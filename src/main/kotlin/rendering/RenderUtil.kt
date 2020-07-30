@@ -1,5 +1,6 @@
 package rendering
 
+import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
 
 fun HTMLCanvasElement.resizeCanvas() {
@@ -16,3 +17,5 @@ fun HTMLCanvasElement.resizeCanvas() {
         println("Resized canvas to $displayWidth x $displayHeight")
     }
 }
+
+fun CanvasRenderingContext2D.setIdentityMatrix() = this.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)

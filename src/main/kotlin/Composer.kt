@@ -13,25 +13,25 @@ object Composer {
     var continousRendering = true
 
     var offset = Vector(0.0, 0.0)
-    var scale = 0.0
+    var scale = 1.0
 
     fun init() {
-        canvas.addEventListener("mousemove", Input::onMouseMove)
+        Input.init(canvas)
 
         window.requestAnimationFrame(::animationFrame)
     }
 
-    fun invalidate() {
+    fun requestRender() {
         renderRequested = true
     }
 
-    var lastFrame = currentTimeMillis()
-    fun animationFrame(t: Double) {
+    private var lastFrame = currentTimeMillis()
+    private fun animationFrame(t: Double) {
         val deltaMillis = currentTimeMillis() - lastFrame;
         lastFrame += deltaMillis;
         val delta = deltaMillis / 1000.0;
 
-        Rendering.render(delta)
+        Rendering.render(delta, canvas)
 
         window.requestAnimationFrame(::animationFrame)
     }

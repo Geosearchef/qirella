@@ -20,9 +20,11 @@ data class Vector(var x: Double = 0.0, var y: Double = 0.0) {
     operator fun unaryPlus() = this
     operator fun unaryMinus() = negate()
     operator fun plus(v: Vector) = add(v)
+    operator fun plus(s: Double) = add(Vector(s, s))
     operator fun minus(v: Vector) = sub(v)
-    operator fun times(s: Double) = scale(s)
+    operator fun minus(s: Double) = sub(Vector(s, s))
     operator fun times(v: Vector) = dot(v)
+    operator fun times(s: Double) = scale(s)
     operator fun div(s: Double) = scale(1.0 / s)
     
     // TODO: contained in rect

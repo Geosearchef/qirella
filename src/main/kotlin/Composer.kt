@@ -1,3 +1,6 @@
+import circuit.Circuit
+import circuit.GateElement
+import circuit.GateType
 import input.Input
 import org.w3c.dom.HTMLCanvasElement
 import rendering.Rendering
@@ -12,13 +15,18 @@ object Composer {
     var renderRequested = true
     var continousRendering = true
 
-    var offset = Vector(0.0, 0.0)
+    var offset = Vector(-3.0, -3.0)
     var scale = 1.0
+
+    var circuit = Circuit()
 
     fun init() {
         Input.init(canvas)
 
         window.requestAnimationFrame(::animationFrame)
+
+        circuit.elements.add(GateElement(Vector(0.0, 0.0), GateType.HADAMARD))
+        circuit.elements.add(GateElement(Vector(1.0, 1.0), GateType.PAULI_X))
     }
 
     fun requestRender() {

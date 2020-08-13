@@ -1,12 +1,13 @@
 package rendering
 
+import Composer
 import org.w3c.dom.*
 import util.Vector
 
 /**
  * Takes a vector in world space and converts it to grid space before rendering
  */
-fun toRenderSpace(pos: Vector) = pos * Rendering.GRID_SIZE
+fun toRenderSpace(pos: Vector) = pos * Composer.GRID_SIZE
 
 fun HTMLCanvasElement.resizeCanvas() {
     val displayWidth = this.offsetWidth
@@ -19,6 +20,7 @@ fun HTMLCanvasElement.resizeCanvas() {
         this.width = displayWidth
         this.height = displayHeight
 
+        Composer.requestRender()
         println("Resized canvas to $displayWidth x $displayHeight")
     }
 }

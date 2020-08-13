@@ -1,6 +1,6 @@
 import circuit.Circuit
-import circuit.CircuitElement
-import circuit.GateElement
+import circuit.CircuitComponent
+import circuit.GateComponent
 import circuit.GateType
 import input.Input
 import org.w3c.dom.HTMLCanvasElement
@@ -11,30 +11,39 @@ import kotlin.browser.document
 import kotlin.browser.window
 
 object Composer {
+
+    const val GATE_SIZE = 50.0
+    const val GATE_SPACING = 50.0
+    const val GRID_SIZE = GATE_SIZE + GATE_SPACING
+
+    const val GATE_SIZE_WORLD_SPACE = GATE_SIZE / GRID_SIZE
+
+
     val canvas = document.getElementById("composer-canvas") as? HTMLCanvasElement ?: throw RuntimeException("Composer canvas not found")
 
     var renderRequested = true
-    var continousRendering = true
+    var continousRendering = false
 
     var offset = Vector(3.0, 3.0) // in world space
     var scale = 1.0
 
     var circuit = Circuit()
 
-    var grabbedElement: CircuitElement? = null
+    var grabbedComponent: CircuitComponent? = null
+
+
 
     fun init() {
         Input.init(canvas)
 
         window.requestAnimationFrame(::animationFrame)
 
-        circuit.elements.add(GateElement(Vector(0.0, 0.0), GateType.HADAMARD))
-        circuit.elements.add(GateElement(Vector(1.0, 1.0), GateType.PAULI_X))
+        circuit.components.add(GateComponent(Vector(0.0, 0.0), GateType.HADAMARD))
+        circuit.components.add(GateComponent(Vector(1.0, 1.0), GateType.PAULI_X))
     }
 
     fun requestRender() {
         renderRequested = true
-        Input.mousePosition
     }
 
     private var lastFrame = currentTimeMillis()

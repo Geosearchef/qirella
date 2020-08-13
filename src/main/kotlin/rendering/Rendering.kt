@@ -1,6 +1,7 @@
 package rendering
 
 import Composer
+import circuit.CircuitElement
 import circuit.GateElement
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.HTMLCanvasElement
@@ -12,6 +13,8 @@ object Rendering {
     const val GATE_SIZE = 50.0
     const val GATE_SPACING = 50.0
     const val GRID_SIZE = GATE_SIZE + GATE_SPACING
+
+    const val GATE_SIZE_WORLD_SPACE = GATE_SIZE / GRID_SIZE
 
     private var averageFrameTime = -1.0;
 
@@ -42,10 +45,14 @@ object Rendering {
 
     private fun renderCircuit() {
         ctx.scale(Composer.scale, Composer.scale)
-        ctx.translate(Composer.offset.x, Composer.offset.y)
+        ctx.translate(Composer.offset.x * GRID_SIZE, Composer.offset.y * GRID_SIZE)
 
 
-        Composer.circuit.elements.forEach {
+        val renderedElements = ArrayList<CircuitElement>(Composer.circuit.elements)
+        renderedElements.addAll(Composer.circuit.elements)
+        Composer.grabbedElement?.let(renderedElements::add)
+
+        renderedElements.forEach {
             val pos = toRenderSpace(it.pos)
 
             ctx.color("#278f42")

@@ -3,10 +3,9 @@ package rendering
 import org.w3c.dom.*
 import util.Vector
 
-fun toWorldSpace() {
-    throw UnsupportedOperationException() // TODO
-}
-
+/**
+ * Takes a vector in world space and converts it to grid space before rendering
+ */
 fun toRenderSpace(pos: Vector) = pos * Rendering.GRID_SIZE
 
 fun HTMLCanvasElement.resizeCanvas() {

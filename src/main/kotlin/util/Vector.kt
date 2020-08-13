@@ -6,7 +6,7 @@ import kotlin.math.sqrt
 data class Vector(var x: Double = 0.0, var y: Double = 0.0) {
 
     fun add(v: Vector) = Vector(v.x + x, v.y + y)
-    fun sub(v: Vector) = Vector(v.x - x, v.y - y)
+    fun sub(v: Vector) = Vector(x - v.x, y - v.y)
     fun scale(s: Double) = Vector(x * s, y * s)
     fun negate() = Vector(-x, -y)
     fun lengthSquared() = x.pow(2) + y.pow(2)
@@ -14,6 +14,9 @@ data class Vector(var x: Double = 0.0, var y: Double = 0.0) {
     fun normalise() = scale(1.0 / length())
     fun clone() = Vector(x, y)
     fun dot(v: Vector) = v.x * x + v.y * y
+    fun floor() = Vector(kotlin.math.floor(x), kotlin.math.floor(y))
+    fun ceil() = Vector(kotlin.math.ceil(x), kotlin.math.ceil(y))
+    fun round() = Vector(kotlin.math.round(x), kotlin.math.round(y))
 
     // operator overloading
     operator fun not() = (x == 0.0 && y == 0.0)

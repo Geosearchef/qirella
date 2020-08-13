@@ -1,4 +1,5 @@
 import circuit.Circuit
+import circuit.CircuitElement
 import circuit.GateElement
 import circuit.GateType
 import input.Input
@@ -15,10 +16,12 @@ object Composer {
     var renderRequested = true
     var continousRendering = true
 
-    var offset = Vector(-3.0, -3.0)
+    var offset = Vector(3.0, 3.0) // in world space
     var scale = 1.0
 
     var circuit = Circuit()
+
+    var grabbedElement: CircuitElement? = null
 
     fun init() {
         Input.init(canvas)
@@ -31,6 +34,7 @@ object Composer {
 
     fun requestRender() {
         renderRequested = true
+        Input.mousePosition
     }
 
     private var lastFrame = currentTimeMillis()

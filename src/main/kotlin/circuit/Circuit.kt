@@ -4,6 +4,6 @@ class Circuit {
 
     var qubitCount = 5 // TODO: render lines
 
-    var elements: MutableList<CircuitElement> = ArrayList() // TODO: render + drag gates on grid
+    var elements: MutableList<CircuitElement> = ArrayList()
 
 }

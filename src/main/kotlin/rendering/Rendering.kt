@@ -47,7 +47,32 @@ object Rendering {
         ctx.scale(Composer.scale, Composer.scale)
         ctx.translate(Composer.offset.x * GRID_SIZE, Composer.offset.y * GRID_SIZE)
 
+        renderRegisters();
 
+        renderElements()
+
+        ctx.setIdentityMatrix()
+    }
+
+    private fun renderRegisters() {
+        val elements = Composer.circuit.elements
+        if (elements.isEmpty()) {
+            return
+        }
+
+        val firstGate: Double = elements.map { it.pos.x }.min()!!
+        val lastGate: Double = elements.map { it.pos.x }.max()!!
+
+        ctx.color("#4a4a4a")
+        elements.map { it.pos.y }.distinct().sorted().forEach {
+            ctx.drawLine(
+                toRenderSpace(Vector(firstGate - GATE_SIZE_WORLD_SPACE, it + GATE_SIZE_WORLD_SPACE / 2)),
+                toRenderSpace(Vector(lastGate + 2 * GATE_SIZE_WORLD_SPACE, it + GATE_SIZE_WORLD_SPACE / 2))
+            )
+        }
+    }
+
+    private fun renderElements() {
         val renderedElements = ArrayList<CircuitElement>(Composer.circuit.elements)
         renderedElements.addAll(Composer.circuit.elements)
         Composer.grabbedElement?.let(renderedElements::add)
@@ -64,7 +89,5 @@ object Rendering {
                 ctx.fillTextCentered(it.type.representation, pos + (GATE_SIZE / 2.0) + Vector(y = 2.0)) // TODO: baseline offset
             }
         }
-
-        ctx.setIdentityMatrix()
     }
 }

@@ -38,7 +38,7 @@ object Input {
             .filter { it.isWorldPosOnElement(worldPos) }
             .firstOrNull()
             ?.let {
-                Composer.circuit.elements.remove(it)
+//                Composer.circuit.elements.remove(it)
                 Composer.grabbedElement = it
             }
 
@@ -52,7 +52,7 @@ object Input {
         if (event !is MouseEvent) throw RuntimeException("Event of wrong type")
 
         Composer.grabbedElement?.let {
-            Composer.circuit.elements.add(it)
+//            Composer.circuit.elements.add(it)
             Composer.grabbedElement = null
         }
 

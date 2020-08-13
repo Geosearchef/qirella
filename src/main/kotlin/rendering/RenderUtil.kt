@@ -36,6 +36,12 @@ fun CanvasRenderingContext2D.fillTextCentered(s: String, v: Vector) {
 
     textBaseline = tB; textAlign = tA
 }
+fun CanvasRenderingContext2D.drawLine(start: Vector, end: Vector) {
+    this.beginPath()
+    this.moveTo(start.x, start.y)
+    this.lineTo(end.x, end.y)
+    this.stroke()
+}
 
 fun CanvasRenderingContext2D.color(c: String) {
     fillStyle = c

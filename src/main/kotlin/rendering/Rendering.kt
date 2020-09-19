@@ -13,7 +13,7 @@ import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.RIGHT
 import ui.UI
 import ui.UI.TOP_BAR_SIZE
-import util.Vector
+import util.math.Vector
 import util.toDecimals
 
 object Rendering {
@@ -71,13 +71,27 @@ object Rendering {
         val firstGate: Double = elements.map { it.pos.x }.min()!!
         val lastGate: Double = elements.map { it.pos.x }.max()!!
 
+        // Draw horizontal lines
         ctx.color("#4a4a4a")
         elements.map { it.pos.y }.distinct().sorted().forEach {
             ctx.drawLine(
-                toRenderSpace(Vector(firstGate - GATE_SIZE_WORLD_SPACE, it + GATE_SIZE_WORLD_SPACE / 2)),
-                toRenderSpace(Vector(lastGate + 2 * GATE_SIZE_WORLD_SPACE, it + GATE_SIZE_WORLD_SPACE / 2))
+                toRenderSpace(
+                    Vector(
+                        firstGate - GATE_SIZE_WORLD_SPACE,
+                        it + GATE_SIZE_WORLD_SPACE / 2
+                    )
+                ),
+                toRenderSpace(
+                    Vector(
+                        lastGate + 2 * GATE_SIZE_WORLD_SPACE,
+                        it + GATE_SIZE_WORLD_SPACE / 2
+                    )
+                )
             )
         }
+
+        // Render register states
+        //TODO:
     }
 
     private fun renderComponents() {

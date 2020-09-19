@@ -1,6 +1,6 @@
 package circuit
 
-import util.Vector
+import util.math.Vector
 
 class GateComponent(pos: Vector = Vector(), var type: GateType) : CircuitComponent(pos) {
 

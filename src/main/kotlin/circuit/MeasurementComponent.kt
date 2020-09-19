@@ -1,6 +1,6 @@
 package circuit
 
-import util.Vector
+import util.math.Vector
 
 class MeasurementComponent(pos: Vector) : CircuitComponent(pos) {
 }

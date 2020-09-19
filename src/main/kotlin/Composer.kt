@@ -6,7 +6,7 @@ import input.Input
 import org.w3c.dom.HTMLCanvasElement
 import rendering.Rendering
 import util.Util.currentTimeMillis
-import util.Vector
+import util.math.Vector
 import kotlin.browser.document
 import kotlin.browser.window
 

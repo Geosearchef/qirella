@@ -7,7 +7,7 @@ import org.w3c.dom.events.Event
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
 import ui.UI
-import util.Vector
+import util.math.Vector
 
 object Input {
     var mousePosition = Vector()

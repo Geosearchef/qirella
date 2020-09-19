@@ -1,4 +1,4 @@
-package util
+package util.math
 
 import kotlin.math.pow
 import kotlin.math.sqrt

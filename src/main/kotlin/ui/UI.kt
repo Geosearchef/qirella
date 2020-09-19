@@ -2,8 +2,8 @@ package ui
 
 import Composer
 import circuit.GateType
-import util.Rectangle
-import util.Vector
+import util.math.Rectangle
+import util.math.Vector
 
 object UI {
 
@@ -18,7 +18,8 @@ object UI {
             uiAddableComponents[gateType] = Rectangle(
                 Vector(
                     x = i.toDouble() * (Composer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING,
-                    y = ADDABLE_GATE_SPACING),
+                    y = ADDABLE_GATE_SPACING
+                ),
                 width = Composer.GATE_SIZE,
                 height = Composer.GATE_SIZE
             )

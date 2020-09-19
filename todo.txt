@@ -1,11 +1,19 @@
 
+linalg:
+- (complex) vector, matrix multiplication framework
+- matrix transpose/conjugate
+
+//TODO start unit testing, complex, vectors, matricies
+
 Statevector simulation
 - passing
 - matricies
-
+- register states during simulation (when wanted, always input)
 
 Measurement
 - Measurement framework
+- measurement operator building from basis states
+--> use measurement framework to define measuring, allow building measurement operator from (orthonormal) basis states
 
 Function / element circuits / subcircuits
   how to use additional qubits? Make larger elements? just add additional qubits not seen by the user? What if the subcircuit inputs on multiple qubits --> need larger elements

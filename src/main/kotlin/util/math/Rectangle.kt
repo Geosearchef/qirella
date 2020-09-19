@@ -1,4 +1,4 @@
-package util
+package util.math
 
 class Rectangle(var pos: Vector, var width: Double, var height: Double) {
 

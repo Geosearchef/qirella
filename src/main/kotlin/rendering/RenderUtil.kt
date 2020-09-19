@@ -2,7 +2,7 @@ package rendering
 
 import Composer
 import org.w3c.dom.*
-import util.Vector
+import util.math.Vector
 
 /**
  * Takes a vector in world space and converts it to grid space before rendering

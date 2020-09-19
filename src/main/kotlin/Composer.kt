@@ -30,6 +30,7 @@ object Composer {
     var circuit = Circuit()
 
     var grabbedComponent: CircuitComponent? = null
+    var grabbedOrigin: Vector? = null
 
 
 

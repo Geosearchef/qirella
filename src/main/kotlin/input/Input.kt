@@ -44,25 +44,24 @@ object Input {
         if(mousePosition.y < UI.TOP_BAR_SIZE) {
             // UI
             UI.uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.let {
-                Composer.grabbedComponent = GateComponent(type = it.key).also { Composer.circuit.components.add(it) }
+                Composer.grabbedComponent = GateComponent(type = it.key)
+                    .also { Composer.circuit.components.add(it) }
             }
 
         } else {
             val worldPos = toWorldSpace(mousePosition)
-
 
             if(event.button.toInt() == 0) {
                 Composer.circuit.components
                     .filter { worldPos in it }
                     .firstOrNull()
                     ?.let {
-//                Composer.circuit.elements.remove(it)
                         Composer.grabbedComponent = it
+                        Composer.grabbedOrigin = it.pos.clone()
                     }
             } else if (event.button.toInt() == 2) {
                 Composer.circuit.components.removeAll { worldPos in it }
             }
-
 
             if(Composer.grabbedComponent == null) {
                 isMapMoving = true
@@ -77,9 +76,18 @@ object Input {
     private fun onMouseUp(event: Event) {
         if (event !is MouseEvent) throw RuntimeException("Event of wrong type")
 
-        Composer.grabbedComponent?.let {
-//            Composer.circuit.elements.add(it)
+        // Drop grabbed circuit component
+        Composer.grabbedComponent?.let { grabbedComponent ->
+            //Dropped position is already blocked
+            if(Composer.circuit.components.count { c -> c.pos == grabbedComponent.pos } > 1) {
+                when(Composer.grabbedOrigin) {
+                    null -> Composer.circuit.components.remove(grabbedComponent)
+                    else -> grabbedComponent.pos = Composer.grabbedOrigin!!
+                }
+            }
+
             Composer.grabbedComponent = null
+            Composer.grabbedOrigin = null
         }
 
         isMapMoving = false

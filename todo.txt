@@ -1,0 +1,18 @@
+
+Statevector simulation
+- passing
+- matricies
+
+
+Measurement
+- Measurement framework
+
+Function / element circuits / subcircuits
+  how to use additional qubits? Make larger elements? just add additional qubits not seen by the user? What if the subcircuit inputs on multiple qubits --> need larger elements
+- need larger circuit elements for subcircuits using multiple qubits
+- implementation can come later
+
+Sampling / circuit/output simulation
+
+
+Manual gate specification

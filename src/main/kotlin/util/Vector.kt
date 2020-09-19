@@ -18,7 +18,7 @@ data class Vector(var x: Double = 0.0, var y: Double = 0.0) {
     fun ceil() = Vector(kotlin.math.ceil(x), kotlin.math.ceil(y))
     fun round() = Vector(kotlin.math.round(x), kotlin.math.round(y))
 
-    // operator overloading
+
     operator fun not() = (x == 0.0 && y == 0.0)
     operator fun unaryPlus() = this
     operator fun unaryMinus() = negate()
@@ -29,6 +29,9 @@ data class Vector(var x: Double = 0.0, var y: Double = 0.0) {
     operator fun times(v: Vector) = dot(v)
     operator fun times(s: Double) = scale(s)
     operator fun div(s: Double) = scale(1.0 / s)
-    
+    override fun equals(other: Any?): Boolean {
+        return (other as? Vector)?.let { it.x == this.x && it.y == this.y } ?: false // wtf kotlin :)
+        ///return other != null && other is Vector && other.x == this.x && other.y == this.y
+    }
     // TODO: contained in rect
 }

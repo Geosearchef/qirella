@@ -4,7 +4,16 @@ import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
 
+operator fun Double.plus(c: Complex) = Complex(this).plus(c)
+operator fun Double.minus(c: Complex) = Complex(this).minus(c)
+operator fun Double.times(c: Complex) = Complex(this).times(c)
+operator fun Double.div(c: Complex) = Complex(this).div(c)
+
 class Complex(var real: Double = 0.0, var imag: Double = 0.0) {
+
+    companion object {
+        val j = Complex(0.0, 1.0)
+    }
 
     fun set(real: Double, imag: Double) {
         this.real = real
@@ -32,6 +41,11 @@ class Complex(var real: Double = 0.0, var imag: Double = 0.0) {
     operator fun timesAssign(o: Complex) = set(times(o))
     operator fun divAssign(o: Complex) = set(div(o))
 
+    operator fun plus(s: Double) = plus(Complex(s))
+    operator fun minus(s: Double) = minus(Complex(s))
+    operator fun times(s: Double) = times(Complex(s))
+    operator fun div(s: Double) = div(Complex(s))
+
     override fun equals(other: Any?): Boolean {
         return other != null && other is Complex && other.real == this.real && other.imag == this.imag
     }
@@ -45,5 +59,6 @@ class Complex(var real: Double = 0.0, var imag: Double = 0.0) {
     val phase: Double get() = argument()
 
     fun conj() = Complex(real, -imag) // conjugate
-    val T: Complex get() = conj()
+
+    override fun toString() = "${real} + ${imag}i"
 }

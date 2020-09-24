@@ -1,8 +1,18 @@
 package util.math.linalg
 
 import util.math.Complex
+import util.math.Complex.Companion.j
+import util.math.minus
+import util.math.plus
+import util.math.times
 
 fun matrixOf(vararg rows: Array<Complex>) = Matrix(arrayOf(*rows)) // spread operator as vararg is read-only (out)
+fun kroneckerOf(vararg gates: Matrix) = gates.reduce { l, r -> l.kronecker(r) }
+fun complexArrayOf(vararg array: Any): Array<Complex> {
+    require(array.all { it is Double || it is Complex })
+    return array.map { if(it is Double) Complex(it) else it as Complex }.toTypedArray()
+}
+
 
 class Matrix(var m: Array<Array<Complex>> = arrayOf(
                 arrayOf(Complex(1.0), Complex(0.0)),
@@ -10,6 +20,20 @@ class Matrix(var m: Array<Array<Complex>> = arrayOf(
 
     companion object {
         val I = Matrix()
+        val Q0 = matrixOf(arrayOf(1.0+0.0*j), arrayOf(0.0+0.0*j))
+        val Q1 = matrixOf(arrayOf(0.0+0.0*j), arrayOf(1.0+0.0*j))
+        val PAULI_X = matrixOf(
+            arrayOf(0.0+0.0*j, 1.0+0.0*j),
+            arrayOf(1.0+0.0*j, 0.0+0.0*j)
+        )
+        val PAULI_Y = matrixOf(
+            arrayOf(0.0+0.0*j, 0.0-1.0*j),
+            arrayOf(0.0+1.0*j, 0.0+0.0*j)
+        )
+        val PAULI_Z = matrixOf(
+            arrayOf(1.0+0.0*j, 0.0+0.0*j),
+            arrayOf(0.0+0.0*j, -1.0+0.0*j)
+        )
     }
 
     constructor (rows: Int, columns: Int) : this(Array(rows) { Array(columns) { Complex() } })
@@ -73,6 +97,23 @@ class Matrix(var m: Array<Array<Complex>> = arrayOf(
 
     fun conjugateTranspose() = Matrix(indiciesTransposed().mapIndexed { col, colInd -> colInd.map { row -> m[row][col].conj() }.toTypedArray() }.toTypedArray())
     val H get() = conjugateTranspose()
+
+    fun kronecker(B: Matrix): Matrix {
+        val A = this
+        val mat = Matrix(A.rows * B.rows, A.columns * B.columns)
+
+        for(a_i in 0 until A.rows) {
+            for(a_j in 0 until A.columns) {
+                for(b_i in 0 until B.rows) {
+                    for(b_j in 0 until B.columns) {
+                        mat.m[a_i * B.rows + b_i][a_j * B.columns + b_j] = A.m[a_i][a_j] * B.m[b_i][b_j]
+                    }
+                }
+            }
+        }
+
+        return mat
+    }
 
     override fun toString() = indicies().mapIndexed { row, rowInd -> rowInd.map { col -> m[row][col].toString() }.joinToString("\t") }.joinToString("\n")
 

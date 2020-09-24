@@ -2,17 +2,15 @@ package util.math
 
 import util.math.Complex.Companion.j
 import util.math.linalg.Matrix.Companion.I
+import util.math.linalg.Matrix.Companion.PAULI_X
+import util.math.linalg.complexArrayOf
+import util.math.linalg.kroneckerOf
 import util.math.linalg.matrixOf
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class MatrixTest {
-
-    val PAULI_X = matrixOf(
-        arrayOf(0.0 + 0.0*j, 1.0 + 0.0*j),
-        arrayOf(1.0 + 0.0*j, 0.0 + 0.0*j)
-    )
 
     @Test
     fun testPlus() {
@@ -80,6 +78,33 @@ class MatrixTest {
                 arrayOf(1.0 + 1.0*j, 3.0 + 3000.0*j),
                 arrayOf(2.0 + 0.0*j, 4.0 + 0.0*j)
             )
+        )
+    }
+
+    @Test
+    fun testKronecker() {
+        assertEquals(
+            matrixOf(
+                arrayOf(0.0+0.0*j, 1.0+0.0*j, 0.0+0.0*j, 0.0+0.0*j),
+                arrayOf(1.0+0.0*j, 0.0+0.0*j, 0.0+0.0*j, 0.0+0.0*j),
+                arrayOf(0.0+0.0*j, 0.0+0.0*j, 0.0+0.0*j, 1.0+0.0*j),
+                arrayOf(0.0+0.0*j, 0.0+0.0*j, 1.0+0.0*j, 0.0+0.0*j)
+            ),
+            I.kronecker(PAULI_X)
+        )
+
+        assertEquals(
+            matrixOf(
+                complexArrayOf(0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+                complexArrayOf(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+                complexArrayOf(0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0),
+                complexArrayOf(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+                complexArrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0),
+                complexArrayOf(0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0),
+                complexArrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0),
+                complexArrayOf(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
+            ),
+            kroneckerOf(I, I, PAULI_X)
         )
     }
 }

@@ -40,7 +40,7 @@ object Composer {
         window.requestAnimationFrame(::animationFrame)
 
         circuit.components.add(GateComponent(Vector(0.0, 0.0), GateType.HADAMARD))
-        circuit.components.add(GateComponent(Vector(1.0, 1.0), GateType.PAULI_X))
+        circuit.components.add(GateComponent(Vector(1.0, 1.0), GateType.X))
     }
 
     fun requestRender() {

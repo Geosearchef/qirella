@@ -2,9 +2,10 @@ package util.math.linalg
 
 import util.math.Complex
 import util.math.Complex.Companion.j
-import util.math.minus
-import util.math.plus
 import util.math.times
+import kotlin.math.log2
+import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 fun matrixOf(vararg rows: Array<Complex>) = Matrix(arrayOf(*rows)) // spread operator as vararg is read-only (out)
 fun kroneckerOf(vararg gates: Matrix) = gates.reduce { l, r -> l.kronecker(r) }
@@ -14,25 +15,27 @@ fun complexArrayOf(vararg array: Any): Array<Complex> {
 }
 
 
-class Matrix(var m: Array<Array<Complex>> = arrayOf(
-                arrayOf(Complex(1.0), Complex(0.0)),
-                arrayOf(Complex(0.0), Complex(1.0)))) {
+open class Matrix(var m: Array<Array<Complex>> = arrayOf(
+                complexArrayOf(1.0, 0.0),
+                complexArrayOf(0.0, 1.0))) {
 
     companion object {
         val I = Matrix()
-        val Q0 = matrixOf(arrayOf(1.0+0.0*j), arrayOf(0.0+0.0*j))
-        val Q1 = matrixOf(arrayOf(0.0+0.0*j), arrayOf(1.0+0.0*j))
+        val Q0 = columnVectorOf(1.0, 0.0)
+        val Q1 = columnVectorOf(0.0, 1.0)
+        val Qplus = columnVectorOf(1.0/sqrt(2.0), +1.0/sqrt(2.0))
+        val Qminus = columnVectorOf(1.0/sqrt(2.0), -1.0/sqrt(2.0))
         val PAULI_X = matrixOf(
-            arrayOf(0.0+0.0*j, 1.0+0.0*j),
-            arrayOf(1.0+0.0*j, 0.0+0.0*j)
+            complexArrayOf(0.0, 1.0),
+            complexArrayOf(1.0, 0.0)
         )
         val PAULI_Y = matrixOf(
-            arrayOf(0.0+0.0*j, 0.0-1.0*j),
-            arrayOf(0.0+1.0*j, 0.0+0.0*j)
+            complexArrayOf(0.0*j, -1.0*j),
+            complexArrayOf(1.0*j, 0.0*j)
         )
         val PAULI_Z = matrixOf(
-            arrayOf(1.0+0.0*j, 0.0+0.0*j),
-            arrayOf(0.0+0.0*j, -1.0+0.0*j)
+            complexArrayOf(1.0, 0.0),
+            complexArrayOf(0.0, -1.0)
         )
     }
 
@@ -44,6 +47,10 @@ class Matrix(var m: Array<Array<Complex>> = arrayOf(
 
     fun isVector() = dim[0] == 1 || dim[1] == 1
     fun isScalar() = dim[0] == 1 && dim[1] == 1
+    fun asScalar(): Complex {
+        check(isScalar()) { "Not a scalar" }
+        return m[0][0]
+    }
 
     fun set(m: Array<Array<Complex>>) {
         this.m = m
@@ -65,7 +72,7 @@ class Matrix(var m: Array<Array<Complex>> = arrayOf(
 
     //TODO: could be way more effective, especially in case of 2^k x 2^k matricies
     operator fun times(o: Matrix): Matrix {
-        require(this.columns == o.rows) { "Incompatible matrix sizes: ${this.rows}x${this.columns} and ${o.rows}x${o.columns}" }
+        require(this.columns == o.rows) { "Incompatible matrix sizes: ${this.shapeString()} and ${o.shapeString()}" }
         val mat = Matrix(rows = this.rows, columns = o.columns)
 
         for(i in 0 until this.rows) {
@@ -115,8 +122,25 @@ class Matrix(var m: Array<Array<Complex>> = arrayOf(
         return mat
     }
 
+    fun isColumnVector() = this.columns == 1
+    fun asColumnVector(): ColumnVector {
+        check(isColumnVector()) {"Cannot convert ${this.shapeString()} to column vector,"}
+        return ColumnVector(m.map { it[0] }.toTypedArray())
+    }
+
     override fun toString() = indicies().mapIndexed { row, rowInd -> rowInd.map { col -> m[row][col].toString() }.joinToString("\t") }.joinToString("\n")
+    fun shapeString() = "${this.rows}x${this.columns}"
 
     private fun indicies() = (0 until rows).map { (0 until columns) }
     private fun indiciesTransposed() = (0 until columns).map { (0 until rows) }
+}
+
+fun columnVectorOf(vararg v: Any) = ColumnVector(complexArrayOf(*v))
+class ColumnVector(v: Array<Complex>) : Matrix(v.map { arrayOf(it) }.toTypedArray()) {
+    val qubits get() = log2(this.rows.toDouble()).roundToInt()
+    val abs: Double get() {
+        val scalarProd = (this.H * this).asScalar()
+        check(scalarProd.imag == 0.0)
+        return sqrt(scalarProd.real)
+    }
 }

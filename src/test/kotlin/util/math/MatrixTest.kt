@@ -36,6 +36,17 @@ class MatrixTest {
                 arrayOf(2.0 + 2.0*j, 4.0 + 4.0*j)
             ).T
         )
+        assertEquals(
+            matrixOf(
+                arrayOf(1.0 + 1.0*j, 2.0 + 2.0*j, 5.0 + 5.0*j),
+                arrayOf(3.0 + 3.0*j, 4.0 + 4.0*j, 6.0 + 6.0*j)
+            ),
+            matrixOf(
+                arrayOf(1.0 + 1.0*j, 3.0 + 3.0*j),
+                arrayOf(2.0 + 2.0*j, 4.0 + 4.0*j),
+                arrayOf(5.0 + 5.0*j, 6.0 + 6.0*j)
+            ).T
+        )
     }
 
     @Test

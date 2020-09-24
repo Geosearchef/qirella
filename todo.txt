@@ -1,7 +1,4 @@
 
-linalg:
-- (complex) vector, matrix multiplication framework
-- matrix transpose/conjugate
 
 //TODO start unit testing, complex, vectors, matricies
 

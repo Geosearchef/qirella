@@ -63,18 +63,19 @@ class Matrix(var m: Array<Array<Complex>> = arrayOf(
     operator fun divAssign(s: Complex) = set(div(s))
 
     override fun equals(other: Any?): Boolean {
-        return other != null && other is Matrix && dim contentEquals other.dim
+        return other != null && other is Matrix && dim[0] == other.dim[0] && dim[1] == other.dim[1]
                 && indicies().mapIndexed { row, rowInd -> rowInd.map { col -> m[row][col] == other.m[row][col] } }.all { it.all { it } }
     }
 
     //TODO: transpose, transpose conjugate this
-    fun transpose() = Matrix(indicies().mapIndexed { row, rowInd -> rowInd.map { col -> m[col][row] }.toTypedArray() }.toTypedArray())
+    fun transpose(): Matrix = Matrix(indiciesTransposed().mapIndexed { col, colInd -> colInd.map { row -> m[row][col] }.toTypedArray() }.toTypedArray())
     val T get() = transpose()
 
-    fun conjugateTranspose() = Matrix(indicies().mapIndexed { row, rowInd -> rowInd.map { col -> m[col][row].conj() }.toTypedArray() }.toTypedArray())
+    fun conjugateTranspose() = Matrix(indiciesTransposed().mapIndexed { col, colInd -> colInd.map { row -> m[row][col].conj() }.toTypedArray() }.toTypedArray())
     val H get() = conjugateTranspose()
 
     override fun toString() = indicies().mapIndexed { row, rowInd -> rowInd.map { col -> m[row][col].toString() }.joinToString("\t") }.joinToString("\n")
 
     private fun indicies() = (0 until rows).map { (0 until columns) }
+    private fun indiciesTransposed() = (0 until columns).map { (0 until rows) }
 }

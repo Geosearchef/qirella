@@ -1,6 +1,11 @@
 package input
 
 import Composer
+import Composer.circuit
+import Composer.grabbedComponent
+import Composer.grabbedOrigin
+import circuit.CircuitComponent
+import circuit.ControlComponent
 import circuit.GateComponent
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.events.Event
@@ -20,9 +25,10 @@ object Input {
 
         mousePosition = Vector(event.offsetX, event.offsetY)
 
-        Composer.grabbedComponent?.pos =
-            (toWorldSpace(mousePosition) - Composer.GATE_SIZE_WORLD_SPACE / 2)
-                .round() // TODO: round correctly
+        grabbedComponent?.let {
+            circuit.setComponentPosition(it, (toWorldSpace(mousePosition) - Composer.GATE_SIZE_WORLD_SPACE / 2).round())// TODO: round correctly
+        }
+
 
         if(isMapMoving) {
             Composer.offset += Vector(
@@ -31,7 +37,7 @@ object Input {
             )
         }
 
-        if(isMapMoving || Composer.grabbedComponent != null) {
+        if(isMapMoving || grabbedComponent != null) {
             Composer.requestRender()
         }
     }
@@ -44,26 +50,37 @@ object Input {
         if(mousePosition.y < UI.TOP_BAR_SIZE) {
             // UI
             UI.uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.let {
-                Composer.grabbedComponent = GateComponent(type = it.key)
-                    .also { Composer.circuit.components.add(it) }
+                grabbedComponent = circuit.addComponent(GateComponent(type = it.key))
             }
 
         } else {
             val worldPos = toWorldSpace(mousePosition)
 
             if(event.button.toInt() == 0) {
-                Composer.circuit.components
-                    .filter { worldPos in it }
-                    .firstOrNull()
-                    ?.let {
-                        Composer.grabbedComponent = it
-                        Composer.grabbedOrigin = it.pos.clone()
+                val clickedComponent = getCircuitElementForWorldPos(worldPos)
+
+                if (!event.shiftKey) {
+                    // Gate dragging
+                    if(clickedComponent != null) {
+                        grabbedComponent = clickedComponent
+                        grabbedOrigin = clickedComponent.pos.clone()
                     }
-            } else if (event.button.toInt() == 2) {
-                Composer.circuit.components.removeAll { worldPos in it }
+                } else {
+                    // Control creation
+                    if(clickedComponent is GateComponent) {
+                        val newControl = clickedComponent.createControl()
+                        circuit.addComponent(newControl)
+                        grabbedComponent = newControl
+                    }
+                }
             }
 
-            if(Composer.grabbedComponent == null) {
+            // Deletion
+            if (event.button.toInt() == 2) {
+                circuit.components.filter { worldPos in it }.forEach { circuit.removeComponent(it) }
+            }
+
+            if(grabbedComponent == null) {
                 isMapMoving = true
             }
         }
@@ -77,18 +94,27 @@ object Input {
         if (event !is MouseEvent) throw RuntimeException("Event of wrong type")
 
         // Drop grabbed circuit component
-        Composer.grabbedComponent?.let { grabbedComponent ->
-            //Dropped position is already blocked
-            if(Composer.circuit.components.count { c -> c.pos == grabbedComponent.pos } > 1) {
-                when(Composer.grabbedOrigin) {
-                    null -> Composer.circuit.components.remove(grabbedComponent)
-                    else -> grabbedComponent.pos = Composer.grabbedOrigin!!
+        grabbedComponent?.let { grabbedComponent ->
+
+            circuit.components.find { c -> c != grabbedComponent && c.pos == grabbedComponent.pos }?.let { blockingComponent ->
+                if(blockingComponent is ControlComponent) {
+                    // blocked by control, remove control
+                    blockingComponent.removeFromParent()
+                    circuit.removeComponent(blockingComponent)
+                } else {
+                    //Dropped position is already blocked, undo move
+                    if(grabbedOrigin == null) {
+                        circuit.removeComponent(grabbedComponent)
+                    } else {
+                        grabbedComponent.pos = grabbedOrigin!!
+                    }
                 }
             }
 
             Composer.grabbedComponent = null
             Composer.grabbedOrigin = null
         }
+
 
         isMapMoving = false
 
@@ -118,5 +144,9 @@ object Input {
      */
     private fun toWorldSpace(v: Vector): Vector {
         return (v / Composer.GRID_SIZE / Composer.scale) - Composer.offset
+    }
+
+    private fun getCircuitElementForWorldPos(worldPos: Vector): CircuitComponent? {
+        return circuit.components.filter { worldPos in it }.firstOrNull()
     }
 }

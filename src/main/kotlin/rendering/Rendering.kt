@@ -4,9 +4,7 @@ import Composer
 import Composer.GATE_SIZE
 import Composer.GATE_SIZE_WORLD_SPACE
 import Composer.GRID_SIZE
-import circuit.CircuitComponent
-import circuit.GateComponent
-import circuit.GateType
+import circuit.*
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.CanvasTextAlign
 import org.w3c.dom.HTMLCanvasElement
@@ -17,6 +15,8 @@ import util.math.Vector
 import util.toDecimals
 
 object Rendering {
+
+    const val CIRCUIT_COLOR = "#4a4a4a"
 
     private var averageFrameTime = -1.0;
 
@@ -72,7 +72,7 @@ object Rendering {
         val lastGate: Double = elements.map { it.pos.x }.max()!!
 
         // Draw horizontal lines
-        ctx.color("#4a4a4a")
+        ctx.color(CIRCUIT_COLOR)
         elements.map { it.pos.y }.distinct().sorted().forEach {
             ctx.drawLine(
                 toRenderSpace(
@@ -99,20 +99,41 @@ object Rendering {
         renderedComponents.addAll(Composer.circuit.components)
         Composer.grabbedComponent?.let(renderedComponents::add)
 
-        for(component in renderedComponents) {
-            renderComponent(toRenderSpace(component.pos), (component as? GateComponent)?.type)
+        renderedComponents.sortBy { if(it is ControlComponent) 0 else 1 } // need to render controls first as they would overlay other components
+
+        renderedComponents.forEach {
+            when(it) {
+                is GateComponent -> renderGate(toRenderSpace(it.pos), it.type)
+                is ControlComponent -> renderControlComponent(toRenderSpace(it.pos), it.controlledGate)
+                is MeasurementComponent -> renderMeasurementComponent(toRenderSpace(it.pos), it)
+            }
         }
     }
 
-    private fun renderComponent(pos: Vector, gateType: GateType?) {
+    private fun renderGate(pos: Vector, gateType: GateType) {
         ctx.color("#278f42")
         ctx.fillSquare(pos, GATE_SIZE)
 
-        gateType?.let {
+        gateType.let {
             ctx.color("#000000")
             ctx.font = "15px sans-serif"
-            ctx.fillTextCentered(it.representation, pos + (GATE_SIZE / 2.0) + Vector(y = 2.0)) // TODO: baseline offset
+            ctx.fillTextCentered(it.representation, pos.componentPosToCenter() + Vector(y = 2.0)) // TODO: baseline offset
         }
+    }
+
+    private fun renderControlComponent(pos: Vector, controlledGate: GateComponent) {
+        ctx.color(CIRCUIT_COLOR)
+
+        val center = pos.componentPosToCenter()
+        ctx.drawLine(center, controlledGate.getRenderedCenter())
+        ctx.fillCircle(center, radius = GATE_SIZE / 8.0)
+    }
+
+    private fun renderMeasurementComponent(pos: Vector, measurementComponent: MeasurementComponent) {
+        ctx.color("#000000")
+
+        // TODO:
+        throw UnsupportedOperationException("not yet implemented")
     }
 
 
@@ -120,6 +141,9 @@ object Rendering {
         ctx.color("#cccccc")
         ctx.fillRect(0.0, 0.0, width, TOP_BAR_SIZE)
 
-        UI.uiAddableComponents.forEach { renderComponent(it.value.pos, it.key) }
+        UI.uiAddableComponents.forEach { renderGate(it.value.pos, it.key) }
     }
+
+    private fun Vector.componentPosToCenter() = this + (GATE_SIZE / 2.0)
+    private fun CircuitComponent.getRenderedCenter() = toRenderSpace(this.pos).componentPosToCenter()
 }

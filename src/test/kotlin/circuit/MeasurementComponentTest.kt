@@ -31,6 +31,5 @@ class MeasurementComponentTest {
         assertEqualsNumerical(0.0, 1e-8, plusMinusMeasurement.resultProbability(baseState = Qplus, state = Qminus))
         assertEqualsNumerical(0.5, 1e-8, plusMinusMeasurement.resultProbability(baseState = Qplus, state = Q0))
         assertEqualsNumerical(0.5, 1e-8, plusMinusMeasurement.resultProbability(baseState = Qminus, state = Q1))
-
     }
 }

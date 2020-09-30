@@ -6,7 +6,7 @@ import util.math.Vector
 
 open class CircuitComponent(var pos : Vector) {
 
-
+    open fun isValidPosition(newPos: Vector) = true
 
     operator fun contains(v: Vector) = isWorldPosOnElement(v)
     fun isWorldPosOnElement(v: Vector) = v in worldSpaceRect()

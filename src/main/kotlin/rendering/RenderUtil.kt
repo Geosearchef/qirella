@@ -3,6 +3,7 @@ package rendering
 import Composer
 import org.w3c.dom.*
 import util.math.Vector
+import kotlin.math.PI
 
 /**
  * Takes a vector in world space and converts it to grid space before rendering
@@ -43,6 +44,11 @@ fun CanvasRenderingContext2D.drawLine(start: Vector, end: Vector) {
     this.moveTo(start.x, start.y)
     this.lineTo(end.x, end.y)
     this.stroke()
+}
+fun CanvasRenderingContext2D.fillCircle(center: Vector, radius: Double) {
+    this.beginPath()
+    this.arc(center.x, center.y, radius, 0.0, 2.0 * PI)
+    this.fill()
 }
 
 fun CanvasRenderingContext2D.color(c: String) {

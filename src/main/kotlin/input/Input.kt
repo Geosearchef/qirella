@@ -48,46 +48,45 @@ object Input {
         if (event !is MouseEvent) throw RuntimeException("Event of wrong type")
 
         if(mousePosition.y < UI.TOP_BAR_SIZE) {
-            // UI
-            UI.uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.let {
-                grabbedComponent = circuit.addComponent(GateComponent(type = it.key))
-            }
-
+            UI.onUIPressed(mousePosition, event)
         } else {
-            val worldPos = toWorldSpace(mousePosition)
-
-            if(event.button.toInt() == 0) {
-                val clickedComponent = getCircuitElementForWorldPos(worldPos)
-
-                if (!event.shiftKey) {
-                    // Gate dragging
-                    if(clickedComponent != null) {
-                        grabbedComponent = clickedComponent
-                        grabbedOrigin = clickedComponent.pos.clone()
-                    }
-                } else {
-                    // Control creation
-                    if(clickedComponent is GateComponent) {
-                        val newControl = clickedComponent.createControl()
-                        circuit.addComponent(newControl)
-                        grabbedComponent = newControl
-                    }
-                }
-            }
-
-            // Deletion
-            if (event.button.toInt() == 2) {
-                circuit.components.filter { worldPos in it }.forEach { circuit.removeComponent(it) }
-            }
-
-            if(grabbedComponent == null) {
-                isMapMoving = true
-            }
+            onComposerPressed(event)
         }
 
         Composer.requestRender()
     }
 
+    private fun onComposerPressed(event: MouseEvent) {
+        val worldPos = toWorldSpace(mousePosition)
+
+        if (event.button.toInt() == 0) {
+            val clickedComponent = getCircuitElementForWorldPos(worldPos)
+
+            if (!event.shiftKey) {
+                // Gate dragging
+                if (clickedComponent != null) {
+                    grabbedComponent = clickedComponent
+                    grabbedOrigin = clickedComponent.pos.clone()
+                }
+            } else {
+                // Control creation
+                if (clickedComponent is GateComponent) {
+                    val newControl = clickedComponent.createControl()
+                    circuit.addComponent(newControl)
+                    grabbedComponent = newControl
+                }
+            }
+        }
+
+        // Deletion
+        if (event.button.toInt() == 2) {
+            circuit.components.filter { worldPos in it }.forEach { circuit.removeComponent(it) }
+        }
+
+        if (grabbedComponent == null) {
+            isMapMoving = true
+        }
+    }
 
 
     private fun onMouseUp(event: Event) {
@@ -142,7 +141,7 @@ object Input {
     /**
      * Converts a vector from SCREEN SPACE (canvas, not rendering/grid space) to world space
      */
-    private fun toWorldSpace(v: Vector): Vector {
+    fun toWorldSpace(v: Vector): Vector {
         return (v / Composer.GRID_SIZE / Composer.scale) - Composer.offset
     }
 

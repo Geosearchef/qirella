@@ -13,10 +13,14 @@ import ui.UI
 import ui.UI.TOP_BAR_SIZE
 import util.math.Vector
 import util.toDecimals
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 object Rendering {
 
     const val CIRCUIT_COLOR = "#4a4a4a"
+    const val MEASUREMENT_SYMBOL_RADIUS = 15.0
 
     private var averageFrameTime = -1.0;
 
@@ -105,7 +109,7 @@ object Rendering {
             when(it) {
                 is GateComponent -> renderGate(toRenderSpace(it.pos), it.type)
                 is ControlComponent -> renderControlComponent(toRenderSpace(it.pos), it.controlledGate)
-                is MeasurementComponent -> renderMeasurementComponent(toRenderSpace(it.pos), it)
+                is MeasurementComponent -> renderMeasurementComponent(toRenderSpace(it.pos))
             }
         }
     }
@@ -114,11 +118,10 @@ object Rendering {
         ctx.color("#278f42")
         ctx.fillSquare(pos, GATE_SIZE)
 
-        gateType.let {
-            ctx.color("#000000")
-            ctx.font = "15px sans-serif"
-            ctx.fillTextCentered(it.representation, pos.componentPosToCenter() + Vector(y = 2.0)) // TODO: baseline offset
-        }
+        ctx.color("black")
+        ctx.font = "15px sans-serif"
+        ctx.fillTextCentered(gateType.representation, pos.componentPosToCenter() + Vector(y = 2.0)) // TODO: baseline offset
+
     }
 
     private fun renderControlComponent(pos: Vector, controlledGate: GateComponent) {
@@ -129,11 +132,21 @@ object Rendering {
         ctx.fillCircle(center, radius = GATE_SIZE / 8.0)
     }
 
-    private fun renderMeasurementComponent(pos: Vector, measurementComponent: MeasurementComponent) {
-        ctx.color("#000000")
+    private fun renderMeasurementComponent(pos: Vector) {
+        ctx.color("#acacac")
+        ctx.fillSquare(pos, GATE_SIZE)
 
-        // TODO:
-        throw UnsupportedOperationException("not yet implemented")
+        val circleCenter = pos.componentPosToCenter() + Vector(y = MEASUREMENT_SYMBOL_RADIUS / 2.0)
+        val indicatorEnd = circleCenter + Vector(cos(1.0/3.0*PI), -sin(1.0/3.0*PI)).normalise() * MEASUREMENT_SYMBOL_RADIUS * 1.5
+
+        // measurement symbol
+        ctx.color("black")
+        ctx.lineWidth = 1.5
+        ctx.beginPath()
+        ctx.arc(circleCenter.x, circleCenter.y, MEASUREMENT_SYMBOL_RADIUS, PI, 0.0)
+        ctx.moveTo(circleCenter.x, circleCenter.y)
+        ctx.lineTo(indicatorEnd.x, indicatorEnd.y)
+        ctx.stroke()
     }
 
 
@@ -142,6 +155,7 @@ object Rendering {
         ctx.fillRect(0.0, 0.0, width, TOP_BAR_SIZE)
 
         UI.uiAddableComponents.forEach { renderGate(it.value.pos, it.key) }
+        UI.measurementComponent.let { renderMeasurementComponent(it.pos) }
     }
 
     private fun Vector.componentPosToCenter() = this + (GATE_SIZE / 2.0)

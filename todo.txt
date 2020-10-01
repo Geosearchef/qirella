@@ -1,7 +1,7 @@
 
 
-- controlled gates ui  // TODO: on parent movement
--render measurement
+- gate selection
+- control, delete, properties menu
 
 Statevector simulation
 - passing

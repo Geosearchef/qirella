@@ -94,8 +94,14 @@ object Rendering {
             )
         }
 
-        // Render register states
-        //TODO:
+        ctx.font = "15px sans-serif"
+        Composer.circuit.getUsedRegisters().forEach { register ->
+            //TODO: extract rendering procedure
+            val registerPos = (toRenderSpace(Vector(firstGate - GATE_SIZE_WORLD_SPACE, register.toDouble() + GATE_SIZE_WORLD_SPACE / 2.0))
+                    + Vector(-35.0, 0.0))
+            ctx.fillTextCentered("|", registerPos + Vector(y = -1.0))
+            ctx.fillTextCentered("0⟩", registerPos + Vector(x = 11.0))
+        }
     }
 
     private fun renderComponents() {

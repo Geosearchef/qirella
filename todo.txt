@@ -3,6 +3,9 @@
 - gate selection
 - control, delete, properties menu
 
+- how to render states
+- how to present results
+
 Statevector simulation
 - passing
 - matricies
@@ -17,3 +20,5 @@ Sampling / circuit/output simulation
 
 
 Manual gate specification
+
+circuit import / export

@@ -35,4 +35,7 @@ class Circuit {
         return components.any { !exclusions.contains(it) && it.pos == pos}
     }
 
+    fun getUsedRegisters(): List<Int> {
+        return components.map { it.pos.y.toInt() }.distinct().sorted()
+    }
 }

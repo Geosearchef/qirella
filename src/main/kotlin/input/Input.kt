@@ -27,6 +27,10 @@ object Input {
 
         grabbedComponent?.let {
             circuit.setComponentPosition(it, (toWorldSpace(mousePosition) - Composer.GATE_SIZE_WORLD_SPACE / 2).round())// TODO: round correctly
+
+            if(it.pos != grabbedOrigin) { // component moved, deselect
+                Composer.selectedComponents.remove(it)
+            }
         }
 
 
@@ -62,11 +66,17 @@ object Input {
         if (event.button.toInt() == 0) {
             val clickedComponent = getCircuitElementForWorldPos(worldPos)
 
+            if(!event.ctrlKey) {
+                Composer.deselectAllComponents()
+            }
+
             if (!event.shiftKey) {
                 // Gate dragging
                 if (clickedComponent != null) {
                     grabbedComponent = clickedComponent
                     grabbedOrigin = clickedComponent.pos.clone()
+
+                    Composer.selectComponent(clickedComponent)
                 }
             } else {
                 // Control creation

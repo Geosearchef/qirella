@@ -10,6 +10,8 @@ import kotlin.math.pow
 
 class MeasurementComponent(pos: Vector, val operators: List<Matrix>, val baseStates: List<ColumnVector>) : CircuitComponent(pos) {
 
+    override val selectable = true
+
     // projective:
     constructor(pos: Vector = Vector(), baseStates: Array<ColumnVector>) : this(pos, baseStates.map { it * it.T }, baseStates.asList()) // projective measurement operator is  |b> <b|
     constructor(pos: Vector = Vector()) : this(pos, arrayOf(Q0, Q1))

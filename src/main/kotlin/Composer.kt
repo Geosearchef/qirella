@@ -32,6 +32,7 @@ object Composer {
     var grabbedComponent: CircuitComponent? = null
     var grabbedOrigin: Vector? = null
 
+    var selectedComponents: MutableList<CircuitComponent> = ArrayList<CircuitComponent>()
 
 
     fun init() {
@@ -56,5 +57,15 @@ object Composer {
         Rendering.render(delta, canvas)
 
         window.requestAnimationFrame(::animationFrame)
+    }
+
+    fun deselectAllComponents() {
+        selectedComponents.clear()
+    }
+
+    fun selectComponent(component: CircuitComponent) {
+        if(component.selectable) {
+            selectedComponents.add(component)
+        }
     }
 }

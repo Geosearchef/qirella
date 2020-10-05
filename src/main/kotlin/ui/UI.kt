@@ -16,8 +16,12 @@ object UI {
     const val ADDABLE_GATE_SPACING = 15.0
     const val TOP_BAR_SIZE = Composer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
 
+    // components
     val uiAddableComponents = HashMap<GateType, Rectangle>()
     val measurementComponent: Rectangle
+
+    // selection interaction
+    val selectionActions: MutableList<SelectionAction> = ArrayList<SelectionAction>()
 
 
     init {

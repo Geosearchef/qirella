@@ -1,6 +1,6 @@
 
 
-- gate selection
+- component selection
 - control, delete, properties menu
 
 - how to render states

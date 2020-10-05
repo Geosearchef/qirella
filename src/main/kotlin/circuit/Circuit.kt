@@ -1,5 +1,6 @@
 package circuit
 
+import Composer
 import util.math.Vector
 
 class Circuit {
@@ -16,6 +17,8 @@ class Circuit {
 
         (component as? ControlComponent)?.removeFromParent()
         (component as? GateComponent)?.controlComponents?.forEach { removeComponent(it) }
+
+        Composer.selectedComponents.remove(component)
     }
 
     fun setComponentPosition(component: CircuitComponent, newPos: Vector) {

@@ -19,8 +19,14 @@ import kotlin.math.sin
 
 object Rendering {
 
+    const val GATE_COLOR = "#278f42"
     const val CIRCUIT_COLOR = "#4a4a4a"
+
     const val MEASUREMENT_SYMBOL_RADIUS = 15.0
+
+    const val SELECTION_COLOR = "#27408f"
+    const val SELECTION_INDICATOR_WIDTH = 5.0
+
 
     private var averageFrameTime = -1.0;
 
@@ -109,19 +115,26 @@ object Rendering {
         renderedComponents.addAll(Composer.circuit.components)
         Composer.grabbedComponent?.let(renderedComponents::add)
 
-        renderedComponents.sortBy { if(it is ControlComponent) 0 else 1 } // need to render controls first as they would overlay other components
+        // need to render controls first as they would overlay other components
+        renderedComponents.filterIsInstance<ControlComponent>().forEach {
+            renderControlComponent(toRenderSpace(it.pos), it.controlledGate)
+        }
 
-        renderedComponents.forEach {
+        Composer.selectedComponents.forEach {
+            ctx.color(SELECTION_COLOR)
+            ctx.fillSquare(toRenderSpace(it.pos) - SELECTION_INDICATOR_WIDTH, GATE_SIZE + SELECTION_INDICATOR_WIDTH * 2.0)
+        }
+
+        renderedComponents.filter { it !is ControlComponent }.forEach {
             when(it) {
                 is GateComponent -> renderGate(toRenderSpace(it.pos), it.type)
-                is ControlComponent -> renderControlComponent(toRenderSpace(it.pos), it.controlledGate)
                 is MeasurementComponent -> renderMeasurementComponent(toRenderSpace(it.pos))
             }
         }
     }
 
     private fun renderGate(pos: Vector, gateType: GateType) {
-        ctx.color("#278f42")
+        ctx.color(GATE_COLOR)
         ctx.fillSquare(pos, GATE_SIZE)
 
         ctx.color("black")

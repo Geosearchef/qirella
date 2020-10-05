@@ -6,6 +6,8 @@ import util.math.Vector
 
 open class CircuitComponent(var pos : Vector) {
 
+    open val selectable = false
+
     open fun isValidPosition(newPos: Vector) = true
 
     operator fun contains(v: Vector) = isWorldPosOnElement(v)

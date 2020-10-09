@@ -2,6 +2,7 @@
 
 - component selection
 - control, delete, properties menu
+ // TODO: different controls size?
 
 - how to render states
 - how to present results

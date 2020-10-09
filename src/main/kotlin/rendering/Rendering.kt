@@ -9,8 +9,10 @@ import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.CanvasTextAlign
 import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.RIGHT
+import ui.Action
 import ui.UI
 import ui.UI.TOP_BAR_SIZE
+import util.math.Rectangle
 import util.math.Vector
 import util.toDecimals
 import kotlin.math.PI
@@ -27,12 +29,14 @@ object Rendering {
     const val SELECTION_COLOR = "#27408f"
     const val SELECTION_INDICATOR_WIDTH = 5.0
 
+    const val ACTION_BUTTON_COLOR = "#dddddd"
+
 
     private var averageFrameTime = -1.0;
 
     private lateinit var ctx: CanvasRenderingContext2D
-    private var width = 0.0
-    private var height = 0.0
+    var width = 0.0
+    var height = 0.0
 
 
     fun render(delta: Double, canvas: HTMLCanvasElement) {
@@ -56,7 +60,7 @@ object Rendering {
         ctx.font = "10px sans-serif"
         ctx.textAlign = CanvasTextAlign.RIGHT
         averageFrameTime = if(averageFrameTime == -1.0) delta else averageFrameTime * 0.95 + delta * 0.05;
-        ctx.fillText("Frame Time: ${averageFrameTime.toDecimals(3)} s  (${ (1.0 / averageFrameTime).toDecimals(1) } fps)", width - 20.0, 20.0);
+        ctx.fillText("Frame Time: ${averageFrameTime.toDecimals(3)} s  (${ (1.0 / averageFrameTime).toDecimals(1) } fps)", width - 20.0, height - 20.0);
     }
 
 
@@ -168,6 +172,14 @@ object Rendering {
         ctx.stroke()
     }
 
+    private fun renderAction(rect: Rectangle, action: Action) {
+        ctx.color(ACTION_BUTTON_COLOR)
+        ctx.fillRect(rect.pos, rect.width, rect.height)
+
+        ctx.color("black")
+        ctx.fillTextCentered(action.representation, rect.center + Vector(y=2.0))
+    }
+
 
     private fun renderUI() {
         ctx.color("#cccccc")
@@ -175,6 +187,7 @@ object Rendering {
 
         UI.uiAddableComponents.forEach { renderGate(it.value.pos, it.key) }
         UI.measurementComponent.let { renderMeasurementComponent(it.pos) }
+        UI.actions.forEach { renderAction(it.value, it.key) }
     }
 
     private fun Vector.componentPosToCenter() = this + (GATE_SIZE / 2.0)

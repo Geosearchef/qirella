@@ -2,6 +2,7 @@ package ui
 
 import Composer
 import circuit.CircuitComponent
+import storage.Storage
 
 enum class Action(val representation: String) {
 
@@ -13,14 +14,14 @@ enum class Action(val representation: String) {
     },
 
 
-    LOAD("Load") {
+    LOAD("\uD83D\uDCC2") {
         override fun onAction(selectedComponents: List<CircuitComponent>) {
-            throw UnsupportedOperationException()
+            Storage.load()//where
         }
     },
-    SAVE("Save") {
+    SAVE("\uD83D\uDCBE") {
         override fun onAction(selectedComponents: List<CircuitComponent>) {
-            throw UnsupportedOperationException()
+            Storage.store()
         }
     };
 

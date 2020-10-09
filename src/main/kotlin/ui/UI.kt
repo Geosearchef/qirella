@@ -17,7 +17,7 @@ object UI {
     const val ADDABLE_GATE_SPACING = 15.0
     const val TOP_BAR_SIZE = Composer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
 
-    const val ACTION_WIDTH = 80.0
+    const val ACTION_WIDTH = 50.0
     const val ACTION_HEIGHT = 25.0
     const val ACTION_SPACING = 10.0
 

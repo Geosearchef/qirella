@@ -19,6 +19,7 @@ Function / element circuits / subcircuits
 
 Sampling / circuit/output simulation
 
+TODO: UI is not resizable
 
 Manual gate specification
 

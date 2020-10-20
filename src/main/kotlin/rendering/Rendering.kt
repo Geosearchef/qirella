@@ -11,7 +11,7 @@ import org.w3c.dom.HTMLCanvasElement
 import org.w3c.dom.RIGHT
 import ui.Action
 import ui.UI
-import ui.UI.TOP_BAR_SIZE
+import ui.UI.Companion.TOP_BAR_SIZE
 import util.math.Rectangle
 import util.math.Vector
 import util.toDecimals

@@ -2,6 +2,7 @@ package rendering
 
 import Composer
 import org.w3c.dom.*
+import ui.UI
 import util.math.Vector
 import kotlin.math.PI
 
@@ -21,6 +22,7 @@ fun HTMLCanvasElement.resizeCanvas() {
         this.width = displayWidth
         this.height = displayHeight
 
+        UI.regenerateUI(this.width, this.height)
         Composer.requestRender()
         println("Resized canvas to $displayWidth x $displayHeight")
     }

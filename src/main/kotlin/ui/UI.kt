@@ -8,18 +8,29 @@ import circuit.GateType
 import circuit.MeasurementComponent
 import input.Input
 import org.w3c.dom.events.MouseEvent
-import rendering.Rendering
 import util.math.Rectangle
 import util.math.Vector
 
-object UI {
+class UI(val width: Int, val height: Int) {
 
-    const val ADDABLE_GATE_SPACING = 15.0
-    const val TOP_BAR_SIZE = Composer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
+    companion object {
+        const val ADDABLE_GATE_SPACING = 15.0
+        const val TOP_BAR_SIZE = Composer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
 
-    const val ACTION_WIDTH = 50.0
-    const val ACTION_HEIGHT = 25.0
-    const val ACTION_SPACING = 10.0
+        const val ACTION_WIDTH = 50.0
+        const val ACTION_HEIGHT = 25.0
+        const val ACTION_SPACING = 10.0
+
+        private var instance = UI(300, 200)
+        val uiAddableComponents get() = instance.uiAddableComponents
+        val measurementComponent get() = instance.measurementComponent
+        val actions get() = instance.actions
+        fun onUIPressed(mousePosition: Vector, event: MouseEvent) = instance.onUIPressed(mousePosition, event)
+
+        fun regenerateUI(width: Int, height: Int) {
+            instance = UI(width, height)
+        }
+    }
 
     // components
     val uiAddableComponents = HashMap<GateType, Rectangle>()
@@ -63,7 +74,7 @@ object UI {
 
         // Shift all actions to all to the right of the canvas
         val actionsWidth = (actions.values.map { it.pos.x + it.width }.max() ?: 0.0) + 10.0
-        val actionsStartX = Rendering.width - actionsWidth
+        val actionsStartX = this.width - actionsWidth
 
         actions.values.forEach { it.pos.x += actionsStartX }
     }
@@ -81,6 +92,4 @@ object UI {
             action.onAction(Composer.selectedComponents)
         }
     }
-
-
 }

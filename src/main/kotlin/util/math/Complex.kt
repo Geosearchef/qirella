@@ -1,5 +1,6 @@
 package util.math
 
+import kotlinx.serialization.Serializable
 import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -9,6 +10,7 @@ operator fun Double.minus(c: Complex) = Complex(this).minus(c)
 operator fun Double.times(c: Complex) = Complex(this).times(c)
 operator fun Double.div(c: Complex) = Complex(this).div(c)
 
+@Serializable
 class Complex(var real: Double = 0.0, var imag: Double = 0.0) {
 
     companion object {

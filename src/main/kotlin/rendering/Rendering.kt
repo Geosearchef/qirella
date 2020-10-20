@@ -121,7 +121,7 @@ object Rendering {
 
         // need to render controls first as they would overlay other components
         renderedComponents.filterIsInstance<ControlComponent>().forEach {
-            renderControlComponent(toRenderSpace(it.pos), it.controlledGate)
+            renderControlComponent(toRenderSpace(it.pos), it.controlledGate!!)
         }
 
         Composer.selectedComponents.forEach {

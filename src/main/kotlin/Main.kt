@@ -1,4 +1,4 @@
-import kotlin.browser.document
+import kotlinx.browser.document
 
 object Main {
 

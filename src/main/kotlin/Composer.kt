@@ -3,12 +3,12 @@ import circuit.CircuitComponent
 import circuit.GateComponent
 import circuit.GateType
 import input.Input
+import kotlinx.browser.document
+import kotlinx.browser.window
 import org.w3c.dom.HTMLCanvasElement
 import rendering.Rendering
 import util.Util.currentTimeMillis
 import util.math.Vector
-import kotlin.browser.document
-import kotlin.browser.window
 
 object Composer {
 
@@ -27,7 +27,11 @@ object Composer {
     var offset = Vector(3.0, 3.0) // in world space
     var scale = 1.0
 
-    var circuit = Circuit()
+    var circuit: Circuit = Circuit()
+        set(value) {
+            field = value
+            requestRender()
+        }
 
     var grabbedComponent: CircuitComponent? = null
     var grabbedOrigin: Vector? = null

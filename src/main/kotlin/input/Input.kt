@@ -33,7 +33,6 @@ object Input {
             }
         }
 
-
         if(isMapMoving) {
             Composer.offset += Vector(
                 js("event.movementX") as Double / Composer.GRID_SIZE / Composer.scale,  // not supported by internet explorer, therefore not exposed

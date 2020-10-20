@@ -16,12 +16,15 @@ enum class Action(val representation: String) {
 
     LOAD("\uD83D\uDCC2") {
         override fun onAction(selectedComponents: List<CircuitComponent>) {
-            Storage.load()//where
+            val circuitPromise = Storage.load()
+
+            circuitPromise.then { Composer.circuit = it }
+            circuitPromise.catch { throw it }
         }
     },
     SAVE("\uD83D\uDCBE") {
         override fun onAction(selectedComponents: List<CircuitComponent>) {
-            Storage.store()
+            Storage.store(Composer.circuit)
         }
     };
 

@@ -1,11 +1,16 @@
 package circuit
 
 import Composer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import util.math.Rectangle
 import util.math.Vector
 
-open class CircuitComponent(var pos : Vector) {
+@Serializable
+abstract class CircuitComponent() {
 
+    abstract var pos : Vector
+    @Transient
     open val selectable = false
 
     open fun isValidPosition(newPos: Vector) = true

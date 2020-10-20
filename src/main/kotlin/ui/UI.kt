@@ -30,7 +30,7 @@ object UI {
 
     // UI components
     init {
-        GateType.values().forEachIndexed { i, gateType ->
+        GateType.values().filter { it.placable }.forEachIndexed { i, gateType ->
             uiAddableComponents[gateType] = Rectangle(
                 Vector(
                     x = i.toDouble() * (Composer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING,

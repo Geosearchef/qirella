@@ -1,5 +1,15 @@
 package util.math.linalg
 
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.descriptors.element
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.encoding.decodeStructure
+import kotlinx.serialization.encoding.encodeStructure
+import kotlinx.serialization.serializer
 import util.math.Complex
 import util.math.Complex.Companion.j
 import util.math.times
@@ -14,7 +24,7 @@ fun complexArrayOf(vararg array: Any): Array<Complex> {
     return array.map { if(it is Double) Complex(it) else it as Complex }.toTypedArray()
 }
 
-
+@Serializable(with = MatrixSerializer::class)
 open class Matrix(var m: Array<Array<Complex>> = arrayOf(
                 complexArrayOf(1.0, 0.0),
                 complexArrayOf(0.0, 1.0))) {
@@ -136,6 +146,7 @@ open class Matrix(var m: Array<Array<Complex>> = arrayOf(
 }
 
 fun columnVectorOf(vararg v: Any) = ColumnVector(complexArrayOf(*v))
+@Serializable(with = MatrixSerializer::class)
 class ColumnVector(v: Array<Complex>) : Matrix(v.map { arrayOf(it) }.toTypedArray()) {
     val qubits get() = log2(this.rows.toDouble()).roundToInt()
     val abs: Double get() {
@@ -143,4 +154,34 @@ class ColumnVector(v: Array<Complex>) : Matrix(v.map { arrayOf(it) }.toTypedArra
         check(scalarProd.imag == 0.0)
         return sqrt(scalarProd.real)
     }
+}
+
+
+object MatrixSerializer : KSerializer<Matrix> {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("Matrix") {
+        element<Boolean>("columnVector")
+        element<Array<Array<Complex>>>("m")
+    }
+
+    val matrixSerializer: KSerializer<Array<Array<Complex>>> = serializer()
+
+    override fun serialize(encoder: Encoder, value: Matrix) {
+        encoder.encodeStructure(descriptor) {
+            encodeBooleanElement(descriptor, 0, value is ColumnVector)
+//            encodeSerializableElement(descriptor, 1, Matrix.serializer())
+            encodeSerializableElement(descriptor, 1, matrixSerializer, value.m)
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): Matrix =
+        decoder.decodeStructure(descriptor) {
+            val isColumnVector = decodeBooleanElement(descriptor, 0)
+            val m: Array<Array<Complex>> = decodeSerializableElement(descriptor, 1, matrixSerializer)
+
+            when(isColumnVector) {
+                true -> ColumnVector(m.map { it[0] }.toTypedArray())  // this might discard information
+                false -> Matrix(m)
+            }
+        }
+
 }

@@ -1,5 +1,6 @@
 package circuit
 
+import kotlinx.serialization.Serializable
 import simulation.multiQubitSingleGate
 import util.math.Vector
 import util.math.linalg.ColumnVector
@@ -8,7 +9,8 @@ import util.math.linalg.Matrix.Companion.Q0
 import util.math.linalg.Matrix.Companion.Q1
 import kotlin.math.pow
 
-class MeasurementComponent(pos: Vector, val operators: List<Matrix>, val baseStates: List<ColumnVector>) : CircuitComponent(pos) {
+@Serializable
+class MeasurementComponent(override var pos: Vector, val operators: List<Matrix>, val baseStates: List<ColumnVector>) : CircuitComponent() {
 
     override val selectable = true
 

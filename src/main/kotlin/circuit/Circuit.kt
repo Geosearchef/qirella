@@ -1,8 +1,10 @@
 package circuit
 
 import Composer
+import kotlinx.serialization.Serializable
 import util.math.Vector
 
+@Serializable
 class Circuit {
 
     var components: MutableList<CircuitComponent> = ArrayList()

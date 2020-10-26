@@ -1,11 +1,11 @@
-package storage
+package qcn.storage
 
-import circuit.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import qcn.circuit.*
 import util.downloadFile
 import util.loadFile
 import kotlin.js.Promise

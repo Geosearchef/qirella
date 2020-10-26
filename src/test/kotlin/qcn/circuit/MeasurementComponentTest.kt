@@ -1,4 +1,4 @@
-package circuit
+package qcn.circuit
 
 import assertEqualsNumerical
 import util.math.linalg.Matrix.Companion.Q0

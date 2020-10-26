@@ -1,4 +1,4 @@
-package simulation
+package qcn.simulation
 
 import util.math.linalg.Matrix
 import util.math.linalg.Matrix.Companion.I

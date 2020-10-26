@@ -1,15 +1,10 @@
 package rendering
 
-import Composer
+import Qirella
 import org.w3c.dom.*
-import ui.UI
+import qcn.ui.QCUI
 import util.math.Vector
 import kotlin.math.PI
-
-/**
- * Takes a vector in world space and converts it to grid space before rendering
- */
-fun toRenderSpace(pos: Vector) = pos * Composer.GRID_SIZE
 
 fun HTMLCanvasElement.resizeCanvas() {
     val displayWidth = this.offsetWidth
@@ -22,8 +17,8 @@ fun HTMLCanvasElement.resizeCanvas() {
         this.width = displayWidth
         this.height = displayHeight
 
-        UI.regenerateUI(this.width, this.height)
-        Composer.requestRender()
+        QCUI.regenerateUI(this.width, this.height)
+        Qirella.requestRender()
         println("Resized canvas to $displayWidth x $displayHeight")
     }
 }

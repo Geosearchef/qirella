@@ -1,7 +1,7 @@
-package circuit
+package qcn.circuit
 
 import kotlinx.serialization.Serializable
-import simulation.multiQubitSingleGate
+import qcn.simulation.multiQubitSingleGate
 import util.math.Vector
 import util.math.linalg.ColumnVector
 import util.math.linalg.Matrix

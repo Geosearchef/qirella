@@ -1,4 +1,4 @@
-package circuit
+package qcn.circuit
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

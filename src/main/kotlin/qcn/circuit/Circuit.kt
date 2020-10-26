@@ -1,7 +1,7 @@
-package circuit
+package qcn.circuit
 
-import Composer
 import kotlinx.serialization.Serializable
+import qcn.QCComposer
 import util.math.Vector
 
 @Serializable
@@ -20,7 +20,7 @@ class Circuit {
         (component as? ControlComponent)?.removeFromParent()
         (component as? GateComponent)?.controlComponents?.forEach { removeComponent(it) }
 
-        Composer.selectedComponents.remove(component)
+        QCComposer.selectedComponents.remove(component)
     }
 
     fun setComponentPosition(component: CircuitComponent, newPos: Vector) {

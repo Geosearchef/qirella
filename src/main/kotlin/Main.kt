@@ -1,12 +1,15 @@
+import input.Input
 import kotlinx.browser.document
-
-object Main {
-
-}
+import kotlinx.browser.window
+import scene.Scene
 
 fun main() {
     console.log("Loading qirella")
 
-    document.addEventListener("DOMContentLoaded", { Composer.init() })
-//    Rendering.render()
+    document.addEventListener("DOMContentLoaded", {
+        Scene.values().forEach { it.initFunction() }
+        Input.init(Qirella.canvas)
+
+        window.requestAnimationFrame(Qirella::animationFrame)
+    })
 }

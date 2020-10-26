@@ -1,8 +1,8 @@
-package circuit
+package qcn.circuit
 
-import Composer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import qcn.QCComposer
 import util.math.Rectangle
 import util.math.Vector
 
@@ -18,6 +18,6 @@ abstract class CircuitComponent() {
     operator fun contains(v: Vector) = isWorldPosOnElement(v)
     fun isWorldPosOnElement(v: Vector) = v in worldSpaceRect()
     private fun worldSpaceRect() =
-        Rectangle(pos, Composer.GATE_SIZE_WORLD_SPACE, Composer.GATE_SIZE_WORLD_SPACE)
+        Rectangle(pos, QCComposer.GATE_SIZE_WORLD_SPACE, QCComposer.GATE_SIZE_WORLD_SPACE)
 
 }

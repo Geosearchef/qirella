@@ -1,4 +1,4 @@
-package circuit
+package qcn.circuit
 
 import util.math.Complex.Companion.j
 import util.math.linalg.Matrix

@@ -1,34 +1,34 @@
-package ui
+package qcn.ui
 
-import Composer
-import Composer.circuit
-import Composer.grabbedComponent
-import circuit.GateComponent
-import circuit.GateType
-import circuit.MeasurementComponent
-import input.Input
 import org.w3c.dom.events.MouseEvent
+import qcn.QCComposer
+import qcn.QCComposer.circuit
+import qcn.QCComposer.grabbedComponent
+import qcn.QCInput
+import qcn.circuit.GateComponent
+import qcn.circuit.GateType
+import qcn.circuit.MeasurementComponent
 import util.math.Rectangle
 import util.math.Vector
 
-class UI(val width: Int, val height: Int) {
+class QCUI(val width: Int, val height: Int) {
 
     companion object {
         const val ADDABLE_GATE_SPACING = 15.0
-        const val TOP_BAR_SIZE = Composer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
+        const val TOP_BAR_SIZE = QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
 
         const val ACTION_WIDTH = 50.0
         const val ACTION_HEIGHT = 25.0
         const val ACTION_SPACING = 10.0
 
-        private var instance = UI(300, 200)
+        private var instance = QCUI(300, 200)
         val uiAddableComponents get() = instance.uiAddableComponents
         val measurementComponent get() = instance.measurementComponent
         val actions get() = instance.actions
         fun onUIPressed(mousePosition: Vector, event: MouseEvent) = instance.onUIPressed(mousePosition, event)
 
         fun regenerateUI(width: Int, height: Int) {
-            instance = UI(width, height)
+            instance = QCUI(width, height)
         }
     }
 
@@ -37,30 +37,30 @@ class UI(val width: Int, val height: Int) {
     val measurementComponent: Rectangle
 
     // selection interaction
-    val actions = HashMap<Action, Rectangle>()
+    val actions = HashMap<QCAction, Rectangle>()
 
     // UI components
     init {
         GateType.values().filter { it.placable }.forEachIndexed { i, gateType ->
             uiAddableComponents[gateType] = Rectangle(
                 Vector(
-                    x = i.toDouble() * (Composer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING,
+                    x = i.toDouble() * (QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING,
                     y = ADDABLE_GATE_SPACING
                 ),
-                width = Composer.GATE_SIZE,
-                height = Composer.GATE_SIZE
+                width = QCComposer.GATE_SIZE,
+                height = QCComposer.GATE_SIZE
             )
         }
 
-        val addableGatesWidth = uiAddableComponents.size.toDouble() * (Composer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING
+        val addableGatesWidth = uiAddableComponents.size.toDouble() * (QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING
 
         measurementComponent = Rectangle(
             Vector(
                 x = addableGatesWidth + ADDABLE_GATE_SPACING,
                 y = ADDABLE_GATE_SPACING
             ),
-            width = Composer.GATE_SIZE,
-            height = Composer.GATE_SIZE
+            width = QCComposer.GATE_SIZE,
+            height = QCComposer.GATE_SIZE
         )
     }
 
@@ -68,12 +68,12 @@ class UI(val width: Int, val height: Int) {
 
     // Actions, relative to start of action area
     init {
-        actions[Action.DELETE] = Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
-        actions[Action.LOAD]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
-        actions[Action.SAVE]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING * 2.0 + ACTION_HEIGHT), ACTION_WIDTH, ACTION_HEIGHT)
+        actions[QCAction.DELETE] = Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
+        actions[QCAction.LOAD]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
+        actions[QCAction.SAVE]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING * 2.0 + ACTION_HEIGHT), ACTION_WIDTH, ACTION_HEIGHT)
 
         // Shift all actions to all to the right of the canvas
-        val actionsWidth = (actions.values.map { it.pos.x + it.width }.max() ?: 0.0) + 10.0
+        val actionsWidth = (actions.values.map { it.pos.x + it.width }.maxOrNull() ?: 0.0) + 10.0
         val actionsStartX = this.width - actionsWidth
 
         actions.values.forEach { it.pos.x += actionsStartX }
@@ -81,15 +81,15 @@ class UI(val width: Int, val height: Int) {
 
     fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
         uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { gateType ->
-            grabbedComponent = circuit.addComponent(GateComponent(pos = Input.toWorldSpace(mousePosition).round(), type = gateType))
+            grabbedComponent = circuit.addComponent(GateComponent(pos = QCInput.toWorldSpace(mousePosition).round(), type = gateType))
         }
 
         if(mousePosition in measurementComponent) {
-            grabbedComponent = circuit.addComponent(MeasurementComponent(Input.toWorldSpace(mousePosition).round()))
+            grabbedComponent = circuit.addComponent(MeasurementComponent(QCInput.toWorldSpace(mousePosition).round()))
         }
 
         actions.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { action ->
-            action.onAction(Composer.selectedComponents)
+            action.onAction(QCComposer.selectedComponents)
         }
     }
 }

@@ -16,7 +16,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-object QCRendering : Scene.SceneRenderer {
+object QCRenderer : Scene.SceneRenderer {
 
     const val GATE_COLOR = "#278f42"
     const val CIRCUIT_COLOR = "#4a4a4a"

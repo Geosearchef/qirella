@@ -1,14 +1,11 @@
 package zxn
 
 import util.math.Vector
-import zxn.network.QubitNode
+import zxn.network.*
 import zxn.network.QubitNode.QubitNodeMode.INPUT
 import zxn.network.QubitNode.QubitNodeMode.OUTPUT
-import zxn.network.Spider
 import zxn.network.Spider.SpiderColor.GREEN
 import zxn.network.Spider.SpiderColor.RED
-import zxn.network.Wire
-import zxn.network.ZXNetwork
 
 object ZXComposer {
 
@@ -27,7 +24,7 @@ object ZXComposer {
             val spacing = 80.0
 
             addNode(QubitNode(Vector(-1.0, 0.0) * spacing, INPUT))
-            addNode(Spider(Vector(0.0, 0.0) * spacing, GREEN))
+            addNode(Spider(Vector(0.0, 0.0) * spacing, GREEN,/* _phase = 0.5*PI*/))
             addNode(Spider(Vector(1.0, 0.0) * spacing, RED))
             addNode(Spider(Vector(2.0, 0.0) * spacing, GREEN))
             addNode(QubitNode(Vector(3.0, 0.0) * spacing, OUTPUT))
@@ -50,6 +47,8 @@ object ZXComposer {
             addWire(Wire(nodes[1], nodes[6]))
             addWire(Wire(nodes[2], nodes[7]))
             addWire(Wire(nodes[3], nodes[8]))
+
+            addNode(ZXHadamardNode(Vector(5.0, 1.0) * spacing))
         }
     }
 }

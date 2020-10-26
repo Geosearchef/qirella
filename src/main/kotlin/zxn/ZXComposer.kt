@@ -12,7 +12,9 @@ import zxn.network.ZXNetwork
 
 object ZXComposer {
 
-    const val NODE_SIZE = 25
+    const val NODE_SIZE = 30.0
+    const val NODE_RADIUS = NODE_SIZE / 1.5
+    const val QUBIT_RADIUS = NODE_RADIUS / 1.5
 
     var offset = Vector(200.0, 200.0) // worldSpace = renderSpace
     var scale = 1.0
@@ -22,17 +24,19 @@ object ZXComposer {
     fun init() {
         // swap gate network using 3 CNOTs
         with(network) {
-            addNode(QubitNode(Vector(-30.0, 0.0), INPUT))
-            addNode(Spider(Vector(0.0, 0.0), GREEN))
-            addNode(Spider(Vector(30.0, 0.0), RED))
-            addNode(Spider(Vector(60.0, 0.0), GREEN))
-            addNode(QubitNode(Vector(90.0, 0.0), OUTPUT))
+            val spacing = 80.0
 
-            addNode(QubitNode(Vector(-30.0, 60.0), INPUT))
-            addNode(Spider(Vector(0.0, 60.0), RED))
-            addNode(Spider(Vector(30.0, 60.0), GREEN))
-            addNode(Spider(Vector(60.0, 60.0), RED))
-            addNode(QubitNode(Vector(90.0, 60.0), OUTPUT))
+            addNode(QubitNode(Vector(-1.0, 0.0) * spacing, INPUT))
+            addNode(Spider(Vector(0.0, 0.0) * spacing, GREEN))
+            addNode(Spider(Vector(1.0, 0.0) * spacing, RED))
+            addNode(Spider(Vector(2.0, 0.0) * spacing, GREEN))
+            addNode(QubitNode(Vector(3.0, 0.0) * spacing, OUTPUT))
+
+            addNode(QubitNode(Vector(-1.0, 2.0) * spacing, INPUT))
+            addNode(Spider(Vector(0.0, 2.0) * spacing, RED))
+            addNode(Spider(Vector(1.0, 2.0) * spacing, GREEN))
+            addNode(Spider(Vector(2.0, 2.0) * spacing, RED))
+            addNode(QubitNode(Vector(3.0, 2.0) * spacing, OUTPUT))
 
             addWire(Wire(nodes[0], nodes[1]))
             addWire(Wire(nodes[1], nodes[2]))

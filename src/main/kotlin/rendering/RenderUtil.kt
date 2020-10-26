@@ -48,6 +48,12 @@ fun CanvasRenderingContext2D.fillCircle(center: Vector, radius: Double) {
     this.fill()
 }
 
+fun CanvasRenderingContext2D.drawCircle(center: Vector, radius: Double) {
+    this.beginPath()
+    this.arc(center.x, center.y, radius, 0.0, 2.0 * PI)
+    this.stroke()
+}
+
 fun CanvasRenderingContext2D.color(c: String) {
     fillStyle = c
 }

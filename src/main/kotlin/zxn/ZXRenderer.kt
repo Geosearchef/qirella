@@ -32,7 +32,7 @@ object ZXRenderer : Scene.SceneRenderer {
     }
 
     fun renderWires() {
-        // TODO: how to render / represent multiple wires
+        // TODO: how to render / represent multiple  
         ctx.color("black")
         ctx.lineWidth = 2.0
         network.wires.forEach {

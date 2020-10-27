@@ -7,14 +7,20 @@ import org.w3c.dom.events.WheelEvent
 import qcn.QCComposer
 import scene.Scene
 import util.math.Vector
+import zxn.ZXComposer.grabbedNode
+import zxn.ZXComposer.network
 
 object ZXInput : Scene.SceneInput {
     var mousePosition = Vector()
+    var mousePositionWorld = Vector()
     var isMapMoving = false
 
 
     override fun onMouseMove(event: MouseEvent) {
         mousePosition = Vector(event.offsetX, event.offsetY)
+        mousePositionWorld = toWorldSpace(mousePosition)
+
+        grabbedNode?.let { network.setNodePosition(it, mousePositionWorld) }
 
         if(isMapMoving) {
             ZXComposer.offset += Vector(
@@ -23,7 +29,7 @@ object ZXInput : Scene.SceneInput {
             )
         }
 
-        if(isMapMoving) {
+        if(isMapMoving || grabbedNode != null) {
             Qirella.requestRender()
         }
     }
@@ -33,10 +39,24 @@ object ZXInput : Scene.SceneInput {
     }
 
     private fun onComposerPressed(event: MouseEvent) {
-        isMapMoving = true
+
+        network.nodes.find { mousePositionWorld in it }?.let { grabbedNode ->
+            if(event.shiftKey) {
+
+            } else {
+                ZXComposer.grabbedNode = grabbedNode
+            }
+        }
+
+
+
+        if(grabbedNode == null) {
+            isMapMoving = true
+        }
     }
 
     override fun onMouseUp(event: MouseEvent) {
+        grabbedNode = null
         isMapMoving = false
     }
 

@@ -5,6 +5,7 @@ import util.math.equalsNumerically
 import util.math.mod
 import zxn.ZXComposer
 import kotlin.math.PI
+import kotlin.math.pow
 
 class Spider(pos: Vector, val color: SpiderColor, private var _phase: Double = PI) : ZXNode(pos) {
     enum class SpiderColor(val colorRepresentation: String) {
@@ -22,7 +23,7 @@ class Spider(pos: Vector, val color: SpiderColor, private var _phase: Double = P
     }
 
     override fun isPosOnElement(v: Vector): Boolean {
-        return (pos - v).lengthSquared() <= ZXComposer.NODE_RADIUS
+        return (pos - v).lengthSquared() <= ZXComposer.NODE_RADIUS.pow(2)
     }
 
 

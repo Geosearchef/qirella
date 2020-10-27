@@ -18,6 +18,8 @@ object ZXComposer {
 
     var network = ZXNetwork()
 
+    var grabbedNode: ZXNode? = null
+
     fun init() {
         // swap gate network using 3 CNOTs
         with(network) {

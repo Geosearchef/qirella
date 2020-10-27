@@ -1,5 +1,7 @@
 package zxn.network
 
+import util.math.Vector
+
 class ZXNetwork {
 
     val nodes: MutableList<ZXNode> = ArrayList()
@@ -20,5 +22,9 @@ class ZXNetwork {
 
     fun removeWire(wire: Wire) {
         wires.remove(wire)
+    }
+
+    fun setNodePosition(node: ZXNode, newPos: Vector) {
+        node.pos = newPos
     }
 }

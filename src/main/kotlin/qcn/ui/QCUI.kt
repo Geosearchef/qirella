@@ -8,36 +8,30 @@ import qcn.QCInput
 import qcn.circuit.GateComponent
 import qcn.circuit.GateType
 import qcn.circuit.MeasurementComponent
+import qcn.rendering.QCRenderer
+import rendering.Rendering.ctx
+import rendering.color
+import rendering.fillRect
+import rendering.fillTextCentered
+import ui.SceneUI
 import util.math.Rectangle
 import util.math.Vector
 
-class QCUI(val width: Int, val height: Int) {
+class QCUI(width: Int, height: Int): SceneUI(width, height) {
 
-    companion object {
-        const val ADDABLE_GATE_SPACING = 15.0
-        const val TOP_BAR_SIZE = QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
+    val ADDABLE_GATE_SPACING = 15.0
+    val ACTION_WIDTH = 50.0
+    val ACTION_HEIGHT = 25.0
+    val ACTION_SPACING = 10.0
 
-        const val ACTION_WIDTH = 50.0
-        const val ACTION_HEIGHT = 25.0
-        const val ACTION_SPACING = 10.0
-
-        private var instance = QCUI(300, 200)
-        val uiAddableComponents get() = instance.uiAddableComponents
-        val measurementComponent get() = instance.measurementComponent
-        val actions get() = instance.actions
-        fun onUIPressed(mousePosition: Vector, event: MouseEvent) = instance.onUIPressed(mousePosition, event)
-
-        fun regenerateUI(width: Int, height: Int) {
-            instance = QCUI(width, height)
-        }
-    }
+    override val TOP_BAR_SIZE = QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
 
     // components
-    val uiAddableComponents = HashMap<GateType, Rectangle>()
-    val measurementComponent: Rectangle
+    private val uiAddableComponents = HashMap<GateType, Rectangle>()
+    private val measurementComponent: Rectangle
 
     // selection interaction
-    val actions = HashMap<QCAction, Rectangle>()
+    private val actions = HashMap<QCAction, Rectangle>()
 
     // UI components
     init {
@@ -79,7 +73,7 @@ class QCUI(val width: Int, val height: Int) {
         actions.values.forEach { it.pos.x += actionsStartX }
     }
 
-    fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
+    override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
         uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { gateType ->
             grabbedComponent = circuit.addComponent(GateComponent(pos = QCInput.toWorldSpace(mousePosition).round(), type = gateType))
         }
@@ -92,4 +86,22 @@ class QCUI(val width: Int, val height: Int) {
             action.onAction(QCComposer.selectedComponents)
         }
     }
+
+    override fun render() {
+        super.render()
+
+        uiAddableComponents.forEach { QCRenderer.renderGate(it.value.pos, it.key) }
+        measurementComponent.let { QCRenderer.renderMeasurementComponent(it.pos) }
+        actions.forEach { renderAction(it.value, it.key) }
+    }
+
+    fun renderAction(rect: Rectangle, action: QCAction) {
+        ctx.color(QCRenderer.ACTION_BUTTON_COLOR)
+        ctx.fillRect(rect.pos, rect.width, rect.height)
+
+        ctx.color("black")
+        ctx.fillTextCentered(action.representation, rect.center + Vector(y=2.0))
+    }
+
+    override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE
 }

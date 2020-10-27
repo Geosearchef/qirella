@@ -5,9 +5,12 @@ import qcn.circuit.Circuit
 import qcn.circuit.CircuitComponent
 import qcn.circuit.GateComponent
 import qcn.circuit.GateType
+import qcn.ui.QCUI
+import scene.UIManager
+import ui.SceneUI
 import util.math.Vector
 
-object QCComposer {
+object QCComposer : UIManager {
 
     const val GATE_SIZE = 50.0
     const val GATE_SPACING = 50.0
@@ -29,6 +32,8 @@ object QCComposer {
 
     var selectedComponents: MutableList<CircuitComponent> = ArrayList<CircuitComponent>()
 
+    var uiInstance = QCUI(300, 200)
+
 
     fun init() {
         circuit.components.add(GateComponent(Vector(0.0, 0.0), GateType.HADAMARD))
@@ -43,5 +48,13 @@ object QCComposer {
         if(component.selectable) {
             selectedComponents.add(component)
         }
+    }
+
+    override fun regenerateUI(width: Int, height: Int) {
+        uiInstance = QCUI(width, height)
+    }
+
+    override fun getUI(): SceneUI {
+        return uiInstance
     }
 }

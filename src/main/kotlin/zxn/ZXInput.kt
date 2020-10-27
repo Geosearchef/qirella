@@ -5,19 +5,17 @@ import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
 import qcn.QCComposer
-import scene.Scene
+import scene.SceneInput
 import util.math.Vector
 import zxn.ZXComposer.grabbedNode
 import zxn.ZXComposer.network
 
-object ZXInput : Scene.SceneInput {
-    var mousePosition = Vector()
+object ZXInput : SceneInput() {
     var mousePositionWorld = Vector()
     var isMapMoving = false
 
 
-    override fun onMouseMove(event: MouseEvent) {
-        mousePosition = Vector(event.offsetX, event.offsetY)
+    override fun onMouseMove(event: MouseEvent, isOnUI: Boolean) {
         mousePositionWorld = toWorldSpace(mousePosition)
 
         grabbedNode?.let { network.setNodePosition(it, mousePositionWorld) }
@@ -34,8 +32,10 @@ object ZXInput : Scene.SceneInput {
         }
     }
 
-    override fun onMouseDown(event: MouseEvent) {
-        onComposerPressed(event)
+    override fun onMouseDown(event: MouseEvent, isOnUI: Boolean) {
+        if(!isOnUI) {
+            onComposerPressed(event)
+        }
     }
 
     private fun onComposerPressed(event: MouseEvent) {
@@ -55,12 +55,12 @@ object ZXInput : Scene.SceneInput {
         }
     }
 
-    override fun onMouseUp(event: MouseEvent) {
+    override fun onMouseUp(event: MouseEvent, isOnUI: Boolean) {
         grabbedNode = null
         isMapMoving = false
     }
 
-    override fun onMouseWheel(event: WheelEvent) {
+    override fun onMouseWheel(event: WheelEvent, isOnUI: Boolean) {
 
     }
 

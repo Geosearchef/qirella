@@ -5,12 +5,9 @@ import qcn.QCComposer.GATE_SIZE
 import qcn.QCComposer.GATE_SIZE_WORLD_SPACE
 import qcn.QCComposer.GRID_SIZE
 import qcn.circuit.*
-import qcn.ui.QCAction
-import qcn.ui.QCUI
 import rendering.*
 import rendering.Rendering.ctx
 import scene.Scene
-import util.math.Rectangle
 import util.math.Vector
 import kotlin.math.PI
 import kotlin.math.cos
@@ -30,7 +27,6 @@ object QCRenderer : Scene.SceneRenderer {
 
     override fun render() {
         renderCircuit()
-        renderUI()
     }
 
     private fun renderCircuit() {
@@ -105,7 +101,7 @@ object QCRenderer : Scene.SceneRenderer {
         }
     }
 
-    private fun renderGate(pos: Vector, gateType: GateType) {
+    fun renderGate(pos: Vector, gateType: GateType) {
         ctx.color(GATE_COLOR)
         ctx.fillSquare(pos, GATE_SIZE)
 
@@ -123,7 +119,7 @@ object QCRenderer : Scene.SceneRenderer {
         ctx.fillCircle(center, radius = GATE_SIZE / 8.0)
     }
 
-    private fun renderMeasurementComponent(pos: Vector) {
+    fun renderMeasurementComponent(pos: Vector) {
         ctx.color("#acacac")
         ctx.fillSquare(pos, GATE_SIZE)
 
@@ -138,24 +134,6 @@ object QCRenderer : Scene.SceneRenderer {
         ctx.moveTo(circleCenter.x, circleCenter.y)
         ctx.lineTo(indicatorEnd.x, indicatorEnd.y)
         ctx.stroke()
-    }
-
-    private fun renderAction(rect: Rectangle, action: QCAction) {
-        ctx.color(ACTION_BUTTON_COLOR)
-        ctx.fillRect(rect.pos, rect.width, rect.height)
-
-        ctx.color("black")
-        ctx.fillTextCentered(action.representation, rect.center + Vector(y=2.0))
-    }
-
-
-    private fun renderUI() {
-        ctx.color("#cccccc")
-        ctx.fillRect(0.0, 0.0, Rendering.width, QCUI.TOP_BAR_SIZE)
-
-        QCUI.uiAddableComponents.forEach { renderGate(it.value.pos, it.key) }
-        QCUI.measurementComponent.let { renderMeasurementComponent(it.pos) }
-        QCUI.actions.forEach { renderAction(it.value, it.key) }
     }
 
     private fun Vector.componentPosToCenter() = this + (GATE_SIZE / 2.0)

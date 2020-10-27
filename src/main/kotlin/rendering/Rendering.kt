@@ -31,8 +31,9 @@ object Rendering {
         ctx.clearRect(0.0, 0.0, width, height)
 
         Scene.currentScene.renderer.render()
+        Scene.currentScene.uiManager.getUI().render()
 
-        // redner frametime
+        // render frametime
         ctx.fillStyle = "#000000"
         ctx.font = "10px sans-serif"
         ctx.textAlign = CanvasTextAlign.RIGHT

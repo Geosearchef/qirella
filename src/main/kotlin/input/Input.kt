@@ -14,22 +14,22 @@ object Input {
 
     private fun onMouseMove(event: Event) {
         if(event !is MouseEvent) throw RuntimeException("Event of wrong type")
-        Scene.currentScene.input.onMouseMove(event)
+        Scene.currentScene.input.sealedOnMouseMove(event)
     }
 
     private fun onMouseDown(event: Event) {
         if (event !is MouseEvent) throw RuntimeException("Event of wrong type")
-        Scene.currentScene.input.onMouseDown(event)
+        Scene.currentScene.input.sealedOnMouseDown(event)
     }
 
     private fun onMouseUp(event: Event) {
         if (event !is MouseEvent) throw RuntimeException("Event of wrong type")
-        Scene.currentScene.input.onMouseUp(event)
+        Scene.currentScene.input.sealedOnMouseUp(event)
     }
 
     private fun onMouseWheel(event: Event) {
         if (event !is WheelEvent) throw RuntimeException("Event of wrong type")
-        Scene.currentScene.input.onMouseWheel(event)
+        Scene.currentScene.input.sealedOnMouseWheel(event)
     }
 
     private fun onKeyDown(event: Event) {

@@ -9,19 +9,14 @@ import qcn.QCComposer.grabbedOrigin
 import qcn.circuit.CircuitComponent
 import qcn.circuit.ControlComponent
 import qcn.circuit.GateComponent
-import qcn.ui.QCUI
-import scene.Scene
+import scene.SceneInput
 import util.math.Vector
 
-object QCInput : Scene.SceneInput {
-    var mousePosition = Vector()
+object QCInput : SceneInput() {
     var isMapMoving = false
 
 
-
-    override fun onMouseMove(event: MouseEvent) {
-        mousePosition = Vector(event.offsetX, event.offsetY)
-
+    override fun onMouseMove(event: MouseEvent, isOnUI: Boolean) {
         grabbedComponent?.let {
             circuit.setComponentPosition(it, (toWorldSpace(mousePosition) - QCComposer.GATE_SIZE_WORLD_SPACE / 2).round())// TODO: round correctly
 
@@ -44,10 +39,8 @@ object QCInput : Scene.SceneInput {
 
 
 
-    override fun onMouseDown(event: MouseEvent) {
-        if(mousePosition.y < QCUI.TOP_BAR_SIZE) {
-            QCUI.onUIPressed(mousePosition, event)
-        } else {
+    override fun onMouseDown(event: MouseEvent, isOnUI: Boolean) {
+        if(! isOnUI) {
             onComposerPressed(event)
         }
 
@@ -93,7 +86,7 @@ object QCInput : Scene.SceneInput {
     }
 
 
-    override fun onMouseUp(event: MouseEvent) {
+    override fun onMouseUp(event: MouseEvent, isOnUI: Boolean) {
         // Drop grabbed circuit component
         grabbedComponent?.let { grabbedComponent ->
 
@@ -124,7 +117,7 @@ object QCInput : Scene.SceneInput {
 
 
 
-    override fun onMouseWheel(event: WheelEvent) {
+    override fun onMouseWheel(event: WheelEvent, isOnUI: Boolean) {
 
     }
 

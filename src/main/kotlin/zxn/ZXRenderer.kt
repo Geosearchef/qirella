@@ -17,7 +17,6 @@ object ZXRenderer : Scene.SceneRenderer {
 
 
     override fun render() {
-        // TODO: render UI
         renderNetwork()
     }
 

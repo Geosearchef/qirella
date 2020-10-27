@@ -1,13 +1,16 @@
 package zxn
 
+import scene.UIManager
+import ui.SceneUI
 import util.math.Vector
 import zxn.network.*
 import zxn.network.QubitNode.QubitNodeMode.INPUT
 import zxn.network.QubitNode.QubitNodeMode.OUTPUT
 import zxn.network.Spider.SpiderColor.GREEN
 import zxn.network.Spider.SpiderColor.RED
+import zxn.ui.ZXUI
 
-object ZXComposer {
+object ZXComposer : UIManager {
 
     const val NODE_SIZE = 30.0
     const val NODE_RADIUS = NODE_SIZE / 1.5
@@ -19,6 +22,8 @@ object ZXComposer {
     var network = ZXNetwork()
 
     var grabbedNode: ZXNode? = null
+
+    var uiInstance = ZXUI(300, 200)
 
     fun init() {
         // swap gate network using 3 CNOTs
@@ -52,5 +57,13 @@ object ZXComposer {
 
             addNode(ZXHadamardNode(Vector(5.0, 1.0) * spacing))
         }
+    }
+
+    override fun regenerateUI(width: Int, height: Int) {
+        uiInstance = ZXUI(width, height)
+    }
+
+    override fun getUI(): SceneUI {
+        return uiInstance
     }
 }

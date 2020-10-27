@@ -2,7 +2,7 @@ package rendering
 
 import Qirella
 import org.w3c.dom.*
-import qcn.ui.QCUI
+import scene.Scene
 import util.math.Vector
 import kotlin.math.PI
 
@@ -17,7 +17,7 @@ fun HTMLCanvasElement.resizeCanvas() {
         this.width = displayWidth
         this.height = displayHeight
 
-        QCUI.regenerateUI(this.width, this.height)
+        Scene.values().forEach { it.uiManager.regenerateUI(this.width, this.height) }
         Qirella.requestRender()
         println("Resized canvas to $displayWidth x $displayHeight")
     }

@@ -14,6 +14,7 @@ class ZXNetwork {
 
     fun removeNode(node: ZXNode) {
         nodes.remove(node)
+        wires.filter { it.nodes.first == node || it.nodes.second == node }.forEach { removeWire(it) }
     }
 
     fun addWire(wire: Wire) {

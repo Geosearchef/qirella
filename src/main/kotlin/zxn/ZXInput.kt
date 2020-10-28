@@ -1,6 +1,8 @@
 package zxn
 
 import Qirella
+import input.Input.LEFT_MOUSE_BUTTON
+import input.Input.RIGHT_MOUSE_BUTTON
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
@@ -36,19 +38,28 @@ object ZXInput : SceneInput() {
         if(!isOnUI) {
             onComposerPressed(event)
         }
+
+        Qirella.requestRender()
     }
 
     private fun onComposerPressed(event: MouseEvent) {
+        val pressedNodes = network.nodes.filter { mousePositionWorld in it }
 
-        network.nodes.find { mousePositionWorld in it }?.let { grabbedNode ->
-            if(event.shiftKey) {
 
+        if(event.button.toInt() == LEFT_MOUSE_BUTTON) {
+            if (event.shiftKey) {
+                TODO("wire creation not yet implemented")
+                //pressedNodes.firstOrNull()?.let
             } else {
-                ZXComposer.grabbedNode = grabbedNode
+                pressedNodes.firstOrNull()?.let {
+                    ZXComposer.grabbedNode = it
+                }
             }
         }
 
-
+        if(event.button.toInt() == RIGHT_MOUSE_BUTTON) {
+            pressedNodes.forEach { network.removeNode(it) }
+        }
 
         if(grabbedNode == null) {
             isMapMoving = true

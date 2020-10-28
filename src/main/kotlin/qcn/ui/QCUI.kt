@@ -9,10 +9,6 @@ import qcn.circuit.GateComponent
 import qcn.circuit.GateType
 import qcn.circuit.MeasurementComponent
 import qcn.rendering.QCRenderer
-import rendering.Rendering.ctx
-import rendering.color
-import rendering.fillRect
-import rendering.fillTextCentered
 import ui.SceneUI
 import util.math.Rectangle
 import util.math.Vector
@@ -74,7 +70,7 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
     }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
-        uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { gateType ->
+        uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.key?.let { gateType ->
             grabbedComponent = circuit.addComponent(GateComponent(pos = QCInput.toWorldSpace(mousePosition).round(), type = gateType))
         }
 
@@ -83,7 +79,7 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
         }
 
         actions.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { action ->
-            action.onAction(QCComposer.selectedComponents)
+            action.onAction()
         }
     }
 
@@ -93,14 +89,6 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
         uiAddableComponents.forEach { QCRenderer.renderGate(it.value.pos, it.key) }
         measurementComponent.let { QCRenderer.renderMeasurementComponent(it.pos) }
         actions.forEach { renderAction(it.value, it.key) }
-    }
-
-    fun renderAction(rect: Rectangle, action: QCAction) {
-        ctx.color(QCRenderer.ACTION_BUTTON_COLOR)
-        ctx.fillRect(rect.pos, rect.width, rect.height)
-
-        ctx.color("black")
-        ctx.fillTextCentered(action.representation, rect.center + Vector(y=2.0))
     }
 
     override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE

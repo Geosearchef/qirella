@@ -23,8 +23,6 @@ object QCRenderer : Scene.SceneRenderer {
     const val SELECTION_COLOR = "#27408f"
     const val SELECTION_INDICATOR_WIDTH = 5.0
 
-    const val ACTION_BUTTON_COLOR = "#dddddd"
-
     override fun render() {
         renderCircuit()
     }

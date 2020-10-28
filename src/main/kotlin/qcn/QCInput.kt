@@ -1,6 +1,8 @@
 package qcn
 
 import Qirella
+import input.Input.LEFT_MOUSE_BUTTON
+import input.Input.RIGHT_MOUSE_BUTTON
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
 import qcn.QCComposer.circuit
@@ -50,7 +52,7 @@ object QCInput : SceneInput() {
     private fun onComposerPressed(event: MouseEvent) {
         val worldPos = toWorldSpace(mousePosition)
 
-        if (event.button.toInt() == 0) {
+        if (event.button.toInt() == LEFT_MOUSE_BUTTON) {
             val clickedComponent = getCircuitElementForWorldPos(worldPos)
 
             if(!event.ctrlKey) {
@@ -76,7 +78,7 @@ object QCInput : SceneInput() {
         }
 
         // Deletion
-        if (event.button.toInt() == 2) {
+        if (event.button.toInt() == RIGHT_MOUSE_BUTTON) {
             circuit.components.filter { worldPos in it }.forEach { circuit.removeComponent(it) }
         }
 

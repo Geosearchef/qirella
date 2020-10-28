@@ -26,6 +26,7 @@ fun HTMLCanvasElement.resizeCanvas() {
 fun CanvasRenderingContext2D.setIdentityMatrix() = this.setTransform(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
 
 fun CanvasRenderingContext2D.fillRect(v: Vector, w: Double, h: Double) = fillRect(v.x, v.y, w, h)
+fun CanvasRenderingContext2D.fillRect(v1: Vector, v2: Vector) = fillRect(v1.x, v1.y, v2.x - v1.x, v2.y - v1.y)
 fun CanvasRenderingContext2D.strokeRect(v: Vector, w: Double, h: Double) = strokeRect(v.x, v.y, w, h)
 fun CanvasRenderingContext2D.fillSquare(v: Vector, s: Double) = fillRect(v, s, s)
 fun CanvasRenderingContext2D.fillTextCentered(s: String, v: Vector) {
@@ -57,4 +58,5 @@ fun CanvasRenderingContext2D.strokeCircle(center: Vector, radius: Double) {
 
 fun CanvasRenderingContext2D.color(c: String) {
     fillStyle = c
+    strokeStyle = c
 }

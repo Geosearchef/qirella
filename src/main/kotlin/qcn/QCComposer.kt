@@ -30,7 +30,7 @@ object QCComposer : UIManager {
     var grabbedComponent: CircuitComponent? = null
     var grabbedOrigin: Vector? = null
 
-    var selectedComponents: MutableList<CircuitComponent> = ArrayList<CircuitComponent>()
+    var selectedComponents: MutableList<CircuitComponent> = ArrayList()
 
     var uiInstance = QCUI(300, 200)
 
@@ -45,7 +45,7 @@ object QCComposer : UIManager {
     }
 
     fun selectComponent(component: CircuitComponent) {
-        if(component.selectable) {
+        if(component.selectable && !selectedComponents.contains(component)) {
             selectedComponents.add(component)
         }
     }

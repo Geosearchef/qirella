@@ -7,10 +7,12 @@ import util.math.Vector
 
 abstract class SceneInput {
     var mousePosition: Vector = Vector()
+    var mouseMovement: Vector = Vector()
     var isOnUI: Boolean = false
 
     fun sealedOnMouseMove(event: MouseEvent) {
         mousePosition = Vector(event.offsetX, event.offsetY)
+        mouseMovement = Vector(js("event.movementX") as Double, js("event.movementY") as Double) // not supported by internet explorer, therefore not exposed
         isOnUI = Scene.currentScene.uiManager.getUI().isMouseEventOnUI(mousePosition)
         onMouseMove(event, isOnUI)
     }

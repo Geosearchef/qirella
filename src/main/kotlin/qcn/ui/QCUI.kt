@@ -63,10 +63,10 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
         actions[QCAction.SAVE]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING * 2.0 + ACTION_HEIGHT), ACTION_WIDTH, ACTION_HEIGHT)
 
         // Shift all actions to all to the right of the canvas
-        val actionsWidth = (actions.values.map { it.pos.x + it.width }.maxOrNull() ?: 0.0) + 10.0
+        val actionsWidth = (actions.values.map { it.x + it.width }.maxOrNull() ?: 0.0) + 10.0
         val actionsStartX = this.width - actionsWidth
 
-        actions.values.forEach { it.pos.x += actionsStartX }
+        actions.values.forEach { it.x += actionsStartX }
     }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {

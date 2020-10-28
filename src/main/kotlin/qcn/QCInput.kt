@@ -28,10 +28,7 @@ object QCInput : SceneInput() {
         }
 
         if(isMapMoving) {
-            QCComposer.offset += Vector(
-                js("event.movementX") as Double / QCComposer.GRID_SIZE / QCComposer.scale,  // not supported by internet explorer, therefore not exposed
-                js("event.movementY") as Double / QCComposer.GRID_SIZE / QCComposer.scale
-            )
+            QCComposer.offset += mouseMovement / QCComposer.GRID_SIZE / QCComposer.scale
         }
 
         if(isMapMoving || grabbedComponent != null) {
@@ -52,14 +49,14 @@ object QCInput : SceneInput() {
     private fun onComposerPressed(event: MouseEvent) {
         val worldPos = toWorldSpace(mousePosition)
 
-        if (event.button.toInt() == LEFT_MOUSE_BUTTON) {
+        if (event.button == LEFT_MOUSE_BUTTON) {
             val clickedComponent = getCircuitElementForWorldPos(worldPos)
 
-            if(!event.ctrlKey) {
+            if(!event.shiftKey) {
                 QCComposer.deselectAllComponents()
             }
 
-            if (!event.shiftKey) {
+            if (!event.ctrlKey) {
                 // Gate dragging
                 if (clickedComponent != null) {
                     grabbedComponent = clickedComponent
@@ -78,7 +75,7 @@ object QCInput : SceneInput() {
         }
 
         // Deletion
-        if (event.button.toInt() == RIGHT_MOUSE_BUTTON) {
+        if (event.button == RIGHT_MOUSE_BUTTON) {
             circuit.components.filter { worldPos in it }.forEach { circuit.removeComponent(it) }
         }
 

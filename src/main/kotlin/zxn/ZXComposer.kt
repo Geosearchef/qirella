@@ -22,6 +22,7 @@ object ZXComposer : UIManager {
     var network = ZXNetwork()
 
     var grabbedNode: ZXNode? = null
+    var selectedNodes: MutableList<ZXNode> = ArrayList()
 
     var uiInstance = ZXUI(300, 200)
 
@@ -57,6 +58,16 @@ object ZXComposer : UIManager {
 
             addNode(ZXHadamardNode(Vector(5.0, 1.0) * spacing))
         }
+    }
+
+    fun selectNode(node: ZXNode) {
+        if(node.selectable && !selectedNodes.contains(node)) {
+            selectedNodes.add(node)
+        }
+    }
+
+    fun deselectAllNodes() {
+        selectedNodes.clear()
     }
 
     override fun regenerateUI(width: Int, height: Int) {

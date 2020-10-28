@@ -11,8 +11,8 @@ import scene.Scene
 
 object Input {
     const val KEY_TAB = 9 // WTF JavaScript, why are there no constants defined for this?
-    const val LEFT_MOUSE_BUTTON = 0
-    const val RIGHT_MOUSE_BUTTON = 2
+    const val LEFT_MOUSE_BUTTON: Short = 0
+    const val RIGHT_MOUSE_BUTTON: Short = 2
 
     private fun onMouseMove(event: Event) {
         if(event !is MouseEvent) throw RuntimeException("Event of wrong type")

@@ -1,6 +1,8 @@
 package zxn
 
 import Qirella
+import input.Input.KEY_C
+import input.Input.KEY_D
 import input.Input.LEFT_MOUSE_BUTTON
 import input.Input.RIGHT_MOUSE_BUTTON
 import org.w3c.dom.events.KeyboardEvent
@@ -37,7 +39,7 @@ object ZXInput : SceneInput() {
         mousePositionWorld = toWorldSpace(mousePosition)
         mouseMovementWorld = mouseMovement / ZXComposer.scale
 
-        if(selectionDragMode && selectedNodes.size >= 2) {
+        if(selectionDragMode && selectedNodes.size >= 2 && !selectionAreaMode) {
             selectedNodes.forEach { it.pos += mouseMovementWorld }
         }
         grabbedNode?.let { network.setNodePosition(it, mousePositionWorld) }
@@ -88,18 +90,22 @@ object ZXInput : SceneInput() {
             }
         }
 
-        if(event.button == LEFT_MOUSE_BUTTON && grabbedNode == null && selectedNodes.isEmpty()) {
+        if(event.button == LEFT_MOUSE_BUTTON && !event.shiftKey && selectedNodes.size < 2 && grabbedNode == null) {
             isMapBeingDragged = true
             mapDragStart = mousePosition
         }
 
-        if(event.button == RIGHT_MOUSE_BUTTON) {
+        if(event.button == LEFT_MOUSE_BUTTON && event.shiftKey) {
             selectionAreaMode = true
             selectionAreaStart = mousePositionWorld
         }
     }
 
     override fun onMouseUp(event: MouseEvent, isOnUI: Boolean) {
+        if(isOnUI) {
+            return
+        }
+
         grabbedNode = null
         isMapBeingDragged = false
         selectionDragMode = false
@@ -107,7 +113,7 @@ object ZXInput : SceneInput() {
 
         val pressedNodes = network.nodes.filter { mousePositionWorld in it }
 
-        if(event.button == RIGHT_MOUSE_BUTTON && (selectionDragStart - mousePosition).lengthSquared() < DRAG_TRESHOLD.pow(2)) {
+        if(event.button == RIGHT_MOUSE_BUTTON) {
             pressedNodes.forEach { network.removeNode(it) }
         }
 
@@ -126,7 +132,14 @@ object ZXInput : SceneInput() {
     }
 
     override fun onKeyDown(event: KeyboardEvent) {
+        if(event.keyCode == KEY_C) {
+            ZXComposer.createSelectedWires()
+        }
+        if(event.keyCode == KEY_D) {
+            ZXComposer.deleteSelectedWires()
+        }
 
+        Qirella.requestRender()
     }
 
     override fun onKeyUp(event: KeyboardEvent) {

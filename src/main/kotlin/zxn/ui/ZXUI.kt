@@ -1,6 +1,7 @@
 package zxn.ui
 
 import org.w3c.dom.events.MouseEvent
+import qcn.ui.QCAction
 import ui.SceneUI
 import util.math.Rectangle
 import util.math.Vector
@@ -17,7 +18,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
     override val TOP_BAR_SIZE = 80.0
 
     companion object {
-        const val ACTION_WIDTH = 50.0
+        const val ACTION_WIDTH = 80.0
         const val ACTION_HEIGHT = 25.0
         const val ACTION_SPACING = 10.0
 
@@ -25,7 +26,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
     }
 
     val nodeGenerators = HashMap<Rectangle, Pair<ZXNode, ()->ZXNode> >()
-
+    private val actions = HashMap<QCAction, Rectangle>()
 
 
     // init generators
@@ -54,10 +55,21 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         nodeGenerators[rectangleSupplier.next()] = { QubitNode(Vector(), QubitNode.QubitNodeMode.OUTPUT) }.let(singleInstanceInvoker)
     }
 
+    // init actions
+    init {
+        val actionIntervalX = ACTION_WIDTH + ACTION_SPACING
+        val actionIntervalY = ACTION_HEIGHT + ACTION_SPACING
 
+        //TODO: could be refactored to auto grid
+        addTopBarAction(ZXAction.DELETE_NODES, Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(ZXAction.CREATE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(ZXAction.DELETE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(ZXAction.LOAD, Rectangle(Vector(actionIntervalX * 2.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(ZXAction.SAVE, Rectangle(Vector(actionIntervalX * 2.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))
+    }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
-        // TODO trigger action
+        super.onUIPressed(mousePosition, event)
 
         nodeGenerators.entries.find { mousePosition in it.key }?.value?.second?.let { nodeGenerator ->
             val newNode = nodeGenerator.invoke().apply { pos = ZXInput.toWorldSpace(mousePosition) }

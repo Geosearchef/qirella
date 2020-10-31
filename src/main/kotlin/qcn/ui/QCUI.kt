@@ -58,28 +58,20 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
 
     // Actions, relative to start of action area
     init {
-        actions[QCAction.DELETE] = Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
-        actions[QCAction.LOAD]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
-        actions[QCAction.SAVE]   = Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING * 2.0 + ACTION_HEIGHT), ACTION_WIDTH, ACTION_HEIGHT)
-
-        // Shift all actions to all to the right of the canvas
-        val actionsWidth = (actions.values.map { it.x + it.width }.maxOrNull() ?: 0.0) + 10.0
-        val actionsStartX = this.width - actionsWidth
-
-        actions.values.forEach { it.x += actionsStartX }
+        addTopBarAction(QCAction.DELETE, Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(QCAction.LOAD, Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(QCAction.SAVE, Rectangle(Vector(ACTION_WIDTH + ACTION_SPACING, ACTION_SPACING * 2.0 + ACTION_HEIGHT), ACTION_WIDTH, ACTION_HEIGHT))
     }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
+        super.onUIPressed(mousePosition, event)
+
         uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.key?.let { gateType ->
             grabbedComponent = circuit.addComponent(GateComponent(pos = QCInput.toWorldSpace(mousePosition).round(), type = gateType))
         }
 
         if(mousePosition in measurementComponent) {
             grabbedComponent = circuit.addComponent(MeasurementComponent(QCInput.toWorldSpace(mousePosition).round()))
-        }
-
-        actions.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { action ->
-            action.onAction()
         }
     }
 
@@ -88,7 +80,6 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
 
         uiAddableComponents.forEach { QCRenderer.renderGate(it.value.pos, it.key) }
         measurementComponent.let { QCRenderer.renderMeasurementComponent(it.pos) }
-        actions.forEach { renderAction(it.value, it.key) }
     }
 
     override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE

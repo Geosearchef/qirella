@@ -11,6 +11,8 @@ import scene.Scene
 
 object Input {
     const val KEY_TAB = 9 // WTF JavaScript, why are there no constants defined for this?
+    const val KEY_C = 67
+    const val KEY_D = 68
     const val LEFT_MOUSE_BUTTON: Short = 0
     const val RIGHT_MOUSE_BUTTON: Short = 2
 

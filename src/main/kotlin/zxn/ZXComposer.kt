@@ -70,6 +70,22 @@ object ZXComposer : UIManager {
         selectedNodes.clear()
     }
 
+    fun createSelectedWires() {
+        for(i in 0 until selectedNodes.size) {
+            for(j in i+1 until selectedNodes.size) {
+                network.addWire(Wire(selectedNodes[i], selectedNodes[j]))
+            }
+        }
+    }
+
+    fun deleteSelectedWires() {
+        network.wires.filter { selectedNodes.containsAll(it.nodeSet) }.forEach { network.removeWire(it) }
+    }
+
+    fun deleteSelectedNodes() {
+        selectedNodes.forEach { network.removeNode(it) }
+    }
+
     override fun regenerateUI(width: Int, height: Int) {
         uiInstance = ZXUI(width, height)
     }

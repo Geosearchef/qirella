@@ -7,7 +7,6 @@ class ZXNetwork {
     val nodes: MutableList<ZXNode> = ArrayList()
     val wires: MutableList<Wire> = ArrayList()
 
-
     fun addNode(node: ZXNode) {
         nodes.add(node)
     }
@@ -28,4 +27,13 @@ class ZXNetwork {
     fun setNodePosition(node: ZXNode, newPos: Vector) {
         node.pos = newPos
     }
+
+    fun getDistinctWiresWithMultiplicity(): List<Pair<List<ZXNode>, Int>> =
+        wires
+            .map { it.nodeSet }
+            .distinct()
+            .map { ArrayList(it) }.map { nodePair ->
+                val multiplicity = wires.count { it.nodeSet.containsAll(nodePair) }
+                Pair(nodePair, multiplicity)
+            }
 }

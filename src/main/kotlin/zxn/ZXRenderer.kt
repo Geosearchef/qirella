@@ -35,15 +35,26 @@ object ZXRenderer : Scene.SceneRenderer {
     }
 
     private fun renderWires() {
-        // TODO: how to render / represent multiple
         ctx.lineWidth = 2.0
-        network.wires.forEach {
-            if(selectedNodes.containsAll(it.nodeSet)) {
+
+        network.getDistinctWiresWithMultiplicity().forEach {
+            val node1 = it.first[0]; val node2 = it.first[1]; val multiplicity = it.second
+
+            if(selectedNodes.containsAll(it.first)) {
                 ctx.color(SELECTION_COLOR)
             } else {
                 ctx.color("black");
             }
-            ctx.drawLine(it.nodes.first.pos, it.nodes.second.pos)
+
+            ctx.drawLine(it.first[0].pos, it.first[1].pos)
+
+            if(multiplicity != 1) {
+                val center = node1.pos + (node2.pos - node1.pos) * 0.5
+                ctx.color("white")
+                ctx.fillCircle(center, 8.0)
+                ctx.color("black")
+                ctx.fillTextCentered(multiplicity.toString(), center)
+            }
         }
     }
 

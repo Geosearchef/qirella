@@ -14,6 +14,7 @@ import zxn.network.QubitNode
 import zxn.network.Spider
 import zxn.network.ZXHadamardNode
 import zxn.network.ZXNode
+import kotlin.math.PI
 
 object ZXRenderer : Scene.SceneRenderer {
 
@@ -72,7 +73,7 @@ object ZXRenderer : Scene.SceneRenderer {
         ctx.fillCircle(pos, NODE_RADIUS)
         ctx.color("black")
         if(!Spider.isDefaultPhase(phase)) {
-            ctx.fillTextCentered(phase.toDecimals(2), pos)
+            ctx.fillTextCentered((phase / PI).toDecimals(2), pos)
         }
 
         ctx.color(if(selected) SELECTION_COLOR else "black")

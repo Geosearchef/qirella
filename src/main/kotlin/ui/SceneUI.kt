@@ -6,6 +6,7 @@ import rendering.Rendering.ctx
 import rendering.color
 import rendering.fillRect
 import rendering.fillTextCentered
+import ui.UISeparator.Orientation.VERTICAL
 import util.math.Rectangle
 import util.math.Vector
 
@@ -13,15 +14,19 @@ abstract class SceneUI(val width: Int, val height: Int) {
 
     abstract val TOP_BAR_SIZE: Double
     open val ACTION_BUTTON_COLOR = "#dddddd"
+    open val TOP_BAR_SEPARATOR_SIZE = 0.66
 
     private val topBarActions = HashMap<UIAction, Rectangle>()
     private var topBarActionsCompleted = false
+
+    private val components = ArrayList<UIComponent>()
 
     open fun render() {
         ctx.color("#cccccc")
         ctx.fillRect(0.0, 0.0, Rendering.width, TOP_BAR_SIZE)
 
         renderTopBarActions()
+        components.forEach { it.render() }
     }
 
     fun renderAction(rect: Rectangle, action: UIAction) {
@@ -33,7 +38,17 @@ abstract class SceneUI(val width: Int, val height: Int) {
     }
 
 
+    fun addComponent(component: UIComponent) {
+        components.add(component)
+    }
 
+    fun removeComponent(component: UIComponent) {
+        components.remove(component)
+    }
+
+    fun addTopBarSeparator(x: Double) {
+        components.add(UISeparator(Vector(x, TOP_BAR_SIZE / 2.0), TOP_BAR_SIZE * TOP_BAR_SEPARATOR_SIZE, VERTICAL))
+    }
 
     fun renderTopBarActions() {
         if(!topBarActionsCompleted) {

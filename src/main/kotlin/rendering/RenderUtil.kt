@@ -38,6 +38,15 @@ fun CanvasRenderingContext2D.fillTextCentered(s: String, v: Vector) {
 
     textBaseline = tB; textAlign = tA
 }
+fun CanvasRenderingContext2D.fillTextLeft(s: String, v: Vector) {
+    val tB = textBaseline; val tA = textAlign
+
+    textBaseline = CanvasTextBaseline.TOP
+    textAlign = CanvasTextAlign.LEFT
+    fillText(s, v.x, v.y)
+
+    textBaseline = tB; textAlign = tA
+}
 fun CanvasRenderingContext2D.drawLine(start: Vector, end: Vector) {
     this.beginPath()
     this.moveTo(start.x, start.y)

@@ -1,10 +1,53 @@
 package zxn.ui
 
+import kotlinx.browser.window
 import ui.UIAction
 import zxn.ZXComposer
+import zxn.network.QubitNode
+import zxn.network.Spider
 import zxn.network.ZXNode
+import kotlin.math.PI
 
 enum class ZXAction(override val representation: String) : UIAction {
+
+    TOGGLE_INPUT_OUTPUT("Toggle IN/OUT") {
+        override fun onZXAction(selectedNodes: List<ZXNode>) {
+            selectedNodes.filterIsInstance<QubitNode>().forEach { it.toggleMode() }
+        }
+
+        override fun isEnabled(selectedNodes: List<ZXNode>): Boolean = selectedNodes.firstOrNull() is QubitNode
+    },
+
+    TOGGLE_SPIDER_COLOR("Toggle Color") {
+        override fun onZXAction(selectedNodes: List<ZXNode>) {
+            selectedNodes.filterIsInstance<Spider>().forEach { it.toggleColor() }
+        }
+
+        override fun isEnabled(selectedNodes: List<ZXNode>): Boolean = selectedNodes.firstOrNull() is Spider
+    },
+
+    SET_SPIDER_PHASE("Set phase") {
+        override fun onZXAction(selectedNodes: List<ZXNode>) {
+            val currentPhase = (selectedNodes.filterIsInstance<Spider>().firstOrNull()?.phase ?: PI) / PI
+            window.prompt(message = "New phase? (as a multiple of π)", currentPhase.toString())?.let { newPhaseString ->
+                try {
+                    val newPhaseValue = newPhaseString.toDouble()
+                    selectedNodes.filterIsInstance<Spider>().forEach { it.phase = newPhaseValue * PI }
+                } catch (e: NumberFormatException) {
+                    console.log("Could not parse new phase input: $newPhaseString")
+                }
+            }
+        }
+
+        override fun isEnabled(selectedNodes: List<ZXNode>): Boolean = selectedNodes.firstOrNull() is Spider
+    },
+
+
+
+
+
+
+
 
     REALIGN_ENTIRE_NETWORK("Align (A)") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {
@@ -51,4 +94,6 @@ enum class ZXAction(override val representation: String) : UIAction {
     override fun onAction() {
         onZXAction(ZXComposer.selectedNodes)
     }
+
+    open fun isEnabled(selectedNodes: List<ZXNode>) = true
 }

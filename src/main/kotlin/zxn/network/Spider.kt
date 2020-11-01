@@ -7,7 +7,7 @@ import zxn.ZXComposer
 import kotlin.math.PI
 import kotlin.math.pow
 
-class Spider(pos: Vector, val color: SpiderColor, private var _phase: Double = PI) : ZXNode(pos) {
+class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = PI) : ZXNode(pos) {
     enum class SpiderColor(val colorRepresentation: String) {
         GREEN("#96faaa"), RED("#ff9191");
     }
@@ -24,6 +24,12 @@ class Spider(pos: Vector, val color: SpiderColor, private var _phase: Double = P
 
     override fun isPosOnElement(v: Vector): Boolean {
         return (pos - v).lengthSquared() <= ZXComposer.NODE_RADIUS.pow(2)
+    }
+
+    fun toggleColor() {
+        SpiderColor.values().find { it != color }?.let {
+            this.color = it
+        }
     }
 
 

@@ -86,6 +86,11 @@ object ZXComposer : UIManager {
         selectedNodes.forEach { network.removeNode(it) }
     }
 
+    fun removeNode(node: ZXNode) {
+        network.removeNode(node)
+        selectedNodes.remove(node)
+    }
+
     fun realignNetwork() {
         zxn.network.util.realignNetwork(network)
     }

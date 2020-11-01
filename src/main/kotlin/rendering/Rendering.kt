@@ -1,10 +1,7 @@
 package rendering
 
 import Qirella
-import org.w3c.dom.CanvasRenderingContext2D
-import org.w3c.dom.CanvasTextAlign
-import org.w3c.dom.HTMLCanvasElement
-import org.w3c.dom.RIGHT
+import org.w3c.dom.*
 import scene.Scene
 import util.toDecimals
 
@@ -39,5 +36,6 @@ object Rendering {
         ctx.textAlign = CanvasTextAlign.RIGHT
         averageFrameTime = if(averageFrameTime == -1.0) delta else averageFrameTime * 0.95 + delta * 0.05;
         ctx.fillText("Frame Time: ${averageFrameTime.toDecimals(3)} s  (${ (1.0 / averageFrameTime).toDecimals(1) } fps)", width - 20.0, height - 20.0);
+        ctx.textAlign = CanvasTextAlign.LEFT
     }
 }

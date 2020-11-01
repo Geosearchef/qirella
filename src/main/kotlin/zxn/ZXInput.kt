@@ -115,7 +115,7 @@ object ZXInput : SceneInput() {
         val pressedNodes = network.nodes.filter { mousePositionWorld in it }
 
         if(event.button == RIGHT_MOUSE_BUTTON) {
-            pressedNodes.forEach { network.removeNode(it) }
+            pressedNodes.forEach { ZXComposer.removeNode(it) }
         }
 
         if(event.button == LEFT_MOUSE_BUTTON && (!isMapBeingDragged || (mapDragStart - mousePosition).lengthSquared() < DRAG_TRESHOLD.pow(2))) {

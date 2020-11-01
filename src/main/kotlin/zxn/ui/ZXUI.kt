@@ -1,10 +1,12 @@
 package zxn.ui
 
 import org.w3c.dom.events.MouseEvent
-import qcn.ui.QCAction
+import rendering.Rendering.ctx
+import rendering.fillTextLeft
 import ui.SceneUI
 import util.math.Rectangle
 import util.math.Vector
+import util.toDecimals
 import zxn.ZXComposer
 import zxn.ZXInput
 import zxn.ZXRenderer
@@ -12,6 +14,7 @@ import zxn.network.QubitNode
 import zxn.network.Spider
 import zxn.network.ZXHadamardNode
 import zxn.network.ZXNode
+import kotlin.math.PI
 
 class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
 
@@ -22,11 +25,15 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         const val ACTION_HEIGHT = 25.0
         const val ACTION_SPACING = 10.0
 
+        const val SELECTION_UI_SPACING = 15.0
+
         const val ADDABLE_NODE_SPACING = 25.0
     }
 
     val nodeGenerators = HashMap<Rectangle, Pair<ZXNode, ()->ZXNode> >()
-    private val actions = HashMap<QCAction, Rectangle>()
+    var generatorsEndingX = 0.0
+
+    val selectionActions = HashMap<ZXAction, Rectangle>()
 
 
     // init generators
@@ -53,6 +60,10 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         nodeGenerators[rectangleSupplier.next()] = { ZXHadamardNode(Vector())                            }.let(singleInstanceInvoker)
         nodeGenerators[rectangleSupplier.next()] = { QubitNode(Vector(), QubitNode.QubitNodeMode.INPUT)  }.let(singleInstanceInvoker)
         nodeGenerators[rectangleSupplier.next()] = { QubitNode(Vector(), QubitNode.QubitNodeMode.OUTPUT) }.let(singleInstanceInvoker)
+
+        generatorsEndingX = rectangleSupplier.next().x
+//        addTopBarSeparator(generatorsEndingX)
+        generatorsEndingX += ADDABLE_NODE_SPACING * 2.0
     }
 
     // init actions
@@ -68,6 +79,14 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         addTopBarAction(ZXAction.DELETE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.LOAD, Rectangle(Vector(actionIntervalX * 2.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.SAVE, Rectangle(Vector(actionIntervalX * 2.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))
+
+
+        // Selection actions
+        val selectionActionsStart = generatorsEndingX + 105.0
+
+        selectionActions[ZXAction.TOGGLE_INPUT_OUTPUT] = Rectangle(Vector(selectionActionsStart, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
+        selectionActions[ZXAction.TOGGLE_SPIDER_COLOR] = Rectangle(Vector(selectionActionsStart, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT)
+        selectionActions[ZXAction.SET_SPIDER_PHASE] = Rectangle(Vector(selectionActionsStart, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT)
     }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
@@ -78,14 +97,39 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
             ZXComposer.network.addNode(newNode)
             ZXComposer.grabbedNode = newNode
         }
+
+        selectionActions.filter { it.key.isEnabled(ZXComposer.selectedNodes) && mousePosition in it.value }.forEach {
+            it.key.onZXAction(ZXComposer.selectedNodes)
+        }
     }
 
     override fun render() {
         super.render()
 
+        // Node generators
         nodeGenerators.forEach { entry ->
             ZXRenderer.renderNode(entry.key.center, entry.value.first)
         }
+
+        //Selection properties
+        ctx.font = "12px sans-serif"
+        val selectedNode = ZXComposer.selectedNodes.firstOrNull()
+
+//        if(ZXComposer.selectedNodes.isNotEmpty()) {
+//            ctx.fillTextLeft("Selected: ${ZXComposer.selectedNodes.size}", Vector(generatorsEndingX, SELECTION_UI_SPACING))
+//        }
+
+        if(selectedNode != null) {
+            ctx.fillTextLeft("Type: ${selectedNode::class.simpleName?.replace("ZX", "")?.replace("Node", "") ?: "Unknown"}",
+                Vector(generatorsEndingX, SELECTION_UI_SPACING + 20.0 * 0.0))
+
+            if(selectedNode is Spider) {
+                ctx.fillTextLeft("Color: ${selectedNode.color.name}", Vector(generatorsEndingX, SELECTION_UI_SPACING + 20.0 * 1.0))
+                ctx.fillTextLeft("Phase: ${(selectedNode.phase / PI).toDecimals(3)} π", Vector(generatorsEndingX, SELECTION_UI_SPACING + 20.0 * 2.0))
+            }
+        }
+
+        selectionActions.filter { it.key.isEnabled(ZXComposer.selectedNodes) }.forEach { renderAction(it.value, it.key) }
     }
 
     override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE

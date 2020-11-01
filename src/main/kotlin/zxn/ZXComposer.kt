@@ -86,6 +86,10 @@ object ZXComposer : UIManager {
         selectedNodes.forEach { network.removeNode(it) }
     }
 
+    fun realignNetwork() {
+        zxn.network.util.realignNetwork(network)
+    }
+
     override fun regenerateUI(width: Int, height: Int) {
         uiInstance = ZXUI(width, height)
     }

@@ -8,6 +8,7 @@ class ZXNetwork {
     val wires: MutableList<Wire> = ArrayList()
 
     fun addNode(node: ZXNode) {
+        node.network = this
         nodes.add(node)
     }
 

@@ -1,6 +1,7 @@
 package zxn
 
 import Qirella
+import input.Input.KEY_A
 import input.Input.KEY_C
 import input.Input.KEY_D
 import input.Input.LEFT_MOUSE_BUTTON
@@ -137,6 +138,9 @@ object ZXInput : SceneInput() {
         }
         if(event.keyCode == KEY_D) {
             ZXComposer.deleteSelectedWires()
+        }
+        if(event.keyCode == KEY_A) {
+            ZXComposer.realignNetwork()
         }
 
         Qirella.requestRender()

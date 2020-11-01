@@ -6,19 +6,25 @@ import zxn.network.ZXNode
 
 enum class ZXAction(override val representation: String) : UIAction {
 
+    REALIGN_ENTIRE_NETWORK("Align (A)") {
+        override fun onZXAction(selectedNodes: List<ZXNode>) {
+            ZXComposer.realignNetwork()
+        }
+    },
+
     // selection actions
-    CREATE_WIRES("Create Wires") {
+    CREATE_WIRES("Create Wires (C)") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {
             ZXComposer.createSelectedWires()
         }
     },
-    DELETE_WIRES("Delete Wires") {
+    DELETE_WIRES("Delete Wires (D)") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {
             ZXComposer.deleteSelectedWires()
         }
     },
 
-    DELETE_NODES("Delete Nodes") {
+    DELETE_NODES("Del. Nodes (RMB)") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {
             ZXComposer.deleteSelectedNodes()
         }

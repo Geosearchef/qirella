@@ -18,7 +18,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
     override val TOP_BAR_SIZE = 80.0
 
     companion object {
-        const val ACTION_WIDTH = 80.0
+        const val ACTION_WIDTH = 100.0
         const val ACTION_HEIGHT = 25.0
         const val ACTION_SPACING = 10.0
 
@@ -61,6 +61,8 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         val actionIntervalY = ACTION_HEIGHT + ACTION_SPACING
 
         //TODO: could be refactored to auto grid
+        addTopBarAction(ZXAction.REALIGN_ENTIRE_NETWORK, Rectangle(Vector(actionIntervalX * (-1.0), ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+
         addTopBarAction(ZXAction.DELETE_NODES, Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.CREATE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.DELETE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))

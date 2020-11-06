@@ -7,7 +7,7 @@ import zxn.ZXComposer
 import kotlin.math.PI
 import kotlin.math.pow
 
-class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = PI) : ZXNode(pos) {
+class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = 0.0) : ZXNode(pos) {
     enum class SpiderColor(val colorRepresentation: String) {
         GREEN("#96faaa"), RED("#ff9191");
     }
@@ -34,6 +34,6 @@ class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = P
 
 
     companion object {
-        fun isDefaultPhase(phase: Double) = phase.equalsNumerically(PI, threshold = 0.001)
+        fun isDefaultPhase(phase: Double) = phase.equalsNumerically(0.0, threshold = 0.001)
     }
 }

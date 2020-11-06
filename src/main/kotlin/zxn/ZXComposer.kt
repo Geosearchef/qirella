@@ -21,6 +21,7 @@ object ZXComposer : UIManager {
 
     var network = ZXNetwork()
 
+    
     var grabbedNode: ZXNode? = null
     var selectedNodes: MutableList<ZXNode> = ArrayList()
 

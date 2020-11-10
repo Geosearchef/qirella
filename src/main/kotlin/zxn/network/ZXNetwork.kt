@@ -1,13 +1,16 @@
 package zxn.network
 
 import util.math.Vector
+import zxn.calculus.ruleNodes.RuleNode
 
-class ZXNetwork {
+class ZXNetwork(val representsRule: Boolean = false) {
 
     val nodes: MutableList<ZXNode> = ArrayList()
     val wires: MutableList<Wire> = ArrayList()
 
     fun addNode(node: ZXNode) {
+        check(! this.representsRule && node is RuleNode) { "This network doesn't support rule only nodes" }
+
         node.network = this
         nodes.add(node)
     }

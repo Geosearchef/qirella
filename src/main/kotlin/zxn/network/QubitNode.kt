@@ -6,7 +6,6 @@ import kotlin.math.pow
 
 class QubitNode(pos: Vector, var mode: QubitNodeMode) : ZXNode(pos) {
 
-
     enum class QubitNodeMode(val representation: String) {
         INPUT("IN"), OUTPUT("OUT");
     }

@@ -8,6 +8,7 @@ import kotlin.math.PI
 import kotlin.math.pow
 
 class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = 0.0) : ZXNode(pos) {
+
     enum class SpiderColor(val colorRepresentation: String) {
         GREEN("#96faaa"), RED("#ff9191");
     }

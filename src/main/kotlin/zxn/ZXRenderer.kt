@@ -39,7 +39,9 @@ object ZXRenderer : Scene.SceneRenderer {
         ctx.lineWidth = 2.0
 
         network.getDistinctWiresWithMultiplicity().forEach {
-            val node1 = it.first[0]; val node2 = it.first[1]; val multiplicity = it.second
+            val node1 = it.first[0];
+            val node2 = if(it.first.size == 2) it.first[1] else it.first[0]
+            val multiplicity = it.second
 
             if(selectedNodes.containsAll(it.first)) {
                 ctx.color(SELECTION_COLOR)
@@ -47,14 +49,22 @@ object ZXRenderer : Scene.SceneRenderer {
                 ctx.color("black");
             }
 
-            ctx.drawLine(it.first[0].pos, it.first[1].pos)
+            var multiplicityCenter: Vector
+
+            if(node1 != node2) {
+                ctx.drawLine(node1.pos, node2.pos)
+                multiplicityCenter = node1.pos + (node2.pos - node1.pos) * 0.5
+            } else {
+                // Wire to self
+                ctx.strokeCircle(node1.pos - Vector(y = NODE_RADIUS), NODE_RADIUS / 1.5)
+                multiplicityCenter = node1.pos - Vector(y = NODE_RADIUS * 1.67)
+            }
 
             if(multiplicity != 1) {
-                val center = node1.pos + (node2.pos - node1.pos) * 0.5
                 ctx.color("white")
-                ctx.fillCircle(center, 8.0)
+                ctx.fillCircle(multiplicityCenter, 8.0)
                 ctx.color("black")
-                ctx.fillTextCentered(multiplicity.toString(), center)
+                ctx.fillTextCentered(multiplicity.toString(), multiplicityCenter)
             }
         }
     }

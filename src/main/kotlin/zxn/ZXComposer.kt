@@ -72,9 +72,14 @@ object ZXComposer : UIManager {
     }
 
     fun createSelectedWires() {
-        for(i in 0 until selectedNodes.size) {
-            for(j in i+1 until selectedNodes.size) {
-                network.addWire(Wire(selectedNodes[i], selectedNodes[j]))
+        if(selectedNodes.size == 1) {
+            // create self wire
+            network.addWire(Wire(selectedNodes.first(), selectedNodes.first()))
+        } else {
+            for(i in 0 until selectedNodes.size) {
+                for(j in i+1 until selectedNodes.size) {
+                    network.addWire(Wire(selectedNodes[i], selectedNodes[j]))
+                }
             }
         }
     }

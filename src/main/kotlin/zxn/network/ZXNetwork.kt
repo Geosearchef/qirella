@@ -34,7 +34,7 @@ class ZXNetwork {
             .map { it.nodeSet }
             .distinct()
             .map { ArrayList(it) }.map { nodePair ->
-                val multiplicity = wires.count { it.nodeSet.containsAll(nodePair) }
+                val multiplicity = wires.count { it.nodeSet.containsAll(nodePair) && nodePair.containsAll(it.nodeSet) }
                 Pair(nodePair, multiplicity)
             }
 }

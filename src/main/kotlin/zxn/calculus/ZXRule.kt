@@ -1,16 +1,25 @@
 package zxn.calculus
 
-import zxn.network.ZXNetwork
+import zxn.network.*
 
-abstract class ZXRule(val longName: String, val shortName:String) {
+abstract class ZXRule(val longName: String, val shortName:String, val isInverse: Boolean) {
 
     val ruleNetwork = ZXNetwork(representsRule = true)
-
-    //TODO: inverse?
-    // TODO: HOW TO APPLY THIS?????? automatic transform? manual implementation of transform? Manual implementation of detection and transform?
+    abstract val inverse: ZXRule
 
     //TODO: presentation
     //TODO: specification
     //TODO: detection
     //TODO: application
+
+    fun isApplicable(selectedNodes: List<ZXNode>, network: ZXNetwork) = apply(selectedNodes, network, dryRun = true)
+    abstract fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean = false): Boolean
+
+
+    fun List<ZXNode>.spiders() = this.filterIsInstance<Spider>()
+    fun List<ZXNode>.spiders(color: Spider.SpiderColor) = spiders().filter { it.color == color }
+    fun List<ZXNode>.hadamards() = this.filterIsInstance<ZXHadamardNode>()
+    fun List<ZXNode>.qubits() = this.filterIsInstance<QubitNode>()
+    fun List<ZXNode>.inputs() = qubits().filter { it.mode == QubitNode.QubitNodeMode.INPUT }
+    fun List<ZXNode>.outputs() = qubits().filter { it.mode == QubitNode.QubitNodeMode.OUTPUT }
 }

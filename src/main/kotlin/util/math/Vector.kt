@@ -37,3 +37,5 @@ data class Vector(var x: Double = 0.0, var y: Double = 0.0) {
     }
     // TODO: contained in rect
 }
+
+fun averagePos(vararg pos: Vector) = pos.reduce(Vector::add) / pos.size.toDouble()

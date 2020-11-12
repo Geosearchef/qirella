@@ -40,4 +40,17 @@ class ZXNetwork(val representsRule: Boolean = false) {
                 val multiplicity = wires.count { it.nodeSet.containsAll(nodePair) && nodePair.containsAll(it.nodeSet) }
                 Pair(nodePair, multiplicity)
             }
+
+    fun getNeighborhood(node: ZXNode): Map<ZXNode, Int> {
+        if(! nodes.contains(node)) {
+            return mapOf()
+        }
+
+        return getDistinctWiresWithMultiplicity().filter {
+            it.first.contains(node)
+        }.associateBy(
+                { it.first.find { it != node } ?: node },
+                { it.second }
+        )
+    }
 }

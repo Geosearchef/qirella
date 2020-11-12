@@ -1,8 +1,10 @@
 package zxn
 
+import Qirella
 import scene.UIManager
 import ui.SceneUI
 import util.math.Vector
+import zxn.calculus.ZXRule
 import zxn.network.*
 import zxn.network.QubitNode.QubitNodeMode.INPUT
 import zxn.network.QubitNode.QubitNodeMode.OUTPUT
@@ -99,6 +101,16 @@ object ZXComposer : UIManager {
 
     fun realignNetwork() {
         zxn.network.util.realignNetwork(network)
+    }
+
+    fun applyRule(rule: ZXRule) {
+        val result = rule.apply(selectedNodes, network)
+        if(!result) {
+            console.log("Rule is not applicable in this context")
+        }
+
+        deselectAllNodes()
+        Qirella.requestRender()
     }
 
     override fun regenerateUI(width: Int, height: Int) {

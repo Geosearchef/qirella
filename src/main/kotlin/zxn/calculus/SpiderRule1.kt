@@ -44,9 +44,13 @@ object SpiderRule1 : ZXRule("SpiderRule1", "S1", false) {
         network.removeNode(spider1)
         network.removeNode(spider2)
         network.addNode(newSpider)
+        console.log("Before: ${network.wires.size}")
         neighborhood1.entries.union(neighborhood2.entries)
-                .flatMap { generateSequence { Wire(newSpider, it.key) }.take(it.value) }
-                .forEach { network.addWire(it) }
+            .filter { it.key != spider1 && it.key != spider2 }
+            .flatMap { generateSequence { Wire(newSpider, it.key) }.take(it.value) }
+            .forEach { network.addWire(it) }
+        console.log("After: ${network.wires.size}")
+
 
         return true
     }
@@ -68,7 +72,7 @@ object SpiderRule1 : ZXRule("SpiderRule1", "S1", false) {
 
 }
 
-object SpiderRule1Inverse : ZXRule("SpiderRule1", "S1", true) {
+object SpiderRule1Inverse : ZXRule("SpiderRule1", "S1_I", true) {
     override val inverse = SpiderRule1
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

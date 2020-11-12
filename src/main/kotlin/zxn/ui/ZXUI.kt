@@ -3,6 +3,7 @@ package zxn.ui
 import org.w3c.dom.events.MouseEvent
 import rendering.Rendering.ctx
 import rendering.color
+import rendering.fillRect
 import rendering.fillTextLeft
 import ui.SceneUI
 import util.math.Rectangle
@@ -11,6 +12,7 @@ import util.toDecimals
 import zxn.ZXComposer
 import zxn.ZXInput
 import zxn.ZXRenderer
+import zxn.calculus.ZXRule
 import zxn.network.QubitNode
 import zxn.network.Spider
 import zxn.network.ZXHadamardNode
@@ -30,14 +32,21 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
 
         const val ADDABLE_NODE_SPACING = 25.0
 
-        const val BOT_BAR_SIZE = 160.0
+        const val BOT_BAR_SIZE = 200.0
+        const val BOT_BAR_RULE_SPACING = 20.0
+        const val BOT_BAR_RULE_WIDTH = 120.0
+        const val BOT_BAR_BOTH_RULES_HEIGHT = BOT_BAR_SIZE - 2.0 * BOT_BAR_RULE_SPACING
+        const val BOT_BAR_RULE_HEIGHT = BOT_BAR_BOTH_RULES_HEIGHT / 2.0 - BOT_BAR_RULE_SPACING
     }
+
+    val BOT_BAR_Y = height - BOT_BAR_SIZE
 
     val nodeGenerators = HashMap<Rectangle, Pair<ZXNode, ()->ZXNode> >()
     var generatorsEndingX = 0.0
 
     val selectionActions = HashMap<ZXAction, Rectangle>()
 
+    val ruleButtons = HashMap<ZXRule, Rectangle>()
 
     // init generators
     init {
@@ -92,17 +101,22 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         selectionActions[ZXAction.SET_SPIDER_PHASE] = Rectangle(Vector(selectionActionsStart, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT)
     }
 
-    override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
-        super.onUIPressed(mousePosition, event)
-
-        nodeGenerators.entries.find { mousePosition in it.key }?.value?.second?.let { nodeGenerator ->
-            val newNode = nodeGenerator.invoke().apply { pos = ZXInput.toWorldSpace(mousePosition) }
-            ZXComposer.network.addNode(newNode)
-            ZXComposer.grabbedNode = newNode
-        }
-
-        selectionActions.filter { it.key.isEnabled(ZXComposer.selectedNodes) && mousePosition in it.value }.forEach {
-            it.key.onZXAction(ZXComposer.selectedNodes)
+    // bottom bar
+    init {
+        ZXRule.allRules.forEachIndexed { index, rule ->
+            val xStart = BOT_BAR_RULE_SPACING + (BOT_BAR_RULE_WIDTH + BOT_BAR_RULE_SPACING) * index
+            ruleButtons[rule] = Rectangle(
+                xStart,
+                BOT_BAR_Y + BOT_BAR_RULE_SPACING,
+                BOT_BAR_RULE_WIDTH,
+                BOT_BAR_RULE_HEIGHT
+            )
+            ruleButtons[rule.inverse] = Rectangle(
+                xStart,
+                BOT_BAR_Y + BOT_BAR_RULE_SPACING * 2 + BOT_BAR_RULE_HEIGHT,
+                BOT_BAR_RULE_WIDTH,
+                BOT_BAR_RULE_HEIGHT
+            )
         }
     }
 
@@ -135,15 +149,42 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         selectionActions.filter { it.key.isEnabled(ZXComposer.selectedNodes) }.forEach { renderAction(it.value, it.key) }
 
         //Bottom bar
-        val bottomBarY = height - BOT_BAR_SIZE
-
         ctx.color("#cccccc")
-        ctx.fillRect(0.0, bottomBarY, width.toDouble(), BOT_BAR_SIZE)
+        ctx.fillRect(0.0, BOT_BAR_Y, width.toDouble(), BOT_BAR_SIZE)
+
+        ZXRule.allRules.forEach { rule ->
+            renderRule(rule, ruleButtons[rule]!!)
+            renderRule(rule.inverse, ruleButtons[rule.inverse]!!)
+        }
     }
 
-    override fun renderRule() {
-        //TODO: implement rule display, test spider rule
+    fun renderRule(rule: ZXRule, rect: Rectangle) {
+        if(rule.isApplicable(ZXComposer.selectedNodes, ZXComposer.network)) {
+            ctx.color("#dddddd")
+            ctx.fillRect(rect)
+        }
+
+        ctx.color("black")
+        ctx.fillTextLeft(rule.shortName, rect.pos + Vector(3.0, 3.0))
     }
 
-    override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE
+    override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
+        super.onUIPressed(mousePosition, event)
+
+        nodeGenerators.entries.find { mousePosition in it.key }?.value?.second?.let { nodeGenerator ->
+            val newNode = nodeGenerator.invoke().apply { pos = ZXInput.toWorldSpace(mousePosition) }
+            ZXComposer.network.addNode(newNode)
+            ZXComposer.grabbedNode = newNode
+        }
+
+        selectionActions.filter { it.key.isEnabled(ZXComposer.selectedNodes) && mousePosition in it.value }.forEach {
+            it.key.onZXAction(ZXComposer.selectedNodes)
+        }
+
+        ruleButtons.entries.find { mousePosition in it.value }?.key?.let {
+            ZXComposer.applyRule(it)
+        }
+    }
+
+    override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE || mousePosition.y >= BOT_BAR_Y
 }

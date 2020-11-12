@@ -4,6 +4,12 @@ import zxn.network.*
 
 abstract class ZXRule(val longName: String, val shortName:String, val isInverse: Boolean) {
 
+    companion object {
+        val allRules = listOf(
+            SpiderRule1
+        )
+    }
+
     val ruleNetwork = ZXNetwork(representsRule = true)
     abstract val inverse: ZXRule
 

@@ -2,6 +2,7 @@ package zxn.ui
 
 import org.w3c.dom.events.MouseEvent
 import rendering.Rendering.ctx
+import rendering.color
 import rendering.fillTextLeft
 import ui.SceneUI
 import util.math.Rectangle
@@ -28,6 +29,8 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         const val SELECTION_UI_SPACING = 15.0
 
         const val ADDABLE_NODE_SPACING = 25.0
+
+        const val BOT_BAR_SIZE = 160.0
     }
 
     val nodeGenerators = HashMap<Rectangle, Pair<ZXNode, ()->ZXNode> >()
@@ -130,6 +133,16 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         }
 
         selectionActions.filter { it.key.isEnabled(ZXComposer.selectedNodes) }.forEach { renderAction(it.value, it.key) }
+
+        //Bottom bar
+        val bottomBarY = height - BOT_BAR_SIZE
+
+        ctx.color("#cccccc")
+        ctx.fillRect(0.0, bottomBarY, width.toDouble(), BOT_BAR_SIZE)
+    }
+
+    override fun renderRule() {
+        //TODO: implement rule display, test spider rule
     }
 
     override fun isMouseEventOnUI(mousePosition: Vector): Boolean = mousePosition.y < TOP_BAR_SIZE

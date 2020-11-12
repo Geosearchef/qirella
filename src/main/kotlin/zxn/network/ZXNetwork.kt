@@ -9,7 +9,7 @@ class ZXNetwork(val representsRule: Boolean = false) {
     val wires: MutableList<Wire> = ArrayList()
 
     fun addNode(node: ZXNode) {
-        check(! this.representsRule && node is RuleNode) { "This network doesn't support rule only nodes" }
+        check(! (this.representsRule && node is RuleNode)) { "This network doesn't support rule only nodes" }
 
         node.network = this
         nodes.add(node)

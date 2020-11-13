@@ -16,12 +16,12 @@ object SpiderRule1 : ZXRule("SpiderRule1", "S1", false) {
     override val inverse = SpiderRule1Inverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
-        if(selectedNodes.size != 2 || ! selectedNodes.all { it is Spider }) {
+        if((selectedNodes.size != 1 && selectedNodes.size != 2) || ! selectedNodes.all { it is Spider }) {
             return false
         }
 
         val spider1 = selectedNodes[0] as Spider
-        val spider2 = selectedNodes[1] as Spider
+        val spider2 = if(selectedNodes.size == 2) selectedNodes[1] as Spider else spider1
         val color = spider1.color
 
         if(spider2.color != color) {

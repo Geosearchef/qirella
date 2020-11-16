@@ -6,8 +6,9 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
 
     companion object {
         val allRules = listOf(
-                SpiderRule1,
-                SpiderRule2
+            SpiderRule1,
+            SpiderRule2,
+            CopyingRuleB1
         )
     }
 

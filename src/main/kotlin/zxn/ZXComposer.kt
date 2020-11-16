@@ -25,6 +25,7 @@ object ZXComposer : UIManager {
 
     
     var grabbedNode: ZXNode? = null
+    var grabOffset = Vector()
     var selectedNodes: MutableList<ZXNode> = ArrayList()
 
     var uiInstance = ZXUI(300, 200)

@@ -13,6 +13,7 @@ import scene.SceneInput
 import util.math.Vector
 import util.math.rectangleOf
 import zxn.ZXComposer.deselectAllNodes
+import zxn.ZXComposer.grabOffset
 import zxn.ZXComposer.grabbedNode
 import zxn.ZXComposer.network
 import zxn.ZXComposer.selectNode
@@ -43,7 +44,7 @@ object ZXInput : SceneInput() {
         if(selectionDragMode && selectedNodes.size >= 2 && !selectionAreaMode) {
             selectedNodes.forEach { it.pos += mouseMovementWorld }
         }
-        grabbedNode?.let { network.setNodePosition(it, mousePositionWorld) }
+        grabbedNode?.let { network.setNodePosition(it, mousePositionWorld + grabOffset) }
 
         if(isMapBeingDragged) {
             ZXComposer.offset += mouseMovementWorld
@@ -83,6 +84,7 @@ object ZXInput : SceneInput() {
                         deselectAllNodes()
                     }
                     grabbedNode = it
+                    grabOffset = it.pos - mousePositionWorld
                     ZXComposer.selectNode(it)
                 }
 

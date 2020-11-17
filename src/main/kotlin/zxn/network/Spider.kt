@@ -11,6 +11,8 @@ class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = 0
 
     enum class SpiderColor(val colorRepresentation: String) {
         GREEN("#96faaa"), RED("#ff9191");
+
+        val inverse get() = SpiderColor.values().find { it != this }!!
     }
 
     var phase: Double

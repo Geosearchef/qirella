@@ -45,7 +45,7 @@ object SpiderRule1 : ZXRule("SpiderRule1", "S1", false) {
         network.removeNode(spider2)
         network.addNode(newSpider)
         console.log("Before: ${network.wires.size}")
-        neighborhood1.entries.union(neighborhood2.entries)
+        listOf(neighborhood1.entries, neighborhood2.entries).flatten()
             .filter { it.key != spider1 && it.key != spider2 }
             .flatMap { generateSequence { Wire(newSpider, it.key) }.take(it.value) }
             .forEach { network.addWire(it) }

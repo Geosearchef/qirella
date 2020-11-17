@@ -13,21 +13,37 @@ object CopyingRuleB1 : ZXRule("Copying", "B1", false) {
         if(selectedNodes.size != 2 || !selectedNodes.all { it is Spider && it.phase.equalsNumerically(0.0, 0.001) }) {
             return false
         }
-
+        console.log("trying B1 rule")
         val neighborhoods = selectedNodes.associateWith { network.getNeighborhood(it) }
+
+
+//        val copiedNode = selectedNodes.find {
+//            val neighborhood = network.getNeighborhood(it)
+//            return@find true
+////            return neighborhood.size == 1 && neighborhood.values.sum() == 1
+//        } as Spider? ?: return false
+//
+//        console.log("found individual copied node")
+
+//        val copyingNode = copiedNode
 
         val copyingNode = selectedNodes.find {
             val neighborhood = neighborhoods[it]!!
-            return neighborhood.size >= 2 && neighborhood.any { it.key is Spider && it.value == 1 } && neighborhood.entries.sumBy { it.value } == 3
-        } as? Spider ?: return false
+            console.log("size: ${neighborhood.size}, has singleConnNeighborSpider selected: ${neighborhood.any { it.key is Spider && it.value == 1 && selectedNodes.contains(it) }}, neighborhoodConnsSum: ${neighborhood.entries.sumBy { it.value }}, returning: ${neighborhood.size >= 2 && neighborhood.any { it.key is Spider && it.value == 1 && selectedNodes.contains(it) } && neighborhood.entries.sumBy { it.value } == 3}")
+            return@find neighborhood.size == 3 && neighborhood.any { it.key is Spider && it.value == 1 && selectedNodes.contains(it.key) } && neighborhood.entries.sumBy { it.value } == 3
+        } as? Spider? ?: return false
+
+        console.log("found copying node: " + copyingNode.color)
 
         val copiedNode = selectedNodes.find {
             val neighborhood = neighborhoods[it]!!
-            return neighborhood.size == 1 && neighborhood.containsKey(copyingNode) && neighborhood[copyingNode] == 1
+            return@find neighborhood.size == 1 && neighborhood.containsKey(copyingNode) && neighborhood[copyingNode] == 1 && (it as Spider).color != copyingNode.color
         } as? Spider ?: return false
 
-        val externalNode1 = neighborhoods[copyingNode]!!.keys.first()
-        val externalNode2 = neighborhoods[copyingNode]!!.keys.find { it != externalNode1 } ?: externalNode1
+        console.log("found copied node: " + copiedNode.color)
+
+        val externalNode1 = neighborhoods[copyingNode]!!.keys.find { it != copyingNode && it != copiedNode } ?: return false
+        val externalNode2 = neighborhoods[copyingNode]!!.keys.find { it != copyingNode && it != copiedNode && it != externalNode1 } ?: externalNode1
 
         if(dryRun) {
             return true

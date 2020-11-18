@@ -1,5 +1,6 @@
 package zxn.calculus
 
+import util.math.equalsNumerically
 import zxn.network.*
 
 abstract class ZXRule(val longName: String, val shortName:String, val isInverse: Boolean) {
@@ -8,7 +9,9 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
         val allRules = listOf(
             SpiderRule1,
             SpiderRule2,
-            CopyingRuleB1
+            CopyingRuleB1,
+            HopfLawH,
+            BialgebraLawB2
         )
     }
 
@@ -23,6 +26,10 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
     fun isApplicable(selectedNodes: List<ZXNode>, network: ZXNetwork) = apply(selectedNodes, network, dryRun = true)
     abstract fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean = false): Boolean
 
+
+    protected fun verifyCount(selectedNodes: List<ZXNode>, count: Int) = selectedNodes.size == count
+    protected fun verifySpiderCount(selectedNodes: List<ZXNode>, count: Int) = verifyCount(selectedNodes, count) && selectedNodes.all { it is Spider }
+    protected fun verifySpiderZeroPhaseCount(selectedNodes: List<ZXNode>, count: Int) = verifyCount(selectedNodes, count) && selectedNodes.all { (it as? Spider)?.phase?.equalsNumerically(0.0, 0.001) ?: false }
 
     fun List<ZXNode>.spiders() = this.filterIsInstance<Spider>()
     fun List<ZXNode>.spiders(color: Spider.SpiderColor) = spiders().filter { it.color == color }

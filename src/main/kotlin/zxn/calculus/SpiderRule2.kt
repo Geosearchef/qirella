@@ -40,7 +40,7 @@ object SpiderRule2 : ZXRule("SpiderRule2", "S2", false) {
     }
 }
 
-object SpiderRule2Inverse : ZXRule("SpiderRule2Inverse", "S2_I", true) {
+object SpiderRule2Inverse : ZXRule("SpiderRule2Inv", "S2_I", true) {
 
     override val inverse = SpiderRule2
 

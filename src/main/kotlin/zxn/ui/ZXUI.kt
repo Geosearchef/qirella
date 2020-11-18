@@ -165,7 +165,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         }
 
         ctx.color("black")
-        ctx.fillTextLeft(rule.shortName, rect.pos + Vector(3.0, 3.0))
+        ctx.fillTextLeft("${rule.shortName} (${rule.longName})", rect.pos + Vector(3.0, 3.0))
     }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {

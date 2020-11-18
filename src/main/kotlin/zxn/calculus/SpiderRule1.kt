@@ -72,7 +72,7 @@ object SpiderRule1 : ZXRule("SpiderRule1", "S1", false) {
 
 }
 
-object SpiderRule1Inverse : ZXRule("SpiderRule1", "S1_I", true) {
+object SpiderRule1Inverse : ZXRule("SpiderRule1 Inv", "S1_I", true) {
     override val inverse = SpiderRule1
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

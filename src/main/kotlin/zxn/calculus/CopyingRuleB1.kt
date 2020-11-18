@@ -1,7 +1,6 @@
 package zxn.calculus
 
 import util.math.averagePos
-import util.math.equalsNumerically
 import zxn.network.Spider
 import zxn.network.Wire
 import zxn.network.ZXNetwork
@@ -11,7 +10,7 @@ object CopyingRuleB1 : ZXRule("Copying", "B1", false) {
     override val inverse: ZXRule = CopyingRuleB1Inverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
-        if(selectedNodes.size != 2 || !selectedNodes.all { it is Spider && it.phase.equalsNumerically(0.0, 0.001) }) {
+        if(! verifySpiderZeroPhaseCount(selectedNodes, 2)) {
             return false
         }
 
@@ -50,11 +49,11 @@ object CopyingRuleB1 : ZXRule("Copying", "B1", false) {
 
 }
 
-object CopyingRuleB1Inverse : ZXRule("CopyingInverse", "B1_I", true) {
+object CopyingRuleB1Inverse : ZXRule("Copying Inv", "B1_I", true) {
     override val inverse: ZXRule = CopyingRuleB1
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
-        if(selectedNodes.size != 2 || !selectedNodes.all { it is Spider && it.phase.equalsNumerically(0.0, 0.001) }) {
+        if(! verifySpiderZeroPhaseCount(selectedNodes, 2)) {
             return false
         }
 

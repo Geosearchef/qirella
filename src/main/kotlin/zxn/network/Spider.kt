@@ -38,5 +38,6 @@ class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = 0
 
     companion object {
         fun isDefaultPhase(phase: Double) = phase.equalsNumerically(0.0, threshold = 0.001)
+        fun isPiPhase(phase: Double) = phase.equalsNumerically(PI, threshold = 0.001)
     }
 }

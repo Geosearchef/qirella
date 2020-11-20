@@ -83,7 +83,7 @@ object ZXRenderer : Scene.SceneRenderer {
         ctx.fillCircle(pos, NODE_RADIUS)
         ctx.color("black")
         if(!Spider.isDefaultPhase(phase)) {
-            ctx.fillTextCentered((phase / PI).toDecimals(2), pos)
+            ctx.fillTextCentered(if(Spider.isPiPhase(phase)) "π" else (phase / PI).toDecimals(2), pos)
         }
 
         ctx.color(if(selected) SELECTION_COLOR else "black")

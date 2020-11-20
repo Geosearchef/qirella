@@ -24,13 +24,14 @@ object HopfLawH : ZXRule("HopfLaw", "H", false) {
         val neighborhood1 = network.getNeighborhood(spider1)
         val neighborhood2 = network.getNeighborhood(spider2)
 
-        if(neighborhood1.entries.filter { it.key != spider2 }.sumBy { it.value } != 1
-            || neighborhood2.entries.filter { it.key != spider1 }.sumBy { it.value } != 1) {
+        if(neighborhood1.entries.filter { it.key != spider2 }.sumBy { it.value } < 1
+            || neighborhood2.entries.filter { it.key != spider1 }.sumBy { it.value } < 1) {
             return false
         }
 
-        val externalNode1 = neighborhood1.keys.find { it != spider2 }
-        val externalNode2 = neighborhood2.keys.find { it != spider1 }
+        // can be more than one node
+//        val externalNode1 = neighborhood1.keys.find { it != spider2 }
+//        val externalNode2 = neighborhood2.keys.find { it != spider1 }
 
         if(! neighborhood1.containsKey(spider2) || neighborhood1[spider2] != 2) {
             return false
@@ -66,12 +67,13 @@ object HopfLawHInverse : ZXRule("HopfLaw Inv", "H_I", true) {
         val neighborhood1 = network.getNeighborhood(spider1)
         val neighborhood2 = network.getNeighborhood(spider2)
 
-        if(neighborhood1.values.sum() != 1 || neighborhood2.values.sum() != 1 || neighborhood1.containsKey(spider2) || neighborhood2.containsKey(spider1)) {
+        if(neighborhood1.values.sum() < 1 || neighborhood2.values.sum() < 1 || neighborhood1.containsKey(spider2) || neighborhood2.containsKey(spider1)) {
             return false
         }
 
-        val externalNode1 = neighborhood1.keys.firstOrNull() ?: return false
-        val externalNode2 = neighborhood2.keys.firstOrNull() ?: return false
+        // count doesn't matter
+//        val externalNode1 = neighborhood1.keys.firstOrNull() ?: return false
+//        val externalNode2 = neighborhood2.keys.firstOrNull() ?: return false
 
         if(dryRun) {
             return true

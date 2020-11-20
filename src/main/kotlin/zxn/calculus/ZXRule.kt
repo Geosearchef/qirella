@@ -13,6 +13,7 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
                 CopyingRuleB1,
                 HopfLawH,
                 BialgebraLawB2,
+                PiCopyRule,
                 PiCommutationRule
         )
     }
@@ -20,10 +21,6 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
     val ruleNetwork = ZXNetwork(representsRule = true)
     abstract val inverse: ZXRule
 
-    //TODO: presentation
-    //TODO: specification
-    //TODO: detection
-    //TODO: application
 
     fun isApplicable(selectedNodes: List<ZXNode>, network: ZXNetwork) = apply(selectedNodes, network, dryRun = true)
     abstract fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean = false): Boolean

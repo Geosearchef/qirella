@@ -14,7 +14,9 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
                 HopfLawH,
                 BialgebraLawB2,
                 PiCopyRule,
-                PiCommutationRule
+                PiCommutationRule,
+                ColorRule,
+                HadamardShorthand
         )
     }
 

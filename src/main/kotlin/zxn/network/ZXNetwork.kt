@@ -24,6 +24,8 @@ class ZXNetwork(val representsRule: Boolean = false) {
         wires.add(wire)
     }
 
+    fun addWire(node1: ZXNode, node2: ZXNode) = addWire(Wire(node1, node2))
+
     fun removeWire(wire: Wire) {
         wires.remove(wire)
     }

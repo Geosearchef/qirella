@@ -1,10 +1,11 @@
 package zxn.calculus
 
+import rendering.Image
 import util.math.equalsNumerically
 import zxn.network.*
 import kotlin.math.PI
 
-abstract class ZXRule(val longName: String, val shortName:String, val isInverse: Boolean) {
+abstract class ZXRule(val longName: String, val shortName:String, val isInverse: Boolean, val imageSrc: String? = null) {
 
     companion object {
         val allRules = listOf(
@@ -16,13 +17,14 @@ abstract class ZXRule(val longName: String, val shortName:String, val isInverse:
                 PiCopyRule,
                 PiCommutationRule,
                 ColorRule,
+                EulerDecomposition,
                 HadamardShorthand
         )
     }
 
     val ruleNetwork = ZXNetwork(representsRule = true)
     abstract val inverse: ZXRule
-
+    val imageRepresentation: Image? = imageSrc?.let { Image(it) }
 
     fun isApplicable(selectedNodes: List<ZXNode>, network: ZXNetwork) = apply(selectedNodes, network, dryRun = true)
     abstract fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean = false): Boolean

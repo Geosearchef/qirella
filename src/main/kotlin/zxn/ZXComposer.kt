@@ -59,8 +59,6 @@ object ZXComposer : UIManager {
             addWire(Wire(nodes[1], nodes[6]))
             addWire(Wire(nodes[2], nodes[7]))
             addWire(Wire(nodes[3], nodes[8]))
-
-            addNode(ZXHadamardNode(Vector(5.0, 1.0) * spacing))
         }
     }
 

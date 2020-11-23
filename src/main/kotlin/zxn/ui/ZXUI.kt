@@ -4,6 +4,7 @@ import org.w3c.dom.events.MouseEvent
 import rendering.Rendering.ctx
 import rendering.color
 import rendering.fillRect
+import rendering.fillTextCentered
 import rendering.fillTextLeft
 import ui.SceneUI
 import util.math.Rectangle
@@ -32,7 +33,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
 
         const val ADDABLE_NODE_SPACING = 25.0
 
-        const val BOT_BAR_SIZE = 200.0
+        const val BOT_BAR_SIZE = 250.0
         const val BOT_BAR_RULE_SPACING = 20.0
         const val BOT_BAR_RULE_WIDTH = 120.0
         const val BOT_BAR_BOTH_RULES_HEIGHT = BOT_BAR_SIZE - 2.0 * BOT_BAR_RULE_SPACING
@@ -107,13 +108,13 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
             val xStart = BOT_BAR_RULE_SPACING + (BOT_BAR_RULE_WIDTH + BOT_BAR_RULE_SPACING) * index
             ruleButtons[rule] = Rectangle(
                 xStart,
-                BOT_BAR_Y + BOT_BAR_RULE_SPACING,
+                BOT_BAR_Y + BOT_BAR_RULE_SPACING * 2,
                 BOT_BAR_RULE_WIDTH,
                 BOT_BAR_RULE_HEIGHT
             )
             ruleButtons[rule.inverse] = Rectangle(
                 xStart,
-                BOT_BAR_Y + BOT_BAR_RULE_SPACING * 2 + BOT_BAR_RULE_HEIGHT,
+                BOT_BAR_Y + BOT_BAR_RULE_SPACING * 3 + BOT_BAR_RULE_HEIGHT,
                 BOT_BAR_RULE_WIDTH,
                 BOT_BAR_RULE_HEIGHT
             )
@@ -164,8 +165,21 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
             ctx.fillRect(rect)
         }
 
-        ctx.color("black")
-        ctx.fillTextLeft("${rule.shortName} (${rule.longName})", rect.pos + Vector(3.0, 3.0))
+        rule.imageRepresentation?.let { ruleImage ->
+            ctx.drawImage(ruleImage.wrappedImage, rect.x, rect.y, BOT_BAR_RULE_WIDTH, BOT_BAR_RULE_HEIGHT)
+        }
+
+        if(rule.isInverse) {
+            ctx.font = "20px sans-serif"
+            ctx.color("#444444")
+            ctx.fillTextCentered("↕", Vector(rect.pos.x + BOT_BAR_RULE_WIDTH / 2.0, BOT_BAR_Y + BOT_BAR_RULE_SPACING * 2.5 + BOT_BAR_RULE_HEIGHT + 2.0))
+            ctx.font = "12px sans-serif"
+        }
+
+        if(!rule.isInverse) {
+            ctx.color("black")
+            ctx.fillTextLeft("${rule.shortName} (${rule.longName})", Vector(rect.pos.x + 3.0, BOT_BAR_Y + BOT_BAR_RULE_SPACING))
+        }
     }
 
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {

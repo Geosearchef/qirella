@@ -39,7 +39,7 @@ object PiCommutationRule : ZXRule("PiComm", "K2", false) {
         piSpider.toggleColor()
         alphaSpider.toggleColor()
 
-        piSpider.phase = alphaSpider.phase
+        piSpider.phase = alphaSpider.phase * (-1.0)
         alphaSpider.phase = PI
 
         return true

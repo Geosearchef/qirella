@@ -6,7 +6,7 @@ import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 import kotlin.math.PI
 
-object PiCommutationRule : ZXRule("PiComm", "K2", false) {
+object PiCommutationRule : ZXRule("PiComm", "K2", false, "k2.png") {
     override val inverse = PiCommutationRuleInverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
@@ -46,7 +46,7 @@ object PiCommutationRule : ZXRule("PiComm", "K2", false) {
     }
 }
 
-object PiCommutationRuleInverse : ZXRule("PiComm Inv", "K2_I", true) {
+object PiCommutationRuleInverse : ZXRule("PiComm Inv", "K2_I", true, "k2i.png") {
     override val inverse = PiCommutationRule
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean = inverse.apply(selectedNodes, network, dryRun)

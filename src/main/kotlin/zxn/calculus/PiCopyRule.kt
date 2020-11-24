@@ -8,7 +8,7 @@ import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 import kotlin.math.PI
 
-object PiCopyRule : ZXRule("PiCopy", "K1", false) {
+object PiCopyRule : ZXRule("PiCopy", "K1", false, "k1.png") {
     override val inverse: ZXRule = PiCopyRuleInverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
@@ -68,7 +68,7 @@ object PiCopyRule : ZXRule("PiCopy", "K1", false) {
     }
 }
 
-object PiCopyRuleInverse : ZXRule("PiCopy Inv", "K1_I", true) {
+object PiCopyRuleInverse : ZXRule("PiCopy Inv", "K1_I", true, "k1i.png") {
     override val inverse: ZXRule = PiCopyRule
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

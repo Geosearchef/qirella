@@ -11,7 +11,7 @@ import zxn.network.Wire
 import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 
-object SpiderRule1 : ZXRule("SpiderRule1", "S1", false, "https://geosearchef.de/MatellaIconWhite.png") {
+object SpiderRule1 : ZXRule("SpiderRule1", "S1", false, "s1.png") {
 
     override val inverse = SpiderRule1Inverse
 
@@ -72,7 +72,7 @@ object SpiderRule1 : ZXRule("SpiderRule1", "S1", false, "https://geosearchef.de/
 
 }
 
-object SpiderRule1Inverse : ZXRule("SpiderRule1 Inv", "S1_I", true, "https://geosearchef.de/MatellaIconWhite.png") {
+object SpiderRule1Inverse : ZXRule("SpiderRule1 Inv", "S1_I", true, "s1i.png") {
     override val inverse = SpiderRule1
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

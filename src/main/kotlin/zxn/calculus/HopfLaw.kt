@@ -5,7 +5,7 @@ import zxn.network.Wire
 import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 
-object HopfLawH : ZXRule("HopfLaw", "H", false) {
+object HopfLawH : ZXRule("HopfLaw", "H", false, "h.png") {
 
     override val inverse: ZXRule = HopfLawHInverse
 
@@ -48,7 +48,7 @@ object HopfLawH : ZXRule("HopfLaw", "H", false) {
     }
 }
 
-object HopfLawHInverse : ZXRule("HopfLaw Inv", "H_I", true) {
+object HopfLawHInverse : ZXRule("HopfLaw Inv", "H_I", true, "hi.png") {
 
     override val inverse: ZXRule = HopfLawH
 

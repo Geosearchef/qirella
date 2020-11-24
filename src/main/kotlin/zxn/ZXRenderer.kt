@@ -51,6 +51,10 @@ object ZXRenderer : Scene.SceneRenderer {
 
             var multiplicityCenter: Vector
 
+            if(ZXComposer.greyscaleMode) {
+                ctx.lineWidth = 4.0
+            }
+
             if(node1 != node2) {
                 ctx.drawLine(node1.pos, node2.pos)
                 multiplicityCenter = node1.pos + (node2.pos - node1.pos) * 0.5
@@ -66,6 +70,8 @@ object ZXRenderer : Scene.SceneRenderer {
                 ctx.color("black")
                 ctx.fillTextCentered(multiplicity.toString(), multiplicityCenter)
             }
+
+            ctx.lineWidth = 2.0
         }
     }
 
@@ -86,9 +92,11 @@ object ZXRenderer : Scene.SceneRenderer {
             ctx.fillTextCentered(if(Spider.isPiPhase(phase)) "π" else (phase / PI).toDecimals(2), pos)
         }
 
+
         ctx.color(if(selected) SELECTION_COLOR else "black")
-        ctx.lineWidth = 2.0
+        ctx.lineWidth = if(ZXComposer.greyscaleMode) 4.0 else 2.0
         ctx.strokeCircle(pos, NODE_RADIUS)
+        ctx.lineWidth = 2.0
     }
 
     private fun renderQubitNode(pos: Vector, mode: QubitNode.QubitNodeMode, selected: Boolean) {

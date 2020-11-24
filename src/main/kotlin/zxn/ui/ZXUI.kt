@@ -166,6 +166,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         }
 
         rule.imageRepresentation?.let { ruleImage ->
+            console.log("$BOT_BAR_RULE_WIDTH   $BOT_BAR_RULE_HEIGHT")
             ctx.drawImage(ruleImage.wrappedImage, rect.x, rect.y, BOT_BAR_RULE_WIDTH, BOT_BAR_RULE_HEIGHT)
         }
 

@@ -4,6 +4,7 @@ import Qirella
 import input.Input.KEY_A
 import input.Input.KEY_C
 import input.Input.KEY_D
+import input.Input.KEY_G
 import input.Input.LEFT_MOUSE_BUTTON
 import input.Input.RIGHT_MOUSE_BUTTON
 import org.w3c.dom.events.KeyboardEvent
@@ -44,7 +45,7 @@ object ZXInput : SceneInput() {
         if(selectionDragMode && selectedNodes.size >= 2 && !selectionAreaMode) {
             selectedNodes.forEach { it.pos += mouseMovementWorld }
         }
-        grabbedNode?.let { network.setNodePosition(it, mousePositionWorld + grabOffset) }
+        grabbedNode?.let { network.setNodePosition(it, (if(!event.ctrlKey) (mousePositionWorld + grabOffset) else ((mousePositionWorld + grabOffset) / 20.0).round() * 20.0)) }
 
         if(isMapBeingDragged) {
             ZXComposer.offset += mouseMovementWorld
@@ -143,6 +144,9 @@ object ZXInput : SceneInput() {
         }
         if(event.keyCode == KEY_A) {
             ZXComposer.realignNetwork()
+        }
+        if(event.keyCode == KEY_G) {
+            ZXComposer.greyscaleMode = !ZXComposer.greyscaleMode
         }
 
         Qirella.requestRender()

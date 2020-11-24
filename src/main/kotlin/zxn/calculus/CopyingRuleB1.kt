@@ -6,7 +6,7 @@ import zxn.network.Wire
 import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 
-object CopyingRuleB1 : ZXRule("Copying", "B1", false) {
+object CopyingRuleB1 : ZXRule("Copying", "B1", false, "b1.png") {
     override val inverse: ZXRule = CopyingRuleB1Inverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
@@ -49,7 +49,7 @@ object CopyingRuleB1 : ZXRule("Copying", "B1", false) {
 
 }
 
-object CopyingRuleB1Inverse : ZXRule("Copying Inv", "B1_I", true) {
+object CopyingRuleB1Inverse : ZXRule("Copying Inv", "B1_I", true, "b1i.png") {
     override val inverse: ZXRule = CopyingRuleB1
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

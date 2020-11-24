@@ -30,6 +30,8 @@ object ZXComposer : UIManager {
 
     var uiInstance = ZXUI(300, 200)
 
+    var greyscaleMode = false
+
     fun init() {
         // swap gate network using 3 CNOTs
         with(network) {

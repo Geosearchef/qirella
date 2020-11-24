@@ -3,7 +3,7 @@ package zxn.calculus
 import util.math.averagePos
 import zxn.network.*
 
-object ColorRule : ZXRule("ColorRule", "C", false) {
+object ColorRule : ZXRule("ColorRule", "C", false, "c.png") {
     override val inverse: ZXRule = ColorRuleInverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
@@ -39,7 +39,7 @@ object ColorRule : ZXRule("ColorRule", "C", false) {
     }
 }
 
-object ColorRuleInverse : ZXRule("ColorRule Inv", "C_I", true) {
+object ColorRuleInverse : ZXRule("ColorRule Inv", "C_I", true, "ci.png") {
     override val inverse: ZXRule = ColorRule
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean) = ColorRule.apply(selectedNodes, network, dryRun)

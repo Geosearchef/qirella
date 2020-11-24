@@ -11,7 +11,7 @@ import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 import kotlin.math.PI
 
-object EulerDecomposition : ZXRule("EulerDecomp", "H", false) {
+object EulerDecomposition : ZXRule("EulerDecomp", "H", false, "euler.png") {
     override val inverse: ZXRule = EulerDecompositionInverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
@@ -48,7 +48,7 @@ object EulerDecomposition : ZXRule("EulerDecomp", "H", false) {
 
 }
 
-object EulerDecompositionInverse : ZXRule("EulerDecomp Inv", "H_I", true) {
+object EulerDecompositionInverse : ZXRule("EulerDecomp Inv", "H_I", true, "eulerI.png") {
     override val inverse: ZXRule = EulerDecomposition
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

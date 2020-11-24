@@ -4,7 +4,7 @@ import zxn.network.ZXHadamardNode
 import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 
-object HadamardShorthand : ZXRule("HadamardShorthand", "-", false) {
+object HadamardShorthand : ZXRule("HadamardShorthand", "-", false, "hadamardShorthand.png") {
     override val inverse: ZXRule = HadamardShorthandInverse
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
@@ -43,7 +43,7 @@ object HadamardShorthand : ZXRule("HadamardShorthand", "-", false) {
 
 }
 
-object HadamardShorthandInverse : ZXRule("HadamardShorthand Inv", "-", true) {
+object HadamardShorthandInverse : ZXRule("HadamardShorthand Inv", "-", true, "hadamardShorthandI.png") {
     override val inverse: ZXRule = HadamardShorthand
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {

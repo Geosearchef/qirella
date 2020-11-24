@@ -9,7 +9,7 @@ import zxn.network.Wire
 import zxn.network.ZXNetwork
 import zxn.network.ZXNode
 
-object BialgebraLawB2 : ZXRule("BialgebraLaw", "B2", false) {
+object BialgebraLawB2 : ZXRule("BialgebraLaw", "B2", false, "b2.png") {
 
     override val inverse: ZXRule = BialgebraLawB2Inverse
 
@@ -70,7 +70,7 @@ object BialgebraLawB2 : ZXRule("BialgebraLaw", "B2", false) {
     }
 }
 
-object BialgebraLawB2Inverse : ZXRule("BialgebraLaw Inv", "B2_I", true) {
+object BialgebraLawB2Inverse : ZXRule("BialgebraLaw Inv", "B2_I", true, "b2i.png") {
 
     override val inverse: ZXRule = BialgebraLawB2
 

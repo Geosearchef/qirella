@@ -9,8 +9,10 @@ import kotlin.math.pow
 
 class Spider(pos: Vector, var color: SpiderColor, private var _phase: Double = 0.0) : ZXNode(pos) {
 
-    enum class SpiderColor(val colorRepresentation: String) {
-        GREEN("#96faaa"), RED("#ff9191");
+    enum class SpiderColor(val _colorRepresentation: String, val greyscaleRepresentation: String) {
+        GREEN("#96faaa", "#eeeeee"), RED("#ff9191", "#666666");
+
+        val colorRepresentation get() = if(ZXComposer.greyscaleMode) greyscaleRepresentation else _colorRepresentation
 
         val inverse get() = SpiderColor.values().find { it != this }!!
     }

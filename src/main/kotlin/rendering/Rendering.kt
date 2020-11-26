@@ -32,10 +32,11 @@ object Rendering {
 
         // render frametime
         ctx.fillStyle = "#000000"
-        ctx.font = "10px sans-serif"
+        ctx.font = "8px sans-serif"
         ctx.textAlign = CanvasTextAlign.RIGHT
         averageFrameTime = if(averageFrameTime == -1.0) delta else averageFrameTime * 0.95 + delta * 0.05;
-        ctx.fillText("Frame Time: ${averageFrameTime.toDecimals(3)} s  (${ (1.0 / averageFrameTime).toDecimals(1) } fps)", width - 20.0, height - 20.0);
+        ctx.fillText("Frame Time: ${averageFrameTime.toDecimals(3)} s  (${ (1.0 / averageFrameTime).toDecimals(1) } fps)", width - 3.0, height - 3.0);
         ctx.textAlign = CanvasTextAlign.LEFT
+        ctx.font = "10px sans-serif"
     }
 }

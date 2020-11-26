@@ -89,7 +89,9 @@ object ZXRenderer : Scene.SceneRenderer {
         ctx.fillCircle(pos, NODE_RADIUS)
         ctx.color("black")
         if(!Spider.isDefaultPhase(phase)) {
-            ctx.fillTextCentered(if(Spider.isPiPhase(phase)) "π" else (phase / PI).toDecimals(2), pos)
+            ctx.font = "15px sans-serif"
+            ctx.fillTextCentered(if(Spider.isPiPhase(phase)) "π" else (phase / PI).toDecimals(2), pos) // π
+            ctx.font = "10px sans-serif"
         }
 
 

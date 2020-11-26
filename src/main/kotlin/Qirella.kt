@@ -5,6 +5,8 @@ import rendering.Rendering
 import util.Util
 
 object Qirella {
+    const val GITHUB_URL = "https://github.com/geosearchef/qirella"
+
     val canvas = document.getElementById("composer-canvas") as? HTMLCanvasElement ?: throw RuntimeException("Composer canvas not found")
 
     var renderRequested = true

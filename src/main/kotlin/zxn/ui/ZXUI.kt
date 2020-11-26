@@ -1,5 +1,9 @@
 package zxn.ui
 
+import Qirella
+import kotlinx.browser.window
+import org.w3c.dom.CanvasTextAlign
+import org.w3c.dom.RIGHT
 import org.w3c.dom.events.MouseEvent
 import rendering.Rendering.ctx
 import rendering.color
@@ -38,6 +42,8 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         const val BOT_BAR_RULE_WIDTH = 120.0
         const val BOT_BAR_BOTH_RULES_HEIGHT = BOT_BAR_SIZE - 2.0 * BOT_BAR_RULE_SPACING
         const val BOT_BAR_RULE_HEIGHT = BOT_BAR_BOTH_RULES_HEIGHT / 2.0 - BOT_BAR_RULE_SPACING
+
+        val INFO_BOX_THRESHOLD = BOT_BAR_RULE_SPACING + (BOT_BAR_RULE_WIDTH + BOT_BAR_RULE_SPACING) * ZXRule.allRules.size + 240
     }
 
     val BOT_BAR_Y = height - BOT_BAR_SIZE
@@ -48,6 +54,8 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
     val selectionActions = HashMap<ZXAction, Rectangle>()
 
     val ruleButtons = HashMap<ZXRule, Rectangle>()
+
+    var githubButton = Rectangle(Vector(width - 220.0, height - 150.0), 200.0, 30.0)
 
     // init generators
     init {
@@ -157,6 +165,24 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
             renderRule(rule, ruleButtons[rule]!!)
             renderRule(rule.inverse, ruleButtons[rule.inverse]!!)
         }
+
+        // Info section
+        if(width > INFO_BOX_THRESHOLD) {
+            ctx.color(ACTION_BUTTON_COLOR)
+            ctx.fillRect(githubButton)
+            ctx.font = "12px sans-serif"
+            ctx.textAlign = CanvasTextAlign.RIGHT
+            ctx.color("black")
+            ctx.fillTextCentered("Show project on GitHub", githubButton.center + Vector(y=2.0))
+
+            val yStart = height - 20.0
+
+            ctx.fillText("Hold shift to select multiple nodes", width - 20.0, yStart - 80.0)
+            ctx.fillText("Select nodes to apply rules", width - 20.0, yStart - 60.0)
+            ctx.fillText("Right click to delete nodes", width - 20.0, yStart - 40.0)
+            ctx.fillText("Press C to connect selected nodes", width - 20.0, yStart - 20.0)
+            ctx.fillText("Press D to delete selected wires", width - 20.0, yStart - 0.0)
+        }
     }
 
     fun renderRule(rule: ZXRule, rect: Rectangle) {
@@ -198,6 +224,10 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
 
         ruleButtons.entries.find { mousePosition in it.value }?.key?.let {
             ZXComposer.applyRule(it)
+        }
+
+        if(width > INFO_BOX_THRESHOLD && mousePosition in githubButton) {
+            window.open(Qirella.GITHUB_URL, "_blank")
         }
     }
 

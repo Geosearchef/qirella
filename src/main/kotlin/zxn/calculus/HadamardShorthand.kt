@@ -26,7 +26,7 @@ object HadamardShorthand : ZXRule("HadamardShorthand", "-", false, "hadamardShor
         }
 
         val neighbor1 = neighborhood1.keys.find { it != hadamardNode2 } ?: return false
-        val neighbor2 = neighborhood1.keys.find { it != hadamardNode1 } ?: return false
+        val neighbor2 = neighborhood2.keys.find { it != hadamardNode1 } ?: return false
 
         if(dryRun) {
             return true

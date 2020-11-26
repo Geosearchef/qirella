@@ -96,6 +96,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
         addTopBarAction(ZXAction.REALIGN_ENTIRE_NETWORK, Rectangle(Vector(actionIntervalX * (-1.0), ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
 
         addTopBarAction(ZXAction.DELETE_NODES, Rectangle(Vector(0.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
+        addTopBarAction(ZXAction.CLEAR_NETWORK, Rectangle(Vector(0.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.CREATE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.DELETE_WIRES, Rectangle(Vector(actionIntervalX * 1.0, ACTION_SPACING + actionIntervalY), ACTION_WIDTH, ACTION_HEIGHT))
         addTopBarAction(ZXAction.LOAD, Rectangle(Vector(actionIntervalX * 2.0, ACTION_SPACING), ACTION_WIDTH, ACTION_HEIGHT))

@@ -55,4 +55,9 @@ class ZXNetwork(val representsRule: Boolean = false) {
                 { it.second }
         )
     }
+
+    fun clear() {
+        wires.clear()
+        nodes.clear()
+    }
 }

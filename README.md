@@ -2,7 +2,7 @@
 Qirella is a simple quantum statevector simulator in developement
 that also supports building tensor networks for the ZX-Calculus and allows interactively applying and experimenting with the rewrite rules.
 
-It is designed as WebApp written in Kotlin and transpiled to JavaScript.
+It is designed as a WebApp written in Kotlin and transpiled to JavaScript.
 
 ## How to run
 The project uses gradle as the build tool.
@@ -11,7 +11,7 @@ The project uses gradle as the build tool.
 Just access the WebApp using any (modern) web browser on e.g. [https://qirella.geosearchef.de](https://qirella.geosearchef.de).  
 
 ### Prebuilt release 
-Download a prebuilt release containing the JS code and required resources from the releases page of this repository, then just open `index.html` with the browser of your choice.
+Download a prebuilt release containing the JS code and required resources from the releases page of this repository, then just open `index.html` with a browser of your choice.
 
 ### Using IntelliJ IDEA
 The easiest way to build and run the project is using the IntelliJ IDE. Just clone and import the project using Gradle as Kotlin/JS for browser (Frontend Application).
@@ -28,4 +28,4 @@ to build the application and launch the integrated web server. Using
 
 ```gradle build```
 
-you can build the project including the distribution files which you can find in `./build/distributions` and either open using a web browser or put on a web server of your choice.
+you can build the project including the distribution files which you can find in `./build/distributions` and either open them using a web browser or put them on a web server of your choice.

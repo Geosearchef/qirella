@@ -1,5 +1,6 @@
 package zxn.calculus
 
+import util.math.Vector
 import util.math.averagePos
 import zxn.calculus.ruleNodes.ANY_NODE
 import zxn.calculus.ruleNodes.RuleNodeSpider
@@ -76,7 +77,21 @@ object SpiderRule1Inverse : ZXRule("SpiderRule1 Inv", "S1_I", true, "s1i.png") {
     override val inverse = SpiderRule1
 
     override fun apply(selectedNodes: List<ZXNode>, network: ZXNetwork, dryRun: Boolean): Boolean {
-        return false // TODO: not yet implemented
+        if(! verifySpiderCount(selectedNodes, 1)) {
+            return false
+        }
+
+        val spider = selectedNodes.filterIsInstance<Spider>().firstOrNull() ?: return false
+
+        if(dryRun) {
+            return true
+        }
+
+        val newSpider = Spider(spider.pos + Vector(y = 60.0), spider.color)
+        network.addNode(newSpider)
+        network.addWire(spider, newSpider)
+
+        return true
     }
 
     init {
@@ -84,6 +99,8 @@ object SpiderRule1Inverse : ZXRule("SpiderRule1 Inv", "S1_I", true, "s1i.png") {
             val spider1 = RuleNodeSpider(WHITE, true)
             addNode(spider1)
             addWire(RuleWire(spider1, ANY_NODE, ANY_MULTIPLICITY))
+
+
         }
     }
 }

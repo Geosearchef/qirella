@@ -73,6 +73,12 @@ enum class ZXAction(override val representation: String) : UIAction {
         }
     },
 
+    CLEAR_NETWORK("New Diagram (N)") {
+        override fun onZXAction(selectedNodes: List<ZXNode>) {
+            ZXComposer.network.clear()
+        }
+    },
+
 
     LOAD("\uD83D\uDCC2") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {

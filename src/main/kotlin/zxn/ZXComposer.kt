@@ -37,6 +37,7 @@ object ZXComposer : UIManager {
         with(network) {
             val spacing = 80.0
 
+            //CNOT
             addNode(QubitNode(Vector(-1.0, 0.0) * spacing, INPUT))
             addNode(Spider(Vector(0.0, 0.0) * spacing, GREEN,/* _phase = 0.5*PI*/))
             addNode(Spider(Vector(1.0, 0.0) * spacing, RED))
@@ -61,6 +62,20 @@ object ZXComposer : UIManager {
             addWire(Wire(nodes[1], nodes[6]))
             addWire(Wire(nodes[2], nodes[7]))
             addWire(Wire(nodes[3], nodes[8]))
+
+
+            // Hopf circuit
+            for (y in listOf(0.0, 2.0)) {
+                val hopf1Input = QubitNode(Vector(8.0, y) * spacing, INPUT).also(::addNode)
+                val hopf1SpiderGreen = Spider(Vector(10.0, y) * spacing, GREEN).also(::addNode)
+                val hopf1SpiderRed = Spider(Vector(12.0, y) * spacing, RED).also(::addNode)
+                val hopf1Output = QubitNode(Vector(14.0, y) * spacing, INPUT).also(::addNode)
+                addWire(hopf1Input, hopf1SpiderGreen)
+                if(y == 0.0) {
+                    repeat(2) { addWire(hopf1SpiderGreen, hopf1SpiderRed) }
+                }
+                addWire(hopf1SpiderRed, hopf1Output)
+            }
         }
     }
 

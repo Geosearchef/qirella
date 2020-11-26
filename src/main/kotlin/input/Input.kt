@@ -15,6 +15,7 @@ object Input {
     const val KEY_C = 67
     const val KEY_D = 68
     const val KEY_G = 71
+    const val KEY_N = 78
     const val LEFT_MOUSE_BUTTON: Short = 0
     const val RIGHT_MOUSE_BUTTON: Short = 2
 

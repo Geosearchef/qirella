@@ -69,7 +69,7 @@ object ZXComposer : UIManager {
                 val hopf1Input = QubitNode(Vector(8.0, y) * spacing, INPUT).also(::addNode)
                 val hopf1SpiderGreen = Spider(Vector(10.0, y) * spacing, GREEN).also(::addNode)
                 val hopf1SpiderRed = Spider(Vector(12.0, y) * spacing, RED).also(::addNode)
-                val hopf1Output = QubitNode(Vector(14.0, y) * spacing, INPUT).also(::addNode)
+                val hopf1Output = QubitNode(Vector(14.0, y) * spacing, OUTPUT).also(::addNode)
                 addWire(hopf1Input, hopf1SpiderGreen)
                 if(y == 0.0) {
                     repeat(2) { addWire(hopf1SpiderGreen, hopf1SpiderRed) }

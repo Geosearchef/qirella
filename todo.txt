@@ -1,0 +1,9 @@
+
+- CNOT / multi qubit = separate time layer, otherwise issue with kronecker
+- load / store for algs experimentation
+- combine matricies -> linear map
+- histogram
+
+- mesurement
+   - compact each block until measurement
+- classical

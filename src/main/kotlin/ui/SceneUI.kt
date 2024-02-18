@@ -80,6 +80,9 @@ abstract class SceneUI(val width: Int, val height: Int) {
         topBarActions.entries.filter { mousePosition in it.value }.firstOrNull()?.let { it.key }?.let { action ->
             action.onAction()
         }
+        components.filter { it.rectangle != null && mousePosition in it.rectangle }.forEach {
+            it.onPressed(mousePosition, event)
+        }
     }
     abstract fun isMouseEventOnUI(mousePosition: Vector): Boolean
 }

@@ -3,6 +3,8 @@ package rendering
 import Qirella
 import org.w3c.dom.events.Event
 
+// cards also supports mipmapping: https://github.com/Geosearchef/cards/blob/master/src/jsMain/kotlin/framework/rendering/Image.kt
+
 class Image(val imageSrc: String) {
 
     var loaded = false

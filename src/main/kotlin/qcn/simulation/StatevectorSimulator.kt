@@ -14,6 +14,26 @@ import kotlin.random.Random
 
 object StatevectorSimulator {
 
+    fun singleShotRun(circuit: Circuit): ExecutionState {
+        val executionPath = buildExecutionPath(circuit)
+        val state = executePath(executionPath)
+        return state
+    }
+    fun multiShotRun(circuit: Circuit, shots: Int): Map<String, Double> {
+        println("Running simulator, $shots shots")
+
+        val states = (0 until shots).map { singleShotRun(circuit) }
+        val measuredResults = HashMap<String, Double>()
+        states.map { it.classicalRegisters }.map { it.joinToString("") }.forEach {
+            measuredResults[it] = measuredResults.getOrPut(it) { 0.0 } + 1.0
+        }
+        measuredResults.keys.forEach {
+            measuredResults[it] = measuredResults[it]!! / shots.toDouble()
+        }
+        return measuredResults
+    }
+
+
     fun buildExecutionPath(circuit: Circuit): ExecutionPath {
         val start = circuit.components.minOf { it.pos.x }.toInt()
         val end = circuit.components.maxOf { it.pos.x }.toInt() // inclusive
@@ -58,7 +78,7 @@ object StatevectorSimulator {
                 .filterIsInstance<MeasurementComponent>()
                 .filter { it.timestep == t }
             measurementComponents.forEach { comp ->
-                steps.add(MeasurementStep(comp.operators.map { multiQubitSingleGate(it, qubits.indexOf(comp.qubitIndex), qubits.size) }, comp.classicalTarget))
+                steps.add(MeasurementStep(comp.operators.map { multiQubitSingleGate(it, qubits.indexOf(comp.qubitIndex), qubits.size) }, classicalRegisters.indexOf(comp.classicalTarget)))
             }
         }
 
@@ -71,7 +91,7 @@ object StatevectorSimulator {
     class MeasurementStep(val operators: List<Matrix>, val classicalTarget: Int) : ExecutionStep() {} // TODO: this just outputs the operator index
 
 
-    fun executePath(path: ExecutionPath, random: Random = Random.Default) {
+    fun executePath(path: ExecutionPath, random: Random = Random.Default): ExecutionState {
         val state = ExecutionState(path.qubits, path.classicalBits)
 
         for(step in path.steps) {
@@ -89,12 +109,14 @@ object StatevectorSimulator {
                 }
             }
         }
+
+        return state
     }
 
     class ExecutionState(val qubits: Int, val classicalBits: Int) {
         var stateVector = ColumnVector(Array(2.0.pow(qubits).toInt()) { 0.0 + 0.0*j }).apply {
             m[0][0] = 1.0 + 0.0*j
         }
-        var classicalRegisters = Array(classicalBits) { 0 }
+        var classicalRegisters = Array(classicalBits) { -1 }
     }
 }

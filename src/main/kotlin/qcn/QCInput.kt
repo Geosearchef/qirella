@@ -3,6 +3,7 @@ package qcn
 import Qirella
 import input.Input.LEFT_MOUSE_BUTTON
 import input.Input.RIGHT_MOUSE_BUTTON
+import org.w3c.dom.events.KeyboardEvent
 import org.w3c.dom.events.MouseEvent
 import org.w3c.dom.events.WheelEvent
 import qcn.QCComposer.circuit
@@ -11,8 +12,10 @@ import qcn.QCComposer.grabbedOrigin
 import qcn.circuit.CircuitComponent
 import qcn.circuit.ControlComponent
 import qcn.circuit.GateComponent
+import qcn.simulation.StatevectorSimulator
 import scene.SceneInput
 import util.math.Vector
+import util.toDecimals
 
 object QCInput : SceneInput() {
     var isMapMoving = false
@@ -114,10 +117,15 @@ object QCInput : SceneInput() {
         Qirella.requestRender()
     }
 
+    override fun onMouseWheel(event: WheelEvent, isOnUI: Boolean) {}
 
-
-    override fun onMouseWheel(event: WheelEvent, isOnUI: Boolean) {
-
+    override fun onKeyDown(event: KeyboardEvent) {
+        if(event.keyCode == 13) {
+//            val result = StatevectorSimulator.singleShotRun(circuit)
+//            println(result.classicalRegisters)
+            val results = StatevectorSimulator.multiShotRun(circuit, shots = 1024)
+            results.entries.forEach { println("${it.key}: ${it.value.toDecimals(3)}") }
+        }
     }
 
     /**

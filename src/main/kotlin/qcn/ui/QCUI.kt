@@ -71,7 +71,7 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
         }
 
         if(mousePosition in measurementComponent) {
-            grabbedComponent = circuit.addComponent(MeasurementComponent(QCInput.toWorldSpace(mousePosition).round(), 10))
+            grabbedComponent = circuit.addComponent(MeasurementComponent(QCInput.toWorldSpace(mousePosition).round(), 10 + circuit.getClassicalRegisters().size))
         }
     }
 

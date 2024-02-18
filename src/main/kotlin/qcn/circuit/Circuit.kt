@@ -41,6 +41,10 @@ class Circuit {
     }
 
     fun getUsedRegisters(): List<Int> {
-        return components.map { it.pos.y.toInt() }.distinct().sorted()
+        return components.map { it.qubitIndex }.distinct().sorted()
+    }
+
+    fun getClassicalRegisters(): List<Int> {
+        return components.filterIsInstance<MeasurementComponent>().map { it.classicalTarget }.distinct().sorted()
     }
 }

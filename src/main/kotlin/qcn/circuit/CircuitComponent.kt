@@ -13,6 +13,9 @@ abstract class CircuitComponent() {
     @Transient
     open val selectable = false
 
+    val timestep: Int get() = pos.x.toInt()  // no backing field = not serialized
+    val qubitIndex: Int get() = pos.y.toInt()
+
     open fun isValidPosition(newPos: Vector) = true
 
     operator fun contains(v: Vector) = isWorldPosOnElement(v)

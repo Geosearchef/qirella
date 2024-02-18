@@ -10,13 +10,13 @@ import util.math.linalg.Matrix.Companion.Q1
 import kotlin.math.pow
 
 @Serializable
-class MeasurementComponent(override var pos: Vector, val operators: List<Matrix>, val baseStates: List<ColumnVector>) : CircuitComponent() {
+class MeasurementComponent(override var pos: Vector, val operators: List<Matrix>, val baseStates: List<ColumnVector>, val classicalTarget: Int) : CircuitComponent() {
 
     override val selectable = true
 
     // projective:
-    constructor(pos: Vector = Vector(), baseStates: Array<ColumnVector>) : this(pos, baseStates.map { it * it.T }, baseStates.asList()) // projective measurement operator is  |b> <b|
-    constructor(pos: Vector = Vector()) : this(pos, arrayOf(Q0, Q1))
+    constructor(pos: Vector = Vector(), baseStates: Array<ColumnVector>, classicalTarget: Int) : this(pos, baseStates.map { it * it.T }, baseStates.asList(), classicalTarget) // projective measurement operator is  |b> <b|
+    constructor(pos: Vector = Vector(), classicalTarget: Int) : this(pos, arrayOf(Q0, Q1), classicalTarget)
 
     init {
         check(baseStates.all { it.isVector() }) { "Base states need to be vectors" }

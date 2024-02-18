@@ -1,9 +1,7 @@
 package util.math
 
 import kotlinx.serialization.Serializable
-import kotlin.math.atan2
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 operator fun Double.plus(c: Complex) = Complex(this).plus(c)
 operator fun Double.minus(c: Complex) = Complex(this).minus(c)
@@ -15,6 +13,9 @@ class Complex(var real: Double = 0.0, var imag: Double = 0.0) {
 
     companion object {
         val j = Complex(0.0, 1.0)
+        fun fromMagArg(mag: Double, arg: Double) = Complex(cos(arg) * mag, sin(arg) * mag)
+        fun fromAmpPhase(amplitude: Double, phase: Double) = fromMagArg(amplitude, phase)
+        fun exp(arg: Double) = fromMagArg(1.0, arg) // e^i*arg
     }
 
     fun set(real: Double, imag: Double) {

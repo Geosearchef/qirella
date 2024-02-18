@@ -22,6 +22,10 @@ class MeasurementComponent(override var pos: Vector, val operators: List<Matrix>
         check(baseStates.all { it.isVector() }) { "Base states need to be vectors" }
     }
 
+    // todo;: result after measurement
+
+    // p = <phi| M_dag M |phi> = <phi| M | phi>    as M_dag = M and M^2 = M
+    // abs(M |phi>)^2 = sqrt((M |phi>)_dag (M |phi>))^2 = (M |phi>)_dag (M |phi>) = <phi| M_dag M |phi> = p
     fun resultProbability(operator: Matrix, state: ColumnVector, measuredQubitIndex: Int = 0): Double {
         val multiGateOperator = multiQubitSingleGate(operator, qubitIndex = measuredQubitIndex, qubitCount = state.qubits)
         val prob = (multiGateOperator * state).asColumnVector().abs.pow(2.0)

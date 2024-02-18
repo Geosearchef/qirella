@@ -48,7 +48,7 @@ class ZXUI(width: Int, height: Int) : SceneUI(width, height) {
 
     val BOT_BAR_Y = height - BOT_BAR_SIZE
 
-    val nodeGenerators = HashMap<Rectangle, Pair<ZXNode, ()->ZXNode> >()
+    val nodeGenerators = HashMap<Rectangle, Pair<ZXNode, ()->ZXNode>>()
     var generatorsEndingX = 0.0
 
     val selectionActions = HashMap<ZXAction, Rectangle>()

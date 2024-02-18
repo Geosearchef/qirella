@@ -37,7 +37,7 @@ class Circuit {
 
 
     fun isPositionBlocked(pos: Vector, vararg exclusions: CircuitComponent): Boolean {
-        return components.any { !exclusions.contains(it) && it.pos == pos}
+        return components.any { it !in exclusions && it.pos == pos}
     }
 
     fun getUsedRegisters(): List<Int> {

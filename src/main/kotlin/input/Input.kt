@@ -73,8 +73,8 @@ object Input {
             addEventListener("wheel", ::onMouseWheel)
         }
         with(window) {
-            addEventListener("keydown", input.Input::onKeyDown)
-            addEventListener("keyup", input.Input::onKeyUp)
+            addEventListener("keydown", Input::onKeyDown)
+            addEventListener("keyup", Input::onKeyUp)
         }
     }
 }

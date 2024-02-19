@@ -1,6 +1,7 @@
 package qcn.circuit
 
 import assertEqualsNumerical
+import util.math.Vector
 import util.math.linalg.Matrix.Companion.Q0
 import util.math.linalg.Matrix.Companion.Q1
 import util.math.linalg.Matrix.Companion.Qminus
@@ -10,8 +11,8 @@ import kotlin.test.assertEquals
 
 class MeasurementComponentTest {
 
-    val computationalMeasurement = MeasurementComponent(baseStates = arrayOf(Q0, Q1))
-    val plusMinusMeasurement = MeasurementComponent(baseStates = arrayOf(Qplus, Qminus))
+    val computationalMeasurement = MeasurementComponent(Vector(), baseStates = arrayOf(Q0, Q1), classicalTarget = 0)
+    val plusMinusMeasurement = MeasurementComponent(Vector(), baseStates = arrayOf(Qplus, Qminus), classicalTarget = 0)
 
 
     @Test

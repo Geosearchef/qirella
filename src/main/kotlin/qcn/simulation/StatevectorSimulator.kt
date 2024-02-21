@@ -49,7 +49,7 @@ object StatevectorSimulator {
                 .filter { it.timestep == t }
                 .filter { it.controlComponents.isEmpty() }
             if(gatesOnLayer.isNotEmpty()) {
-                val gatesByQubitIndex = gatesOnLayer.map { it.qubitIndex to it.type.matrix }.toMap()
+                val gatesByQubitIndex = gatesOnLayer.map { it.qubitIndex to it.matrix }.toMap()
                 val gateApplicationMatrix = multiQubitMultiGate(gatesByQubitIndex, qubits)
                 steps.add(MatrixMultiplicationStep(gateApplicationMatrix))
             }
@@ -62,7 +62,7 @@ object StatevectorSimulator {
             controlledGatesOnLayer.forEach { gate ->
                 steps.add(MatrixMultiplicationStep(
                     multiQubitSingleControlledGate(
-                        gate.type.matrix,
+                        gate.matrix,
                         qubits.indexOf(gate.qubitIndex),
                         gate.controlComponents.map { qubits.indexOf(it.qubitIndex) },
                         qubits.size

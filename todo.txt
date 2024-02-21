@@ -1,8 +1,17 @@
 
-- gate color
 - custom rotation gate
-
-- load / store for algs experimentation
 - histogram
 
+- gate color
+- load / store for algs experimentation
+
 - classical
+
+
+
+- zero gate
+  - this is not unitary
+  - this produces a a^2 + b^2 + 2ab output
+  - this forces a measurement relative to the target state regardless of probability
+    - if p = 0: resulting state vec is 0!
+  - a.k.a you do not do this

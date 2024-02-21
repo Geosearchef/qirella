@@ -4,7 +4,10 @@ import qcn.QCComposer
 import qcn.QCComposer.GATE_SIZE
 import qcn.QCComposer.GATE_SIZE_WORLD_SPACE
 import qcn.QCComposer.GRID_SIZE
-import qcn.circuit.*
+import qcn.circuit.CircuitComponent
+import qcn.circuit.ControlComponent
+import qcn.circuit.GateComponent
+import qcn.circuit.MeasurementComponent
 import rendering.*
 import rendering.Rendering.ctx
 import scene.Scene
@@ -93,19 +96,20 @@ object QCRenderer : Scene.SceneRenderer {
 
         renderedComponents.filter { it !is ControlComponent }.forEach {
             when(it) {
-                is GateComponent -> renderGate(toRenderSpace(it.pos), it.type)
+                is GateComponent -> renderGate(toRenderSpace(it.pos), it)
                 is MeasurementComponent -> renderMeasurementComponent(toRenderSpace(it.pos))
             }
         }
     }
 
-    fun renderGate(pos: Vector, gateType: GateType) {
+    fun renderGate(pos: Vector, gate: GateComponent) {
+//        ctx.color(gateType.color)
         ctx.color(GATE_COLOR)
         ctx.fillSquare(pos, GATE_SIZE)
 
         ctx.color("black")
         ctx.font = "15px sans-serif"
-        ctx.fillTextCentered(gateType.representation, pos.componentPosToCenter() + Vector(y = 2.0)) // TODO: baseline offset
+        ctx.fillTextCentered(gate.representation, pos.componentPosToCenter() + Vector(y = 2.0)) // TODO: baseline offset
 
     }
 

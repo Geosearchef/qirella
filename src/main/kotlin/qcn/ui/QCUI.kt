@@ -5,8 +5,7 @@ import qcn.QCComposer
 import qcn.QCComposer.circuit
 import qcn.QCComposer.grabbedComponent
 import qcn.QCInput
-import qcn.circuit.GateComponent
-import qcn.circuit.GateType
+import qcn.circuit.GateGenerator
 import qcn.circuit.MeasurementComponent
 import qcn.rendering.QCRenderer
 import ui.SceneUI
@@ -23,7 +22,7 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
     override val TOP_BAR_SIZE = QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING * 2.0
 
     // components
-    private val uiAddableComponents = HashMap<GateType, Rectangle>()
+    private val uiAddableComponents = HashMap<GateGenerator, Rectangle>()
     private val measurementComponent: Rectangle
 
     // selection interaction
@@ -31,8 +30,8 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
 
     // UI components
     init {
-        GateType.values().filter { it.placable }.forEachIndexed { i, gateType ->
-            uiAddableComponents[gateType] = Rectangle(
+        GateGenerator.values().filter { it.placeable }.forEachIndexed { i, generator ->
+            uiAddableComponents[generator] = Rectangle(
                 Vector(
                     x = i.toDouble() * (QCComposer.GATE_SIZE + ADDABLE_GATE_SPACING) + ADDABLE_GATE_SPACING,
                     y = ADDABLE_GATE_SPACING
@@ -66,8 +65,8 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
     override fun onUIPressed(mousePosition: Vector, event: MouseEvent) {
         super.onUIPressed(mousePosition, event)
 
-        uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.key?.let { gateType ->
-            grabbedComponent = circuit.addComponent(GateComponent(pos = QCInput.toWorldSpace(mousePosition).round(), type = gateType))
+        uiAddableComponents.entries.filter { mousePosition in it.value }.firstOrNull()?.key?.let { gateGenerator ->
+            grabbedComponent = circuit.addComponent(gateGenerator.generate(QCInput.toWorldSpace(mousePosition).round()))
         }
 
         if(mousePosition in measurementComponent) {
@@ -78,7 +77,7 @@ class QCUI(width: Int, height: Int): SceneUI(width, height) {
     override fun render() {
         super.render()
 
-        uiAddableComponents.forEach { QCRenderer.renderGate(it.value.pos, it.key) }
+        uiAddableComponents.forEach { QCRenderer.renderGate(it.value.pos, it.key.dummy) }
         measurementComponent.let { QCRenderer.renderMeasurementComponent(it.pos) }
     }
 

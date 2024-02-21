@@ -24,6 +24,9 @@ fun complexArrayOf(vararg array: Any): Array<Complex> {
     return array.map { if(it is Double) Complex(it) else it as Complex }.toTypedArray()
 }
 
+operator fun Double.times(m: Matrix) = m.times(this)
+operator fun Complex.times(m: Matrix) = m.times(this)
+
 @Serializable(with = MatrixSerializer::class)
 open class Matrix(var m: Array<Array<Complex>> = arrayOf(
                 complexArrayOf(1.0, 0.0),

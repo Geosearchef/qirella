@@ -3,8 +3,7 @@ package qcn
 import Qirella
 import qcn.circuit.Circuit
 import qcn.circuit.CircuitComponent
-import qcn.circuit.GateComponent
-import qcn.circuit.GateType
+import qcn.circuit.GateGenerator
 import qcn.ui.QCUI
 import scene.UIManager
 import ui.SceneUI
@@ -36,8 +35,8 @@ object QCComposer : UIManager {
 
 
     fun init() {
-        circuit.components.add(GateComponent(Vector(0.0, 0.0), GateType.HADAMARD))
-        circuit.components.add(GateComponent(Vector(1.0, 1.0), GateType.X))
+        circuit.components.add(GateGenerator.HADAMARD.generate(Vector(0.0, 0.0)))
+        circuit.components.add(GateGenerator.X.generate(Vector(1.0, 1.0)))
     }
 
     fun deselectAllComponents() {

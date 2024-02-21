@@ -1,12 +1,13 @@
 package qcn.circuit
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import qcn.rendering.QCRenderer
 import util.math.Vector
+import util.math.linalg.Matrix
 
 @Serializable
-class GateComponent(override var pos: Vector = Vector(), @SerialName("gateType") var type: GateType) : CircuitComponent() {
+open class GateComponent(val representation: String, val matrix : Matrix, val color: String = QCRenderer.GATE_COLOR, override var pos: Vector = Vector()) : CircuitComponent() {
 
     override val selectable = true
 

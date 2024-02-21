@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import util.math.Vector
+import util.math.linalg.matrixOf
 
 @Serializable
 class ControlComponent(override var pos: Vector, @Serializable(with = ControlledGateSerializer::class) var controlledGate: GateComponent? = null) : CircuitComponent() {
@@ -22,6 +23,8 @@ class ControlComponent(override var pos: Vector, @Serializable(with = Controlled
 
 }
 
+// this only serializes the controlled gate as a position
+// the deserialize afterward restores the reference to the controlledGate by searching based on the position
 object ControlledGateSerializer : KSerializer<GateComponent?> {
     override val descriptor = Vector.serializer().descriptor
 
@@ -31,6 +34,6 @@ object ControlledGateSerializer : KSerializer<GateComponent?> {
     }
 
     override fun deserialize(decoder: Decoder): GateComponent? {
-        return GateComponent(Vector.serializer().deserialize(decoder), GateType.NONE)
+        return GateComponent("-", matrixOf(arrayOf()), "#000000", Vector.serializer().deserialize(decoder))
     }
 }

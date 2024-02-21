@@ -4,6 +4,7 @@ import Qirella
 import qcn.circuit.Circuit
 import qcn.circuit.CircuitComponent
 import qcn.circuit.GateGenerator
+import qcn.circuit.generatorStartupComplete
 import qcn.ui.QCUI
 import scene.UIManager
 import ui.SceneUI
@@ -37,6 +38,8 @@ object QCComposer : UIManager {
     fun init() {
         circuit.components.add(GateGenerator.HADAMARD.generate(Vector(0.0, 0.0)))
         circuit.components.add(GateGenerator.X.generate(Vector(1.0, 1.0)))
+
+        generatorStartupComplete = true // this causes the generators to be (have been) loaded which causes them to generate their dummies, for which we want to prevent user input
     }
 
     fun deselectAllComponents() {

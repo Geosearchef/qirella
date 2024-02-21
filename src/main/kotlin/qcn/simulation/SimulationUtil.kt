@@ -4,9 +4,13 @@ import util.math.Complex.Companion.j
 import util.math.linalg.Matrix
 import util.math.linalg.Matrix.Companion.I
 import util.math.linalg.kroneckerOf
+import util.math.linalg.matrixOf
+import util.math.linalg.times
 import util.math.plus
 import util.math.times
+import kotlin.math.cos
 import kotlin.math.pow
+import kotlin.math.sin
 
 fun multiQubitSingleGate(gate: Matrix, qubitIndex: Int, qubitCount: Int): Matrix {
     val gates = (0 until qubitCount).map { if(it == qubitIndex) gate else I }.toTypedArray()
@@ -39,4 +43,23 @@ fun multiQubitSingleControlledGate(gate: Matrix, qubitIndex: Int, controlQubits:
     }
 
     return matrix
+}
+
+fun buildRotationMatrix(axis: Matrix, angle: Double): Matrix {
+    val v = axis.asColumnVector()
+    check(v.rows == 3 && v.abs == 1.0)
+
+    // rotation around X/Y/Z is e^(-iaX/2) = cos(a/2)*I - i*sin(a/2)X, book page
+    // rotation around v is e^(-ia(v*sigma)/2) = cos(a/2)*I - i * sin(a/2)(v*sigma)
+    // with v*sigma = v_1*sig_1 + v_2*sig_2 + v_3*sig_3
+
+    // project axis to combination of pauli matrices
+    val vSigma = matrixOf(
+        arrayOf(v.m[2][0], v.m[0][0] - j * v.m[1][0]),
+        arrayOf(v.m[0][0] + j * v.m[1][0], -v.m[2][0])
+    )
+
+    val rotationMatrix = cos(angle / 2.0) * I - j * sin(angle / 2.0) * vSigma
+
+    return rotationMatrix
 }

@@ -50,6 +50,9 @@ open class Matrix(var m: Array<Array<Complex>> = arrayOf(
             complexArrayOf(1.0, 0.0),
             complexArrayOf(0.0, -1.0)
         )
+        val AXIS_X = columnVectorOf(1.0, 0.0, 0.0)
+        val AXIS_Y = columnVectorOf(0.0, 1.0, 0.0)
+        val AXIS_Z = columnVectorOf(0.0, 0.0, 1.0)
     }
 
     constructor (rows: Int, columns: Int) : this(Array(rows) { Array(columns) { Complex() } })

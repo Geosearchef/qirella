@@ -30,6 +30,7 @@ fun CanvasRenderingContext2D.fillRect(v: Vector, w: Double, h: Double) = fillRec
 fun CanvasRenderingContext2D.fillRect(v1: Vector, v2: Vector) = fillRect(v1.x, v1.y, v2.x - v1.x, v2.y - v1.y)
 fun CanvasRenderingContext2D.fillRect(rect: Rectangle) = fillRect(rect.x, rect.y, rect.width, rect.height)
 fun CanvasRenderingContext2D.strokeRect(v: Vector, w: Double, h: Double) = strokeRect(v.x, v.y, w, h)
+fun CanvasRenderingContext2D.strokeRect(rect: Rectangle) = strokeRect(rect.x, rect.y, rect.width, rect.height)
 fun CanvasRenderingContext2D.fillSquare(v: Vector, s: Double) = fillRect(v, s, s)
 fun CanvasRenderingContext2D.fillTextCentered(s: String, v: Vector) {
     val tB = textBaseline; val tA = textAlign

@@ -80,6 +80,7 @@ object QCInput : SceneInput() {
         // Deletion
         if (event.button == RIGHT_MOUSE_BUTTON) {
             circuit.components.filter { worldPos in it }.forEach { circuit.removeComponent(it) }
+            QCComposer.resimulate()
         }
 
         if (grabbedComponent == null) {
@@ -109,6 +110,9 @@ object QCInput : SceneInput() {
 
             QCComposer.grabbedComponent = null
             QCComposer.grabbedOrigin = null
+
+            Qirella.requestRender()
+            QCComposer.resimulate()
         }
 
 
@@ -123,7 +127,7 @@ object QCInput : SceneInput() {
         if(event.keyCode == 13) {
 //            val result = StatevectorSimulator.singleShotRun(circuit)
 //            println(result.classicalRegisters)
-            val results = StatevectorSimulator.multiShotRun(circuit, shots = 1024)
+            val results = StatevectorSimulator.multiShotRun(circuit, shots = QCComposer.configuredShotCount)
             results.entries.forEach { println("${it.key}: ${it.value.toDecimals(3)}") }
         }
     }

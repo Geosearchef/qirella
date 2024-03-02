@@ -5,10 +5,13 @@ import qcn.circuit.Circuit
 import qcn.circuit.CircuitComponent
 import qcn.circuit.GateGenerator
 import qcn.circuit.generatorStartupComplete
+import qcn.simulation.StatevectorSimulator
 import qcn.ui.QCUI
 import scene.UIManager
 import ui.SceneUI
 import util.math.Vector
+import kotlin.math.max
+import kotlin.math.min
 
 object QCComposer : UIManager {
 
@@ -25,6 +28,7 @@ object QCComposer : UIManager {
         set(value) {
             field = value
             Qirella.requestRender()
+            resimulate()
         }
 
     var grabbedComponent: CircuitComponent? = null
@@ -33,6 +37,9 @@ object QCComposer : UIManager {
     var selectedComponents: MutableList<CircuitComponent> = ArrayList()
 
     var uiInstance = QCUI(300, 200)
+
+    var configuredShotCount = 1024
+    var simulationResult: Map<String, Double> = emptyMap()
 
 
     fun init() {
@@ -50,6 +57,24 @@ object QCComposer : UIManager {
         if(component.selectable && !selectedComponents.contains(component)) {
             selectedComponents.add(component)
         }
+    }
+
+    fun increaseShots() {
+        configuredShotCount *= 2
+        configuredShotCount = min(65536, configuredShotCount)
+        Qirella.requestRender()
+        resimulate()
+    }
+    fun decreaseShots() {
+        configuredShotCount /= 2
+        configuredShotCount = max(1, configuredShotCount)
+        Qirella.requestRender()
+        resimulate()
+    }
+
+    fun resimulate() {
+        simulationResult = StatevectorSimulator.multiShotRun(circuit, shots = configuredShotCount)
+        Qirella.requestRender()
     }
 
     override fun regenerateUI(width: Int, height: Int) {

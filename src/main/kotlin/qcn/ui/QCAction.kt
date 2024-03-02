@@ -27,6 +27,16 @@ enum class QCAction(override val representation: String) : UIAction {
         override fun onQCAction(selectedComponents: List<CircuitComponent>) {
             Storage.store(QCComposer.circuit)
         }
+    },
+    INCREASE_SHOTS("➕") {
+        override fun onQCAction(selectedComponents: List<CircuitComponent>) {
+            QCComposer.increaseShots()
+        }
+    },
+    DECREASE_SHOTS("➖") {
+        override fun onQCAction(selectedComponents: List<CircuitComponent>) {
+            QCComposer.decreaseShots()
+        }
     };
 
     abstract fun onQCAction(selectedComponents: List<CircuitComponent>)

@@ -2,7 +2,7 @@ package qcn.ui
 
 import qcn.QCComposer
 import qcn.circuit.CircuitComponent
-import qcn.storage.Storage
+import qcn.storage.QCStorage
 import ui.UIAction
 
 enum class QCAction(override val representation: String) : UIAction {
@@ -17,7 +17,7 @@ enum class QCAction(override val representation: String) : UIAction {
 
     LOAD("\uD83D\uDCC2") {
         override fun onQCAction(selectedComponents: List<CircuitComponent>) {
-            val circuitPromise = Storage.load()
+            val circuitPromise = QCStorage.load()
 
             circuitPromise.then { QCComposer.circuit = it }
             circuitPromise.catch { throw it }
@@ -25,7 +25,7 @@ enum class QCAction(override val representation: String) : UIAction {
     },
     SAVE("\uD83D\uDCBE") {
         override fun onQCAction(selectedComponents: List<CircuitComponent>) {
-            Storage.store(QCComposer.circuit)
+            QCStorage.store(QCComposer.circuit)
         }
     },
     INCREASE_SHOTS("➕") {

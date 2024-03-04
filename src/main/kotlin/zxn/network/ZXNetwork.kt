@@ -3,6 +3,7 @@ package zxn.network
 import util.math.Vector
 import zxn.calculus.ruleNodes.RuleNode
 
+
 class ZXNetwork(val representsRule: Boolean = false) {
 
     val nodes: MutableList<ZXNode> = ArrayList()

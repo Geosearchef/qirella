@@ -6,6 +6,7 @@ import zxn.ZXComposer
 import zxn.network.QubitNode
 import zxn.network.Spider
 import zxn.network.ZXNode
+import zxn.storage.ZXStorage
 import kotlin.math.PI
 
 enum class ZXAction(override val representation: String) : UIAction {
@@ -82,17 +83,15 @@ enum class ZXAction(override val representation: String) : UIAction {
 
     LOAD("\uD83D\uDCC2") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {
-//            val circuitPromise = Storage.load()
-//
-//            circuitPromise.then { QCComposer.circuit = it }
-//            circuitPromise.catch { throw it }
-            TODO("not yet implemented")
+            val networkPromise = ZXStorage.load()
+
+            networkPromise.then { ZXComposer.network = it }
+            networkPromise.catch { throw it }
         }
     },
     SAVE("\uD83D\uDCBE") {
         override fun onZXAction(selectedNodes: List<ZXNode>) {
-//            Storage.store(QCComposer.circuit)
-            TODO("not yet implemented")
+            ZXStorage.store(ZXComposer.network)
         }
     };
 

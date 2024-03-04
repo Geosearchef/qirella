@@ -10,7 +10,7 @@ import util.downloadFile
 import util.loadFile
 import kotlin.js.Promise
 
-object Storage {
+object QCStorage {
 
     val module = SerializersModule {
         polymorphic(CircuitComponent::class) {
@@ -29,7 +29,7 @@ object Storage {
     }
 
     fun load() : Promise<Circuit> {
-        return Promise() { resolve, reject ->
+        return Promise { resolve, reject ->
             loadFile(listOf(".qir"), callback = {
                 println("Deserializing circuit...")
 
@@ -53,8 +53,4 @@ object Storage {
         return format.encodeToString(circuit)
     }
 
-//    @Serializable
-//    class StorageFormat(val circuit: Circuit, val ) {
-//
-//    }
 }

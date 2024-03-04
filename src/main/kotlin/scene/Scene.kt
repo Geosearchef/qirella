@@ -17,7 +17,7 @@ enum class Scene(val input: SceneInput, /*val update: SceneUpdate,*/ val rendere
     ZXN(ZXInput, ZXRenderer, ZXComposer, initFunction = { ZXComposer.init() });
 
     companion object {
-        var currentScene: Scene = QCN
+        var currentScene: Scene = PICKER
 
         fun switchScene() {
             currentScene = when(currentScene) {

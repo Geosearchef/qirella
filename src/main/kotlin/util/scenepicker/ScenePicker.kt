@@ -6,6 +6,7 @@ import rendering.Image
 import rendering.Rendering.ctx
 import rendering.color
 import rendering.fillRect
+import rendering.fillTextCentered
 import scene.Scene
 import scene.SceneInput
 import scene.UIManager
@@ -30,17 +31,17 @@ class ScenePickerUI(width: Int, height: Int): SceneUI(width, height) {
 
     // image loading is executed 2 times, as the image is created in the UI that is faked and then recreated at the correct size
     init {
-        addComponent(PickerButton(Image("/picker/qcnPicker.png"), Rectangle((width.toDouble() / 2.0) - buttonSize - 100.0 , (height.toDouble() / 2.0) - buttonSize / 2.0, buttonSize, buttonSize)) {
+        addComponent(PickerButton("State Vector Simulator", Image("/picker/qcnPicker.png"), Rectangle((width.toDouble() / 2.0) - buttonSize - 100.0 , (height.toDouble() / 2.0) - buttonSize / 2.0, buttonSize, buttonSize)) {
             Scene.currentScene = Scene.QCN
             Qirella.requestRender()
         })
-        addComponent(PickerButton(Image("/picker/zxnPicker.png"), Rectangle((width.toDouble() / 2.0) + 100.0, (height.toDouble() / 2.0) - buttonSize / 2.0 , buttonSize, buttonSize)) {
+        addComponent(PickerButton("Interactive ZX-Calculus", Image("/picker/zxnPicker.png"), Rectangle((width.toDouble() / 2.0) + 100.0, (height.toDouble() / 2.0) - buttonSize / 2.0 , buttonSize, buttonSize)) {
             Scene.currentScene = Scene.ZXN
             Qirella.requestRender()
         })
     }
 
-    class PickerButton(val image: Image, val rect: Rectangle, val onPress: () -> Unit) : UIComponent(rect) {
+    class PickerButton(val label: String, val image: Image, val rect: Rectangle, val onPress: () -> Unit) : UIComponent(rect) {
 
         override fun render() {
             ctx.color("#ffffff")
@@ -49,6 +50,12 @@ class ScenePickerUI(width: Int, height: Int): SceneUI(width, height) {
             if(image.loaded) {
                 ctx.drawImage(image.wrappedImage, rect.x + 50, rect.y + 50, rect.width - 100, rect.height - 100)
             }
+
+            val oldFont = ctx.font
+            ctx.color("black")
+            ctx.font = "bold 20px sans-serif"
+            ctx.fillTextCentered(label, rect.pos + Vector(rect.width / 2.0, rect.height * 0.87))
+            ctx.font = oldFont
         }
 
         override fun onPressed(mousePosition: Vector, event: MouseEvent) {
